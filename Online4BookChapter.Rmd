@@ -1,0 +1,56 @@
+---
+title: "Supporting materials for DSEM book chapter"
+author: "Ellen Hamaker"
+date: "2021"
+output:
+  html_document:
+    highlight: default
+    theme: united
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+    toc_depth: '5'
+params:
+  answers: true
+fontsize: 16pt
+---
+# Empirical analyses
+
+## N=1 analyses
+
+### Model 1
+
+### Model 2
+
+### Model 3
+
+## Multilevel analysis combined with time series analysis
+
+### Model 1
+
+### Model 2
+
+### Model 3
+
+## SEM combined with multilevel and time series analysis
+
+### Model 4
+
+### Model 5
+
+### Model 6
+
+## Pretest-posttest design
+
+### Model the change in parameters
+
+# Simulated data and analyses
+
+## Simulate data
+
+### Models.
+
+
+---

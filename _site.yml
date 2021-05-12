@@ -1,0 +1,7 @@
+name: "Supplemental Materials DSEM"
+output_dir: "docs"
+navbar:
+  title: "Title of chapter"
+  left:
+    - text: "Supplementary Materials"
+      href: index.html
