@@ -7,29 +7,28 @@ output:
     toc_float: yes
 ---
 
-Instead of analyzing the data for each person separately using replicated time series analysis, we can analyse the data of the 129 individuals in a single multilevel model. 
+Instead of analyzing the data for each person separately using replicated $N=1$ analyses, we can analyze the data of the 129 individuals in a single multilevel model. 
 
 In the book chapter we consider 6 dynamic multilevel models: 
 
-* __Multilevel models 1-3__ are based on combining time series modeling with multilevel modeling
+* __Multilevel models 1-3__ are based on combining _time series modeling_ with _multilevel modeling_
 
-* __Multilevel models 4-6__ are based on combining times series modeling and multilevel modeling with structural equation modeling 
+* __Multilevel models 4-6__ are based on combining _times series modeling_ and _multilevel modeling_ with _structural equation modeling_ 
 
 As an initial step, we determine the intraclass correlation of each variable in __Multilevel Model 0__.
 
 Below, we start by discussing some general aspects of the multilevel analyses; then we present each model, discuss how it is specified, and discuss the output.  
 
 # General comments
-
-This approach should be based on decomposing the observed variables into a within-person part and a between-person part, that is
+Dynamic multilevel modeling is based on decomposing the observed variables into a within-person part and a between-person part, that is
 
 $x_{it} = x_{it}^{(w)} + x_{i}^{(b)}$
 
 $y_{it} = y_{it}^{(w)} + y_{i}^{(b)}$
 
-For both components a model is then specified: At the within level a time series model is specified to account for the dynamics in the repeated measures within a person, and at the between level the random effects can be related to each other. 
+For both components a model is specified: At the within level a time series model is used to account for the dynamics in the repeated measures within a person, and at the between level the random effects can be related to each other, either through correlating them, or by including them in a regression model, a path model, and/or a factor model. 
 
-In Mplus, this approach requires the repeated measures within a person to be represented in long format (as before), while the data of all the individuals are stacked. There has to be a specific variable that indicates to which individual the data belong. 
+In Mplus, this approach requires the repeated measures within a person to be represented in long format (as was the case for the $N=1$ approach as well), with the data of all the individuals stacked. There has to be a specific variable that indicates to which individual the data belong (i.e., the clustering of the data). 
 
 The `DATA` command now becomes:
 

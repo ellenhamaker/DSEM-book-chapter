@@ -7,7 +7,7 @@ navbar:
       href: index.html
     - text: "N=1 analyses"
       href: Nis1.html
-    - text: "Multilevel analysis"
+    - text: "Multilevel analyses"
       href: MLM1to6.html
     - text: "Pretest-posttest"
       href: PrePost.html
