@@ -415,8 +415,8 @@ div.tocify {
 <p>The two <code>STANDARDIZE</code> statements imply that these two variables are standardized; in the current context, it means they are standardized for each person separately. The advantage of this is that our regression coefficients can be interpreted in terms of effect sizes.</p>
 <p>Alternatively, we could also use the <code>STDYX</code> option in the <code>OUTPUT</code> command; this will imply that first the unstandardized parameter estimates are obtained, which are then standardized using the model implied standard deviations. Note that while for models without lagged relations, these two approaches will lead to very similar results, but for models that include lagged relations (e.g., autoregression), they may deviate: The reason for this is that taking into account the autocorrelation structure in the data, the model implied mean and/or variance of a variable may deviate considerably from the observed mean and variance (specifically when the probability of missing data is different for for instance higher scores than for lower scores).</p>
 </div>
-<div id="bayesian-esitmation" class="section level2">
-<h2>Bayesian esitmation</h2>
+<div id="bayesian-estimation" class="section level2">
+<h2>Bayesian estimation</h2>
 <p>Throughout, we make use of Bayesian estimation, which is required for doing DSEM analysis in Mplus. We do this by specifying:</p>
 <pre><code>ANALYSIS: ESTIMATOR = BAYES; 
           PROC = 2;

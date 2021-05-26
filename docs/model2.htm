@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+a:link
+{
+    color: black;
+    text-decoration: none;
+}
+a[name]:hover
+{
+    text-decoration: none;
+}
+a:hover
+{
+    color: blue;
+    text-decoration: underline;
+}
+a:visited
+{
+    color: black;
+    text-decoration: none;
+}
+.heading
+{
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+}
+.heading:hover
+{
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+    text-decoration: none;
+}
+</style>
+
+<body style="font-family:'Courier New'; font-size:14px;">
+<p class="heading">
+Mplus VERSION 8.6<br />
+MUTHEN & MUTHEN<br />
+04/08/2021  11:01 PM<br />
+</p>
+
+<p class='heading'>OUTPUT SECTIONS</p>
+
+<ul>
+     <li><a href='#input'>Input Instructions</a></li>
+     <li><a href='#inputmessages'>Input Warnings And Errors</a></li>
+     <li><a href='#summary_analysis'>Summary Of Analysis</a></li>
+     <li><a href='#summary_data'>Summary Of Data</a></li>
+     <li><a href='#summary_missing_patterns'>Summary Of Missing Data Patterns</a></li>
+     <li><a href='#covariance_coverage'>Covariance Coverage Of Data</a></li>
+     <li><a href='#univariatess'>Univariate Sample Statistics</a></li>
+     <li><a href='#modelmessages'>Model Warnings And Errors</a></li>
+     <li><a href='#model_fit'>Model Fit Information</a></li>
+     <li><a href='#model_results'>Model Results</a></li>
+     <li><a href='#standardized_results'>Standardized Model Results</a></li>
+     <li><a href='#rsquare'>R-square</a></li>
+     <li><a href='#bayes_fscores_comparisons'>Between-level Factor Score Comparisons</a></li>
+     <li><a href='#tech1_output'>Technical 1 Output</a></li>
+     <li><a href='#tech8_output'>Technical 8 Output</a></li>
+     <li><a href='#summary_plausible'>Summaries Of Plausible Values (n = Number Of Observations * Number Of Imputations)</a></li>
+     <li><a href='#summary_plausible_stdev'>Summary Of Plausible Standard Deviation (n = Number Of Observations)</a></li>
+     <li><a href='#plot_info'>Plot Information</a></li>
+</ul>
+<pre>
+
+<a name='input' class='heading'>INPUT INSTRUCTIONS</a>
+
+  TITLE: Multilevel AR(1) for NA with unpleasantness of events as predictor
+         At the within level, per phase:
+         - random means
+         - random autoregressions (phi)
+         - random slopes (beta)
+         - random residual variance (psi)
+         At the between level model the change in each of these as a function:
+         - time (intercept)
+         - group (treatment)
+
+  DATA: file is ChapterData1.dat;
+
+  VARIABLE:
+
+  NAMES       =   ID prepost TimeHours U2P PA NA PEx NEx
+                  pa_pre na_pre U2P_pre PEx_pre NEx_pre
+                  pa_post na_post U2P_post PEx_post NEx_post
+                  ham_pre ham_post group;
+  CLUSTER     =   ID;
+  USEVAR      =   na_pre na_post group ue_pre ue_post;
+  BETWEEN     =   group;
+  LAGGED      =   na_pre(1) na_post(1);
+  TINTERVAL   =   TimeHours(1);
+  MISSING     =   ALL(-999);
+
+  DEFINE:     ue_pre = -1*U2P_pre;
+              ue_post = -1*U2P_post;
+
+  ANALYSIS:   TYPE = TWOLEVEL RANDOM;
+      		ESTIMATOR = BAYES;
+              PROC = 2;
+              BITER = (3000);
+              BSEED = 8386;
+              THIN = 5;
+
+  MODEL:
+      %WITHIN%
+      phi_pre | na_pre ON na_pre&1;
+      beta_pre | na_pre ON ue_pre;
+      psi_pre | na_pre;
+      phi_post | na_post ON na_post&1;
+      beta_post | na_post ON ue_post;
+      psi_post | na_post;
+      !na_pre ue_pre WITH na_post@0 ue_post@0; ! NOT ALLOWED WHEN THERE IS RANDOM VARIANCE
+      ue_pre WITH ue_post@0;
+
+      %BETWEEN%
+      na_pre ue_pre phi_pre beta_pre psi_pre ON group;
+      na_post ON na_pre@1 group;
+      ue_post ON ue_pre@1 group;
+      phi_post ON phi_pre@1 group;
+      beta_post ON beta_pre@1 group;
+      psi_post ON psi_pre@1 group;
+
+  OUTPUT: TECH1 TECH8 STDYX FSCOMPARISON;
+
+  PLOT: TYPE = PLOT3;
+        FACTOR = ALL(500);
+
+
+<a name='inputmessages' class='heading'></a>
+
+*** WARNING in VARIABLE command
+  Note that only the first 8 characters of variable names are used in the output.
+  Shorten variable names to avoid any confusion.
+*** WARNING in PLOT command
+  Note that only the first 8 characters of variable names are used in plots.
+  If variable names are not unique within the first 8 characters, problems
+  may occur.
+*** WARNING
+  Data set contains cases with missing on x-variables converted to dependent variables.
+  The autocorrelation of these variables should be included in the model and the variables
+  added to the LAGGED option.  The following converted x-variable(s) have cases with missing:
+
+      UE_PRE (48569 cases with missing data)
+      UE_POST (49051 cases with missing data)
+
+*** WARNING
+  One or more individual-level variables have no variation within a
+  cluster for the following clusters.
+
+     Variable   Cluster IDs with no within-cluster variation
+
+      NA_POST     122 69 107 46 143 88 121 28 119 33
+      UE_POST     122 69 107 46 143 88 121 28 119 33
+
+   4 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Multilevel AR(1) for NA with unpleasantness of events as predictor
+At the within level, per phase:
+- random means
+- random autoregressions (phi)
+- random slopes (beta)
+- random residual variance (psi)
+At the between level model the change in each of these as a function:
+- time (intercept)
+- group (treatment)
+
+<a name='summary_analysis' class='heading'>SUMMARY OF ANALYSIS</a>
+
+Number of groups                                                 1
+Number of observations                                       54567
+
+Number of dependent variables                                    4
+Number of independent variables                                  3
+Number of continuous latent variables                            6
+
+Observed dependent variables
+
+  Continuous
+   NA_PRE      NA_POST     UE_PRE      UE_POST
+
+Observed independent variables
+   GROUP       NA_PRE&1    NA_POST&
+
+Continuous latent variables
+   PHI_PRE     BETA_PRE    PSI_PRE     PHI_POST    BETA_POS    PSI_POST
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   NA_PRE&1    NA_POST&
+
+  Between variables
+   GROUP
+
+
+Estimator                                                    BAYES
+Specifications for Bayesian Estimation
+  Point estimate                                            MEDIAN
+  Number of Markov chain Monte Carlo (MCMC) chains               2
+  Random seed for the first chain                             8386
+  Starting value information                           UNPERTURBED
+  Algorithm used for Markov chain Monte Carlo           GIBBS(PX1)
+  Convergence criterion                                  0.500D-01
+  Maximum number of iterations                               50000
+  K-th iteration used for thinning                               5
+Specifications for Bayes Factor Score Estimation
+  Number of imputed data sets                                  500
+  Iteration intervals for thinning                               1
+
+Input data file(s)
+  ChapterData1.dat
+Input data format  FREE
+
+
+<a name='summary_data' class='heading'>SUMMARY OF DATA</a>
+
+     Number of clusters                        129
+
+       Size (s)    Cluster ID with Size s
+
+        103        122
+        129        69
+        130        107
+        131        46
+        132        143
+        133        88
+        134        121 28 119
+        254        33
+        420        117
+        431        45
+        434        135
+        438        58 110 72 62
+        439        21 37 125 130 64 94
+        440        30 124 51 17 95 139 104
+        441        115 5 73 82 24 27 38 128 98 41 66 1
+        442        83 85 10 7 129 79 26 137 120 102
+        443        43 86 13 90 91 16 47 8 52 54 105 56 57 31 116 32 63
+                   20 36 9 123 70 71 126 4 39 40 134 80 136 81 138 12 42
+                   144
+        444        103 50 2 106 18 109 53 112 113 76 78 29 118 55 3 14
+                   22 84 59 60 61 127 15 34 92 131 35 11 97 68 99 100 141
+                   101 48
+        460        108
+        461        140
+        490        49
+        504        114
+        558        19
+        585        44
+        587        23
+
+
+
+<a name='summary_missing_patterns' class='heading'>SUMMARY OF MISSING DATA PATTERNS</a>
+
+     Number of missing data patterns            15
+
+
+     MISSING DATA PATTERNS (x = not missing)
+
+           1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+ NA_PRE    x  x  x        x  x
+ NA_POST   x                    x     x  x  x
+ UE_PRE    x  x  x                                   x
+ UE_POST   x                    x     x        x  x
+ NA_PRE&1  x     x  x        x
+ NA_POST&  x                       x  x     x  x
+ GROUP     x  x  x  x  x  x  x  x  x  x  x  x  x  x  x
+
+
+     MISSING DATA PATTERN FREQUENCIES
+
+    Pattern   Frequency     Pattern   Frequency     Pattern   Frequency
+          1           0           6          99          11          63
+          2        3388           7          73          12          52
+          3        2606           8        3178          13           3
+          4        3477           9        3119          14           4
+          5       36170          10        2331          15           4
+
+
+<a name='covariance_coverage' class='heading'>COVARIANCE COVERAGE OF DATA</a>
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              NA_PRE        NA_POST       UE_PRE        UE_POST       GROUP
+              ________      ________      ________      ________      ________
+ NA_PRE         0.113
+ NA_POST        0.000         0.103
+ UE_PRE         0.110         0.000         0.110
+ UE_POST        0.000         0.101         0.000         0.101
+ GROUP          0.113         0.103         0.110         0.101         1.000
+
+
+
+<a name='univariatess' class='heading'>UNIVARIATE SAMPLE STATISTICS</a>
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     NA_PRE                2.048       1.291       1.000   20.73%       1.000      1.430      1.710
+            6166.000       1.197       1.382       7.000    0.08%       2.000      2.860
+     NA_POST               1.868       1.474       1.000   27.81%       1.000      1.290      1.570
+            5624.000       1.021       1.915       6.710    0.02%       1.710      2.570
+     UE_PRE               -1.247       1.014      -3.000   28.36%      -3.000     -2.000     -2.000
+            5998.000       3.104       0.082       3.000    5.94%      -1.000      0.000
+     UE_POST              -1.456       1.228      -3.000   29.66%      -3.000     -2.000     -2.000
+            5516.000       2.591       0.853       4.000    0.02%      -2.000      0.000
+     GROUP                 0.488       0.047       0.000   51.16%       0.000      0.000      0.000
+             129.000       0.250      -1.998       1.000   48.84%       1.000      1.000
+
+<a name='modelmessages' class='heading'></a>
+
+     WARNING: PROBLEMS OCCURRED IN SEVERAL ITERATIONS IN THE COMPUTATION OF THE STANDARDIZED ESTIMATES FOR SEVERAL
+     CLUSTERS. THIS IS MOST LIKELY DUE TO AR COEFFICIENTS GREATER THAN 1 OR PARAMETERS GIVING NON-STATIONARY MODELS.
+     SUCH POSTERIOR DRAWS ARE REMOVED. THE FOLLOWING CLUSTERS HAD SUCH PROBLEMS:
+          122 107 46 121 28 119 33 110 64 39 134
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     USE THE FBITERATIONS OPTION TO INCREASE THE NUMBER OF ITERATIONS BY A FACTOR
+     OF AT LEAST TWO TO CHECK CONVERGENCE AND THAT THE PSR VALUE DOES NOT INCREASE.
+
+
+
+<a name='model_fit' class='heading'>MODEL FIT INFORMATION</a>
+
+Number of Free Parameters                              33
+
+Information Criteria
+
+          Deviance (DIC)                       753165.170
+          Estimated Number of Parameters (pD)  182196.500
+
+
+
+<a name='model_results' class='heading'>MODEL RESULTS</a>
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+ UE_PRE   WITH
+    UE_POST            0.000       0.000      1.000       0.000       0.000
+
+ Variances
+    UE_PRE             2.838       0.053      0.000       2.734       2.942      *
+    UE_POST            2.253       0.042      0.000       2.174       2.342      *
+
+Between Level
+
+ PHI_POST   ON
+    PHI_PRE            1.000       0.000      0.000       1.000       1.000
+
+ BETA_POST  ON
+    BETA_PRE           1.000       0.000      0.000       1.000       1.000
+
+ PSI_POST   ON
+    PSI_PRE            1.000       0.000      0.000       1.000       1.000
+
+ PHI_PRE    ON
+    GROUP              0.079       0.041      0.030      -0.005       0.159
+
+ BETA_PRE   ON
+    GROUP             -0.013       0.015      0.195      -0.042       0.016
+
+ PSI_PRE    ON
+    GROUP              0.010       0.170      0.472      -0.312       0.351
+
+ PHI_POST   ON
+    GROUP             -0.132       0.060      0.018      -0.247      -0.007      *
+
+ BETA_POST  ON
+    GROUP              0.018       0.019      0.165      -0.019       0.054
+
+ PSI_POST   ON
+    GROUP             -0.240       0.172      0.083      -0.574       0.116
+
+ NA_PRE     ON
+    GROUP             -0.028       0.126      0.415      -0.278       0.219
+
+ UE_PRE     ON
+    GROUP              0.095       0.106      0.195      -0.112       0.300
+
+ NA_POST    ON
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    GROUP             -0.286       0.098      0.002      -0.480      -0.096      *
+
+ UE_POST    ON
+    UE_PRE             1.000       0.000      0.000       1.000       1.000
+    GROUP             -0.264       0.081      0.001      -0.421      -0.106      *
+
+ UE_POST  WITH
+    NA_POST            0.079       0.025      0.000       0.038       0.133      *
+
+ Intercepts
+    NA_PRE             2.025       0.088      0.000       1.847       2.198      *
+    NA_POST            0.023       0.067      0.364      -0.107       0.157
+    UE_PRE            -1.301       0.073      0.000      -1.445      -1.162      *
+    UE_POST           -0.085       0.056      0.066      -0.196       0.029
+    PHI_PRE            0.451       0.030      0.000       0.392       0.508      *
+    BETA_PRE           0.116       0.011      0.000       0.096       0.137      *
+    PSI_PRE           -1.163       0.118      0.000      -1.394      -0.931      *
+    PHI_POST          -0.044       0.042      0.148      -0.130       0.037
+    BETA_POST         -0.012       0.013      0.173      -0.037       0.013
+    PSI_POST          -0.267       0.120      0.016      -0.508      -0.029      *
+
+ Residual Variances
+    NA_PRE             0.468       0.068      0.000       0.359       0.623      *
+    NA_POST            0.229       0.043      0.000       0.161       0.325      *
+    UE_PRE             0.276       0.042      0.000       0.209       0.371      *
+    UE_POST            0.091       0.026      0.000       0.051       0.149      *
+    PHI_PRE            0.034       0.006      0.000       0.023       0.049      *
+    BETA_PRE           0.004       0.001      0.000       0.002       0.006      *
+    PSI_PRE            0.841       0.116      0.000       0.650       1.107      *
+    PHI_POST           0.061       0.014      0.000       0.039       0.093      *
+    BETA_POST          0.004       0.001      0.000       0.002       0.007      *
+    PSI_POST           0.767       0.124      0.000       0.569       1.066      *
+
+
+<a name='standardized_results' class='heading'>STANDARDIZED MODEL RESULTS</a>
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ PHI_PRE | NA_PRE ON
+    NA_PRE&1           0.490       0.013      0.000       0.465       0.515      *
+
+ BETA_PRE | NA_PRE ON
+    UE_PRE             0.251       0.012      0.000       0.226       0.275      *
+
+ PHI_POST | NA_POST ON
+    NA_POST&1          0.384       0.018      0.000       0.348       0.419      *
+
+ BETA_POST | NA_POST ON
+    UE_POST            0.247       0.013      0.000       0.223       0.274      *
+
+ UE_PRE   WITH
+    UE_POST            0.000       0.000      1.000       0.000       0.000
+
+ PSI_PRE |
+    NA_PRE             0.645       0.012      0.000       0.621       0.668      *
+
+ PSI_POST |
+    NA_POST            0.687       0.013      0.000       0.663       0.712      *
+
+ Variances
+    UE_PRE             1.000       0.000      0.000       1.000       1.000
+    UE_POST            1.000       0.000      0.000       1.000       1.000
+
+Between Level
+
+ PHI_POST   ON
+    PHI_PRE            0.605       0.052      0.000       0.505       0.707      *
+
+ BETA_POST  ON
+    BETA_PRE           0.699       0.070      0.000       0.560       0.837      *
+
+ PSI_POST   ON
+    PSI_PRE            0.722       0.035      0.000       0.651       0.786      *
+
+ PHI_PRE    ON
+    GROUP              0.148       0.077      0.030      -0.009       0.300
+
+ BETA_PRE   ON
+    GROUP             -0.074       0.085      0.195      -0.238       0.093
+
+ PSI_PRE    ON
+    GROUP              0.004       0.065      0.472      -0.120       0.134
+
+ PHI_POST   ON
+    GROUP             -0.150       0.069      0.018      -0.286      -0.009      *
+
+ BETA_POST  ON
+    GROUP              0.072       0.074      0.165      -0.076       0.212
+
+ PSI_POST   ON
+    GROUP             -0.066       0.047      0.083      -0.155       0.031
+
+ NA_PRE     ON
+    GROUP             -0.014       0.064      0.415      -0.140       0.109
+
+ UE_PRE     ON
+    GROUP              0.064       0.070      0.195      -0.072       0.197
+
+ NA_POST    ON
+    NA_PRE             0.813       0.030      0.000       0.749       0.865      *
+    GROUP             -0.119       0.041      0.002      -0.200      -0.040      *
+
+ UE_POST    ON
+    UE_PRE             0.866       0.035      0.000       0.789       0.924      *
+    GROUP             -0.151       0.047      0.001      -0.246      -0.062      *
+
+ UE_POST  WITH
+    NA_POST            0.563       0.122      0.000       0.298       0.767      *
+
+ Intercepts
+    NA_PRE             2.955       0.237      0.000       2.486       3.425      *
+    NA_POST            0.027       0.079      0.364      -0.127       0.185
+    UE_PRE            -2.472       0.223      0.000      -2.908      -2.043      *
+    UE_POST           -0.140       0.093      0.066      -0.318       0.047
+    PHI_PRE            2.412       0.293      0.000       1.870       3.010      *
+    BETA_PRE           1.894       0.235      0.000       1.458       2.384      *
+    PSI_PRE           -1.268       0.154      0.000      -1.569      -0.964      *
+    PHI_POST          -0.141       0.133      0.148      -0.405       0.123
+    BETA_POST         -0.135       0.145      0.173      -0.416       0.149
+    PSI_POST          -0.209       0.094      0.016      -0.394      -0.022      *
+
+ Residual Variances
+    NA_PRE             0.998       0.006      0.000       0.978       1.000      *
+    NA_POST            0.321       0.047      0.000       0.234       0.419      *
+    UE_PRE             0.995       0.011      0.000       0.961       1.000      *
+    UE_POST            0.243       0.058      0.000       0.143       0.369      *
+    PHI_PRE            0.978       0.024      0.000       0.910       1.000      *
+    BETA_PRE           0.993       0.016      0.000       0.944       1.000      *
+    PSI_PRE            0.998       0.006      0.000       0.979       1.000      *
+    PHI_POST           0.635       0.062      0.000       0.505       0.748      *
+    BETA_POST          0.512       0.097      0.000       0.301       0.686      *
+    PSI_POST           0.473       0.050      0.000       0.377       0.572      *
+
+
+<a name='rsquare' class='heading'>R-SQUARE</a>
+
+Within-Level R-Square Averaged Across Clusters
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    NA_PRE             0.355       0.012      0.000       0.332       0.379
+    NA_POST            0.313       0.013      0.000       0.288       0.337
+
+Between Level
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    NA_PRE             0.002       0.006      0.000       0.000       0.021
+    NA_POST            0.679       0.047      0.000       0.580       0.766
+    UE_PRE             0.005       0.011      0.000       0.000       0.039
+    UE_POST            0.757       0.058      0.000       0.630       0.857
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    PHI_PRE            0.022       0.024      0.000       0.000       0.090
+    BETA_PRE           0.007       0.016      0.000       0.000       0.056
+    PSI_PRE            0.002       0.006      0.000       0.000       0.021
+    PHI_POST           0.365       0.062      0.000       0.251       0.495
+    BETA_POST          0.488       0.097      0.000       0.314       0.699
+    PSI_POST           0.527       0.050      0.000       0.428       0.623
+
+
+<a name='bayes_fscores_comparisons' class='heading'>BETWEEN-LEVEL FACTOR SCORE COMPARISONS</a>
+
+ Results for Factor PHI_PRE
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       134          0.844           2        39          0.820           3         3          0.810
+     4        60          0.802           5       125          0.774           6       116          0.772
+     7       141          0.770           8        66          0.766           9       108          0.766
+    10       104          0.765          11       144          0.741          12        28          0.735
+    13         1          0.719          14        58          0.701          15        20          0.692
+    16       121          0.670          17       117          0.665          18        27          0.660
+    19       138          0.650          20       130          0.649          21        36          0.629
+    22       106          0.623          23        41          0.621          24       131          0.616
+    25        64          0.603          26        44          0.601          27         5          0.599
+    28        83          0.597          29         8          0.597          30       107          0.592
+    31        61          0.588          32        29          0.584          33       137          0.577
+    34        52          0.573          35       119          0.567          36        21          0.566
+    37         2          0.558          38        49          0.555          39        32          0.554
+    40        42          0.553          41        14          0.553          42        72          0.552
+    43        97          0.551          44        18          0.543          45        85          0.543
+    46        46          0.541          47       115          0.541          48        62          0.538
+    49         9          0.538          50        33          0.531          51        26          0.526
+    52       127          0.520          53        90          0.517          54       113          0.513
+    55        30          0.511          56        10          0.509          57        71          0.508
+    58        98          0.502          59        94          0.499          60         7          0.493
+    61        68          0.491          62        78          0.490          63        45          0.487
+    64        40          0.481          65        31          0.481          66       123          0.481
+    67        51          0.479          68        13          0.479          69       122          0.478
+    70       135          0.478          71       140          0.476          72        81          0.476
+    73        16          0.475          74        82          0.474          75       101          0.466
+    76       110          0.465          77        95          0.462          78        76          0.453
+    79        59          0.449          80        54          0.442          81        63          0.442
+    82       100          0.438          83        53          0.437          84        11          0.436
+    85        23          0.434          86        57          0.434          87        80          0.433
+    88        19          0.424          89       103          0.421          90        15          0.414
+    91       109          0.412          92        56          0.409          93        55          0.408
+    94        48          0.403          95         4          0.402          96        34          0.401
+    97       102          0.396          98       114          0.381          99        38          0.376
+   100       143          0.373         101       136          0.367         102        86          0.364
+   103        91          0.363         104        69          0.361         105        92          0.361
+   106        47          0.353         107       129          0.351         108        70          0.350
+   109       139          0.337         110       112          0.316         111        50          0.313
+   112        73          0.313         113       124          0.309         114       105          0.297
+   115        22          0.295         116       128          0.294         117       126          0.291
+   118        17          0.289         119       120          0.270         120        79          0.258
+   121        84          0.257         122        37          0.251         123        12          0.249
+   124        24          0.243         125        99          0.237         126        35          0.184
+   127        88          0.182         128       118          0.161         129        43          0.144
+
+ Results for Factor BETA_PRE
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1         5          0.239           2       121          0.224           3       106          0.208
+     4        81          0.194           5        70          0.190           6        83          0.190
+     7       138          0.188           8        71          0.185           9        48          0.184
+    10       122          0.183          11         8          0.181          12        49          0.180
+    13        23          0.174          14        59          0.174          15        79          0.173
+    16       127          0.173          17        73          0.172          18        22          0.168
+    19        24          0.161          20       124          0.160          21        27          0.158
+    22        40          0.156          23       128          0.156          24       143          0.156
+    25        39          0.156          26       140          0.155          27        38          0.152
+    28       103          0.152          29        95          0.151          30         4          0.149
+    31        32          0.148          32        82          0.146          33       131          0.145
+    34        72          0.143          35        68          0.139          36        20          0.138
+    37        46          0.138          38        84          0.137          39        10          0.136
+    40        69          0.135          41       137          0.132          42         1          0.131
+    43        85          0.131          44       107          0.130          45       139          0.129
+    46        97          0.129          47        17          0.128          48        33          0.128
+    49        15          0.127          50        37          0.127          51       119          0.126
+    52        55          0.125          53       100          0.124          54       112          0.123
+    55        13          0.118          56       105          0.115          57       123          0.115
+    58        54          0.114          59        94          0.114          60        36          0.114
+    61       135          0.112          62        56          0.111          63        52          0.110
+    64        51          0.110          65       130          0.110          66       120          0.107
+    67        16          0.107          68       144          0.107          69        26          0.107
+    70        53          0.107          71       125          0.106          72        21          0.105
+    73        31          0.105          74        66          0.103          75       136          0.103
+    76       102          0.102          77       104          0.102          78        92          0.099
+    79        61          0.095          80        62          0.094          81        29          0.092
+    82       134          0.090          83        19          0.089          84        57          0.089
+    85         9          0.088          86        63          0.088          87        60          0.087
+    88        88          0.087          89        11          0.084          90       117          0.084
+    91       110          0.083          92        80          0.083          93        50          0.080
+    94        18          0.078          95       126          0.078          96        98          0.076
+    97        42          0.076          98       118          0.076          99        58          0.075
+   100        90          0.074         101         3          0.074         102        35          0.073
+   103         7          0.073         104        28          0.071         105        64          0.071
+   106       129          0.069         107        91          0.068         108       114          0.067
+   109        76          0.067         110         2          0.063         111        30          0.061
+   112        86          0.060         113       115          0.053         114        14          0.051
+   115        34          0.050         116        41          0.049         117       116          0.049
+   118       113          0.048         119        78          0.047         120       109          0.040
+   121        47          0.039         122       141          0.039         123        44          0.038
+   124        12          0.037         125       101          0.035         126        43          0.020
+   127        99          0.012         128       108          0.012         129        45          0.010
+
+ Results for Factor PSI_PRE
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       120          0.494           2        28          0.441           3       140          0.351
+     4       107          0.247           5        23          0.229           6       127          0.162
+     7       135          0.122           8        13          0.099           9        82          0.084
+    10       122          0.025          11       128          0.007          12        95          0.005
+    13       138          0.001          14        27         -0.053          15        40         -0.186
+    16        22         -0.187          17        97         -0.205          18       139         -0.270
+    19       100         -0.336          20        71         -0.346          21       105         -0.370
+    22         4         -0.422          23       143         -0.427          24       131         -0.445
+    25        16         -0.476          26        69         -0.517          27        50         -0.533
+    28       123         -0.546          29         5         -0.559          30        46         -0.571
+    31        79         -0.595          32        66         -0.597          33       104         -0.598
+    34       134         -0.634          35        15         -0.690          36       121         -0.693
+    37       124         -0.699          38        49         -0.715          39       103         -0.732
+    40        81         -0.740          41        29         -0.781          42        52         -0.794
+    43        48         -0.809          44       126         -0.815          45        68         -0.815
+    46        92         -0.820          47        94         -0.825          48        17         -0.831
+    49       137         -0.832          50       130         -0.844          51        37         -0.848
+    52         9         -0.852          53        62         -0.857          54        58         -0.858
+    55        90         -0.880          56        70         -0.887          57        72         -0.900
+    58        53         -0.903          59        30         -0.904          60       136         -0.927
+    61        61         -0.964          62       106         -0.965          63        19         -0.966
+    64         1         -0.970          65        39         -1.002          66        31         -1.020
+    67        51         -1.033          68        76         -1.039          69        57         -1.060
+    70        32         -1.088          71        44         -1.102          72        64         -1.118
+    73        10         -1.169          74        54         -1.184          75       119         -1.215
+    76       114         -1.226          77       129         -1.278          78       125         -1.284
+    79        24         -1.297          80        21         -1.298          81        59         -1.326
+    82       102         -1.371          83       112         -1.393          84        26         -1.415
+    85        18         -1.429          86        47         -1.471          87       117         -1.477
+    88        73         -1.487          89        85         -1.502          90       118         -1.587
+    91         8         -1.594          92       115         -1.597          93       144         -1.620
+    94        20         -1.675          95         3         -1.683          96        83         -1.691
+    97       116         -1.701          98       113         -1.705          99        33         -1.722
+   100        55         -1.740         101        98         -1.755         102        36         -1.775
+   103        56         -1.788         104        80         -1.795         105       108         -1.806
+   106        78         -1.831         107        38         -1.846         108        11         -1.875
+   109        45         -1.906         110       101         -2.016         111         7         -2.029
+   112        34         -2.087         113       110         -2.147         114        42         -2.148
+   115        84         -2.265         116        41         -2.267         117         2         -2.270
+   118        14         -2.286         119        60         -2.393         120       109         -2.423
+   121       141         -2.463         122        35         -2.479         123        91         -2.595
+   124        86         -2.756         125        63         -2.776         126        88         -2.859
+   127        99         -3.123         128        12         -3.424         129        43         -5.210
+
+ Results for Factor PHI_POST
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       104          0.805           2       125          0.788           3        62          0.788
+     4        18          0.771           5        31          0.763           6       117          0.759
+     7        71          0.756           8        21          0.747           9        64          0.726
+    10        39          0.697          11        53          0.693          12        17          0.691
+    13        20          0.690          14        60          0.690          15       116          0.686
+    16       110          0.674          17         8          0.659          18        66          0.643
+    19       134          0.629          20        68          0.628          21        36          0.607
+    22       115          0.600          23       106          0.583          24        28          0.581
+    25        78          0.581          26        76          0.575          27        15          0.573
+    28        47          0.563          29        41          0.554          30        40          0.549
+    31       126          0.546          32        97          0.546          33         9          0.541
+    34         4          0.540          35       131          0.539          36       107          0.524
+    37        49          0.523          38       137          0.519          39        81          0.510
+    40        51          0.510          41       105          0.502          42        48          0.490
+    43        63          0.486          44        55          0.471          45       121          0.463
+    46        44          0.449          47        13          0.442          48       114          0.431
+    49       136          0.430          50        26          0.428          51        85          0.427
+    52         7          0.425          53        61          0.411          54         5          0.407
+    55        80          0.400          56        46          0.396          57        82          0.395
+    58        34          0.391          59        42          0.384          60       122          0.371
+    61       119          0.364          62        91          0.360          63        33          0.350
+    64        59          0.350          65        19          0.345          66         2          0.344
+    67        23          0.342          68        90          0.333          69        94          0.331
+    70       112          0.330          71       139          0.329          72       128          0.328
+    73        38          0.327          74         3          0.323          75        16          0.319
+    76        27          0.318          77       140          0.317          78       135          0.316
+    79       113          0.308          80       100          0.306          81       101          0.306
+    82       103          0.306          83        45          0.305          84        86          0.300
+    85       143          0.298          86        50          0.294          87       108          0.291
+    88        95          0.289          89        29          0.288          90        58          0.281
+    91        32          0.279          92        54          0.276          93         1          0.272
+    94        22          0.262          95        70          0.258          96        35          0.254
+    97        72          0.246          98       109          0.237          99        83          0.235
+   100        11          0.217         101       123          0.213         102       124          0.212
+   103       127          0.208         104        14          0.201         105        24          0.200
+   106        73          0.193         107        69          0.192         108        88          0.187
+   109       144          0.183         110        57          0.182         111       102          0.173
+   112       130          0.164         113        10          0.159         114        84          0.154
+   115        79          0.133         116       141          0.119         117       118          0.118
+   118        30          0.113         119       129          0.113         120        37          0.082
+   121        56          0.063         122        12          0.051         123       138          0.051
+   124        52          0.037         125        98          0.014         126        99          0.012
+   127        92          0.007         128        43         -0.089         129       120         -0.171
+
+ Results for Factor BETA_POS
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1         5          0.302           2       106          0.298           3       121          0.252
+     4        59          0.243           5        81          0.239           6        97          0.225
+     7        23          0.214           8       112          0.211           9       138          0.204
+    10        83          0.202          11        70          0.201          12       100          0.194
+    13        71          0.194          14        79          0.193          15       127          0.192
+    16        22          0.189          17        38          0.188          18         4          0.184
+    19        68          0.180          20        27          0.177          21       122          0.175
+    22       140          0.175          23        73          0.171          24        49          0.170
+    25        48          0.170          26        82          0.166          27        86          0.161
+    28        95          0.161          29        72          0.160          30        92          0.157
+    31       115          0.155          32        17          0.154          33        46          0.154
+    34        39          0.153          35       102          0.151          36        69          0.150
+    37       139          0.150          38        32          0.149          39        13          0.145
+    40       103          0.142          41        55          0.140          42       143          0.140
+    43        51          0.139          44       119          0.138          45        15          0.136
+    46        54          0.134          47        56          0.133          48       105          0.133
+    49       124          0.132          50        44          0.131          51         1          0.131
+    52        33          0.130          53        52          0.130          54        94          0.128
+    55       123          0.125          56        24          0.121          57        84          0.121
+    58       137          0.121          59        42          0.120          60        26          0.120
+    61       104          0.119          62       107          0.115          63        40          0.114
+    64        10          0.113          65        90          0.112          66        18          0.109
+    67       131          0.109          68        36          0.107          69        50          0.105
+    70        21          0.104          71       130          0.102          72        43          0.100
+    73       128          0.095          74       135          0.093          75         8          0.091
+    76        66          0.090          77        20          0.085          78        31          0.085
+    79        29          0.084          80         7          0.084          81        11          0.080
+    82        28          0.079          83        16          0.073          84        37          0.072
+    85       134          0.072          86        85          0.072          87        53          0.070
+    88       120          0.070          89        19          0.069          90        62          0.067
+    91        61          0.067          92        88          0.065          93       117          0.064
+    94       118          0.059          95        57          0.058          96       113          0.058
+    97        60          0.054          98        63          0.052          99         9          0.051
+   100        76          0.050         101         2          0.049         102       129          0.049
+   103        91          0.049         104        34          0.049         105       136          0.048
+   106       144          0.046         107       114          0.046         108       125          0.044
+   109        80          0.042         110       109          0.035         111        98          0.034
+   112        58          0.030         113       141          0.030         114       101          0.029
+   115        12          0.026         116       126          0.022         117       116          0.020
+   118        47          0.015         119        14          0.006         120        64          0.004
+   121        78          0.003         122        99          0.002         123        35          0.001
+   124         3         -0.001         125        30         -0.004         126       108         -0.005
+   127       110         -0.007         128        41         -0.011         129        45         -0.071
+
+ Results for Factor PSI_POST
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       140          0.782           2       107          0.671           3        13          0.481
+     4       135          0.449           5        79          0.173           6        82          0.132
+     7        23          0.127           8       120          0.107           9         5          0.032
+    10        92         -0.077          11        48         -0.144          12        16         -0.169
+    13        28         -0.277          14        22         -0.288          15        95         -0.310
+    16       128         -0.339          17        70         -0.360          18       127         -0.362
+    19       105         -0.475          20        49         -0.510          21       103         -0.548
+    22        81         -0.620          23       100         -0.635          24        52         -0.642
+    25         1         -0.646          26       138         -0.651          27         4         -0.655
+    28        68         -0.669          29       143         -0.726          30        19         -0.739
+    31       131         -0.759          32        66         -0.817          33        94         -0.837
+    34       136         -0.837          35       124         -0.846          36        38         -0.878
+    37       106         -0.910          38        45         -0.912          39        10         -0.959
+    40        40         -0.989          41       137         -0.995          42        44         -1.004
+    43        86         -1.008          44        26         -1.017          45        71         -1.040
+    46       104         -1.049          47        24         -1.056          48       139         -1.057
+    49        69         -1.059          50        76         -1.093          51        15         -1.099
+    52       122         -1.109          53       101         -1.112          54        32         -1.127
+    55       126         -1.192          56        46         -1.210          57        39         -1.252
+    58       117         -1.253          59        72         -1.336          60        59         -1.348
+    61        37         -1.378          62        97         -1.390          63        29         -1.523
+    64        50         -1.548          65        27         -1.551          66       134         -1.553
+    67        54         -1.596          68        53         -1.610          69        43         -1.617
+    70        17         -1.624          71        73         -1.672          72        61         -1.681
+    73        18         -1.684          74        51         -1.686          75        35         -1.711
+    76         9         -1.735          77        83         -1.746          78       123         -1.765
+    79       119         -1.783          80       114         -1.795          81        20         -1.808
+    82         8         -1.849          83        90         -1.849          84       112         -1.852
+    85       118         -1.898          86        55         -1.961          87       115         -1.965
+    88        62         -2.077          89       121         -2.082          90       102         -2.086
+    91        31         -2.091          92        42         -2.146          93       130         -2.172
+    94        85         -2.213          95       144         -2.232          96        33         -2.245
+    97       129         -2.260          98        36         -2.400          99       110         -2.403
+   100        80         -2.405         101        58         -2.436         102       116         -2.439
+   103        21         -2.440         104        98         -2.476         105       125         -2.494
+   106       109         -2.547         107        14         -2.555         108        41         -2.581
+   109         7         -2.618         110        78         -2.625         111        56         -2.659
+   112        12         -2.669         113         3         -2.735         114        57         -2.736
+   115        34         -2.926         116        63         -3.148         117       113         -3.193
+   118         2         -3.252         119        84         -3.296         120        11         -3.380
+   121        47         -3.467         122        60         -3.669         123       108         -3.709
+   124        30         -3.765         125        64         -3.797         126       141         -3.819
+   127        91         -3.865         128        88         -3.869         129        99         -4.216
+
+ Results for NA_PRE (referred to as plausible label B_NA_PRE)
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       124          3.850           2       120          3.660           3        49          3.478
+     4        13          3.425           5       117          3.301           6        66          3.257
+     7        68          3.248           8       121          3.170           9        40          3.168
+    10        39          3.127          11        76          3.113          12        64          3.085
+    13        17          3.065          14       127          3.016          15        28          3.008
+    16       107          2.990          17       131          2.960          18       134          2.899
+    19        82          2.827          20        69          2.825          21       138          2.825
+    22        27          2.756          23        70          2.719          24       104          2.707
+    25       139          2.634          26       122          2.618          27       105          2.549
+    28        81          2.542          29       103          2.487          30         8          2.475
+    31        16          2.475          32       137          2.458          33       140          2.427
+    34        72          2.425          35        50          2.393          36        95          2.362
+    37       135          2.339          38       100          2.309          39        22          2.295
+    40         9          2.249          41        31          2.229          42        79          2.217
+    43        71          2.187          44         1          2.164          45        94          2.162
+    46       106          2.159          47        23          2.135          48        18          2.128
+    49        32          2.118          50        97          2.117          51       116          2.104
+    52        78          2.052          53        57          2.045          54        19          2.043
+    55        58          2.037          56        10          2.033          57        15          2.016
+    58        30          2.003          59       123          1.992          60       136          1.960
+    61        55          1.954          62         5          1.950          63        46          1.949
+    64        21          1.898          65       125          1.894          66        59          1.881
+    67         4          1.869          68       119          1.849          69       126          1.797
+    70        52          1.796          71        36          1.781          72       130          1.773
+    73       128          1.769          74         7          1.752          75        61          1.741
+    76       114          1.733          77        90          1.716          78        20          1.706
+    79        54          1.706          80       143          1.692          81        62          1.686
+    82        29          1.684          83        53          1.671          84         3          1.671
+    85        48          1.637          86        37          1.619          87       129          1.613
+    88        24          1.593          89        41          1.593          90        26          1.570
+    91       102          1.559          92        88          1.545          93        92          1.539
+    94        44          1.534          95        51          1.534          96        56          1.510
+    97        11          1.496          98        85          1.473          99       108          1.469
+   100        33          1.464         101        73          1.455         102        83          1.449
+   103        98          1.413         104         2          1.410         105       109          1.408
+   106        38          1.399         107        14          1.365         108        42          1.357
+   109       115          1.350         110       118          1.343         111        45          1.343
+   112       110          1.338         113        47          1.338         114       112          1.326
+   115       144          1.326         116        60          1.320         117       141          1.276
+   118        80          1.254         119       113          1.250         120       101          1.238
+   121        86          1.229         122        35          1.192         123        34          1.186
+   124        63          1.173         125        84          1.172         126        91          1.152
+   127        12          1.073         128        99          1.047         129        43          1.012
+
+ Results for NA_POST (referred to as plausible label B_NA_POST)
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       131          4.280           2       127          3.853           3        13          3.629
+     4        49          3.549           5        16          3.451           6       120          3.448
+     7       110          3.360           8       124          3.259           9        17          3.063
+    10       117          2.996          11         8          2.942          12       140          2.933
+    13       135          2.921          14       107          2.919          15       104          2.874
+    16        66          2.872          17        22          2.818          18        39          2.806
+    19       137          2.741          20       121          2.701          21        28          2.692
+    22        82          2.646          23        71          2.561          24        68          2.543
+    25        40          2.469          26        76          2.452          27       122          2.450
+    28        48          2.410          29         9          2.385          30       105          2.363
+    31        69          2.345          32       134          2.274          33        95          2.266
+    34        18          2.248          35       103          2.230          36        70          2.194
+    37        62          2.190          38        79          2.181          39        81          2.169
+    40        19          2.103          41        50          2.100          42         5          2.071
+    43        92          2.066          44        10          2.065          45        94          2.059
+    46       139          2.043          47        59          2.043          48        32          2.039
+    49        38          1.997          50        55          1.991          51       136          1.991
+    52       126          1.972          53        23          1.958          54       106          1.920
+    55        31          1.881          56       116          1.873          57       100          1.873
+    58        97          1.854          59        72          1.853          60       128          1.837
+    61       143          1.826          62        46          1.815          63        78          1.812
+    64        24          1.802          65       138          1.773          66         1          1.758
+    67        21          1.702          68         4          1.625          69        15          1.618
+    70        36          1.606          71        73          1.566          72        33          1.562
+    73       119          1.546          74        86          1.522          75       125          1.516
+    76       109          1.512          77        45          1.502          78        27          1.501
+    79       114          1.499          80        26          1.494          81       102          1.488
+    82        44          1.484          83        29          1.459          84        53          1.458
+    85        52          1.453          86        20          1.448          87       112          1.429
+    88        41          1.405          89       123          1.397          90       101          1.397
+    91       115          1.388          92        85          1.383          93        51          1.369
+    94         7          1.361          95        43          1.351          96        64          1.349
+    97       118          1.315          98        54          1.310          99        61          1.295
+   100        83          1.285         101        42          1.254         102        35          1.238
+   103        90          1.230         104        56          1.227         105        37          1.224
+   106        57          1.203         107        14          1.203         108        98          1.189
+   109        11          1.173         110         3          1.173         111        12          1.166
+   112       130          1.162         113       129          1.162         114        58          1.158
+   115        88          1.154         116        34          1.131         117        80          1.130
+   118        63          1.126         119        84          1.119         120        60          1.112
+   121        47          1.098         122       113          1.084         123         2          1.076
+   124        91          1.070         125       144          1.056         126       141          1.042
+   127        30          1.040         128       108          1.026         129        99          1.018
+
+ Results for UE_PRE (referred to as plausible label B_UE_PRE)
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1        81         -0.057           2        49         -0.158           3        82         -0.238
+     4        53         -0.391           5        59         -0.427           6       134         -0.428
+     7       127         -0.453           8       125         -0.511           9        32         -0.521
+    10       117         -0.568          11        95         -0.600          12       139         -0.614
+    13        45         -0.618          14        18         -0.623          15        41         -0.638
+    16        78         -0.698          17        60         -0.702          18        69         -0.713
+    19       109         -0.760          20         3         -0.765          21         5         -0.769
+    22       105         -0.770          23       140         -0.777          24        20         -0.781
+    25        44         -0.785          26       131         -0.808          27        11         -0.819
+    28        34         -0.830          29        15         -0.855          30        62         -0.856
+    31       123         -0.861          32        13         -0.881          33       114         -0.887
+    34        22         -0.897          35        31         -0.908          36        17         -0.923
+    37        30         -0.929          38        64         -0.951          39         1         -0.961
+    40       137         -0.963          41        48         -0.985          42        38         -1.001
+    43        90         -1.017          44        72         -1.046          45       121         -1.064
+    46        70         -1.085          47        68         -1.095          48        94         -1.110
+    49       128         -1.124          50       120         -1.142          51       119         -1.145
+    52       136         -1.164          53        51         -1.183          54       101         -1.195
+    55       138         -1.202          56        27         -1.205          57       100         -1.211
+    58        50         -1.218          59        16         -1.219          60       144         -1.241
+    61       124         -1.244          62        71         -1.257          63       104         -1.262
+    64         4         -1.266          65         7         -1.271          66        21         -1.272
+    67        56         -1.280          68        40         -1.284          69        76         -1.284
+    70       103         -1.298          71       115         -1.301          72       143         -1.308
+    73        37         -1.331          74        36         -1.343          75        63         -1.377
+    76        86         -1.377          77         9         -1.382          78       110         -1.382
+    79       122         -1.386          80       106         -1.397          81        52         -1.398
+    82        80         -1.413          83         8         -1.421          84       107         -1.425
+    85        29         -1.429          86        73         -1.436          87        55         -1.436
+    88        57         -1.446          89        58         -1.449          90       141         -1.460
+    91        61         -1.486          92       112         -1.507          93        47         -1.529
+    94       129         -1.552          95       116         -1.568          96        23         -1.590
+    97        24         -1.612          98       126         -1.626          99       102         -1.644
+   100        43         -1.655         101        10         -1.662         102        79         -1.662
+   103        92         -1.683         104         2         -1.705         105        28         -1.709
+   106        12         -1.727         107        97         -1.754         108       113         -1.768
+   109       130         -1.786         110        66         -1.787         111        14         -1.799
+   112        83         -1.827         113        26         -1.830         114        39         -1.833
+   115        33         -1.931         116       108         -1.932         117        46         -1.945
+   118        99         -1.951         119        88         -1.951         120       118         -1.981
+   121        19         -2.002         122        85         -2.019         123        54         -2.021
+   124        98         -2.055         125        42         -2.063         126       135         -2.085
+   127        84         -2.178         128        91         -2.196         129        35         -2.442
+
+ Results for UE_POST (referred to as plausible label B_UE_POST)
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       131         -0.105           2        81         -0.148           3       127         -0.160
+     4        49         -0.234           5        53         -0.317           6        82         -0.522
+     7       140         -0.583           8        59         -0.586           9       134         -0.617
+    10       125         -0.625          11        95         -0.634          12       110         -0.652
+    13        18         -0.655          14        48         -0.663          15        62         -0.664
+    16        45         -0.696          17        32         -0.737          18        78         -0.764
+    19         5         -0.772          20        38         -0.789          21        20         -0.832
+    22        22         -0.833          23       123         -0.913          24        13         -0.953
+    25       109         -0.959          26       137         -0.971          27       139         -1.011
+    28        17         -1.035          29         1         -1.041          30       117         -1.066
+    31       136         -1.099          32        41         -1.109          33        69         -1.111
+    34        11         -1.120          35        71         -1.130          36        31         -1.131
+    37        16         -1.164          38        15         -1.168          39         3         -1.186
+    40       105         -1.228          41        44         -1.230          42        34         -1.231
+    43        70         -1.245          44       114         -1.257          45        40         -1.286
+    46        60         -1.291          47       143         -1.326          48       128         -1.342
+    49       103         -1.364          50        21         -1.369          51       101         -1.373
+    52        73         -1.400          53       144         -1.407          54       120         -1.411
+    55        30         -1.415          56        86         -1.428          57       124         -1.435
+    58       121         -1.465          59        50         -1.467          60        72         -1.470
+    61        64         -1.473          62        63         -1.479          63       119         -1.495
+    64        47         -1.502          65        29         -1.503          66        90         -1.525
+    67       107         -1.525          68        68         -1.529          69        80         -1.531
+    70        51         -1.534          71         8         -1.534          72        36         -1.541
+    73       122         -1.551          74        24         -1.556          75       104         -1.578
+    76        52         -1.580          77        37         -1.588          78        43         -1.628
+    79        56         -1.636          80       100         -1.638          81        94         -1.652
+    82        55         -1.652          83       141         -1.678          84       112         -1.706
+    85        92         -1.724          86       138         -1.762          87       106         -1.770
+    88         2         -1.771          89         9         -1.776          90         7         -1.781
+    91        83         -1.783          92         4         -1.788          93       115         -1.793
+    94        61         -1.806          95       116         -1.807          96       102         -1.815
+    97       129         -1.844          98        39         -1.860          99        23         -1.864
+   100        76         -1.875         101       126         -1.952         102        27         -1.956
+   103        10         -1.983         104       118         -2.031         105        19         -2.035
+   106       135         -2.053         107        14         -2.070         108        28         -2.083
+   109        12         -2.084         110        97         -2.099         111        33         -2.123
+   112        26         -2.124         113        57         -2.131         114       113         -2.135
+   115        85         -2.147         116        88         -2.151         117        79         -2.182
+   118       130         -2.206         119        58         -2.210         120        46         -2.233
+   121        42         -2.271         122        91         -2.314         123        99         -2.360
+   124        66         -2.365         125        84         -2.373         126       108         -2.404
+   127        54         -2.414         128        98         -2.481         129        35         -2.588
+
+
+<a name='tech1_output' class='heading'>TECHNICAL 1 OUTPUT</a>
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              NA_POST&
+              ________
+                    0
+
+
+           LAMBDA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+ NA_PRE             0             0             0             0             0
+ NA_POST            0             0             0             0             0
+ UE_PRE             0             0             0             0             0
+ UE_POST            0             0             0             0             0
+ NA_PRE&1           0             0             0             0             0
+ NA_POST&           0             0             0             0             0
+
+
+           LAMBDA
+              NA_POST&
+              ________
+ NA_PRE             0
+ NA_POST            0
+ UE_PRE             0
+ UE_POST            0
+ NA_PRE&1           0
+ NA_POST&           0
+
+
+           THETA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+ NA_PRE             0
+ NA_POST            0             0
+ UE_PRE             0             0             0
+ UE_POST            0             0             0             0
+ NA_PRE&1           0             0             0             0             0
+ NA_POST&           0             0             0             0             0
+
+
+           THETA
+              NA_POST&
+              ________
+ NA_POST&           0
+
+
+           ALPHA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           ALPHA
+              NA_POST&
+              ________
+                    0
+
+
+           BETA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+ NA_PRE             0             0             0             0             0
+ NA_POST            0             0             0             0             0
+ UE_PRE             0             0             0             0             0
+ UE_POST            0             0             0             0             0
+ NA_PRE&1           0             0             0             0             0
+ NA_POST&           0             0             0             0             0
+
+
+           BETA
+              NA_POST&
+              ________
+ NA_PRE             0
+ NA_POST            0
+ UE_PRE             0
+ UE_POST            0
+ NA_PRE&1           0
+ NA_POST&           0
+
+
+           PSI
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+ NA_PRE             0
+ NA_POST            0             0
+ UE_PRE             0             0             1
+ UE_POST            0             0             0             2
+ NA_PRE&1           0             0             0             0             0
+ NA_POST&           0             0             0             0             0
+
+
+           PSI
+              NA_POST&
+              ________
+ NA_POST&           0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              NA_PRE        NA_POST       UE_PRE        UE_POST       GROUP
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           LAMBDA
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ NA_PRE             0             0             0             0             0
+ NA_POST            0             0             0             0             0
+ UE_PRE             0             0             0             0             0
+ UE_POST            0             0             0             0             0
+ GROUP              0             0             0             0             0
+
+
+           LAMBDA
+              PSI_POST      NA_PRE        NA_POST       UE_PRE        UE_POST
+              ________      ________      ________      ________      ________
+ NA_PRE             0             0             0             0             0
+ NA_POST            0             0             0             0             0
+ UE_PRE             0             0             0             0             0
+ UE_POST            0             0             0             0             0
+ GROUP              0             0             0             0             0
+
+
+           LAMBDA
+              GROUP
+              ________
+ NA_PRE             0
+ NA_POST            0
+ UE_PRE             0
+ UE_POST            0
+ GROUP              0
+
+
+           THETA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       GROUP
+              ________      ________      ________      ________      ________
+ NA_PRE             0
+ NA_POST            0             0
+ UE_PRE             0             0             0
+ UE_POST            0             0             0             0
+ GROUP              0             0             0             0             0
+
+
+           ALPHA
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+                    3             4             5             6             7
+
+
+           ALPHA
+              PSI_POST      NA_PRE        NA_POST       UE_PRE        UE_POST
+              ________      ________      ________      ________      ________
+                    8             9            10            11            12
+
+
+           ALPHA
+              GROUP
+              ________
+                    0
+
+
+           BETA
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ PHI_PRE            0             0             0             0             0
+ BETA_PRE           0             0             0             0             0
+ PSI_PRE            0             0             0             0             0
+ PHI_POST           0             0             0             0             0
+ BETA_POS           0             0             0             0             0
+ PSI_POST           0             0             0             0             0
+ NA_PRE             0             0             0             0             0
+ NA_POST            0             0             0             0             0
+ UE_PRE             0             0             0             0             0
+ UE_POST            0             0             0             0             0
+ GROUP              0             0             0             0             0
+
+
+           BETA
+              PSI_POST      NA_PRE        NA_POST       UE_PRE        UE_POST
+              ________      ________      ________      ________      ________
+ PHI_PRE            0             0             0             0             0
+ BETA_PRE           0             0             0             0             0
+ PSI_PRE            0             0             0             0             0
+ PHI_POST           0             0             0             0             0
+ BETA_POS           0             0             0             0             0
+ PSI_POST           0             0             0             0             0
+ NA_PRE             0             0             0             0             0
+ NA_POST            0             0             0             0             0
+ UE_PRE             0             0             0             0             0
+ UE_POST            0             0             0             0             0
+ GROUP              0             0             0             0             0
+
+
+           BETA
+              GROUP
+              ________
+ PHI_PRE           13
+ BETA_PRE          14
+ PSI_PRE           15
+ PHI_POST          16
+ BETA_POS          17
+ PSI_POST          18
+ NA_PRE            19
+ NA_POST           20
+ UE_PRE            21
+ UE_POST           22
+ GROUP              0
+
+
+           PSI
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ PHI_PRE           23
+ BETA_PRE           0            24
+ PSI_PRE            0             0            25
+ PHI_POST           0             0             0            26
+ BETA_POS           0             0             0             0            27
+ PSI_POST           0             0             0             0             0
+ NA_PRE             0             0             0             0             0
+ NA_POST            0             0             0             0             0
+ UE_PRE             0             0             0             0             0
+ UE_POST            0             0             0             0             0
+ GROUP              0             0             0             0             0
+
+
+           PSI
+              PSI_POST      NA_PRE        NA_POST       UE_PRE        UE_POST
+              ________      ________      ________      ________      ________
+ PSI_POST          28
+ NA_PRE             0            29
+ NA_POST            0             0            30
+ UE_PRE             0             0             0            31
+ UE_POST            0             0            32             0            33
+ GROUP              0             0             0             0             0
+
+
+           PSI
+              GROUP
+              ________
+ GROUP              0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              NA_POST&
+              ________
+                0.000
+
+
+           LAMBDA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+ NA_PRE         1.000         0.000         0.000         0.000         0.000
+ NA_POST        0.000         1.000         0.000         0.000         0.000
+ UE_PRE         0.000         0.000         1.000         0.000         0.000
+ UE_POST        0.000         0.000         0.000         1.000         0.000
+ NA_PRE&1       0.000         0.000         0.000         0.000         1.000
+ NA_POST&       0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              NA_POST&
+              ________
+ NA_PRE         0.000
+ NA_POST        0.000
+ UE_PRE         0.000
+ UE_POST        0.000
+ NA_PRE&1       0.000
+ NA_POST&       1.000
+
+
+           THETA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+ NA_PRE         0.000
+ NA_POST        0.000         0.000
+ UE_PRE         0.000         0.000         0.000
+ UE_POST        0.000         0.000         0.000         0.000
+ NA_PRE&1       0.000         0.000         0.000         0.000         0.000
+ NA_POST&       0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              NA_POST&
+              ________
+ NA_POST&       0.000
+
+
+           ALPHA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              NA_POST&
+              ________
+                0.000
+
+
+           BETA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+ NA_PRE         0.000         0.000         0.000         0.000         0.000
+ NA_POST        0.000         0.000         0.000         0.000         0.000
+ UE_PRE         0.000         0.000         0.000         0.000         0.000
+ UE_POST        0.000         0.000         0.000         0.000         0.000
+ NA_PRE&1       0.000         0.000         0.000         0.000         0.000
+ NA_POST&       0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              NA_POST&
+              ________
+ NA_PRE         0.000
+ NA_POST        0.000
+ UE_PRE         0.000
+ UE_POST        0.000
+ NA_PRE&1       0.000
+ NA_POST&       0.000
+
+
+           PSI
+              NA_PRE        NA_POST       UE_PRE        UE_POST       NA_PRE&1
+              ________      ________      ________      ________      ________
+ NA_PRE         0.000
+ NA_POST        0.000         0.000
+ UE_PRE         0.000         0.000         1.552
+ UE_POST        0.000         0.000         0.000         1.296
+ NA_PRE&1       0.000         0.000         0.000         0.000         0.598
+ NA_POST&       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              NA_POST&
+              ________
+ NA_POST&       0.511
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              NA_PRE        NA_POST       UE_PRE        UE_POST       GROUP
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ NA_PRE         0.000         0.000         0.000         0.000         0.000
+ NA_POST        0.000         0.000         0.000         0.000         0.000
+ UE_PRE         0.000         0.000         0.000         0.000         0.000
+ UE_POST        0.000         0.000         0.000         0.000         0.000
+ GROUP          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PSI_POST      NA_PRE        NA_POST       UE_PRE        UE_POST
+              ________      ________      ________      ________      ________
+ NA_PRE         0.000         1.000         0.000         0.000         0.000
+ NA_POST        0.000         0.000         1.000         0.000         0.000
+ UE_PRE         0.000         0.000         0.000         1.000         0.000
+ UE_POST        0.000         0.000         0.000         0.000         1.000
+ GROUP          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              GROUP
+              ________
+ NA_PRE         0.000
+ NA_POST        0.000
+ UE_PRE         0.000
+ UE_POST        0.000
+ GROUP          1.000
+
+
+           THETA
+              NA_PRE        NA_POST       UE_PRE        UE_POST       GROUP
+              ________      ________      ________      ________      ________
+ NA_PRE         0.000
+ NA_POST        0.000         0.000
+ UE_PRE         0.000         0.000         0.000
+ UE_POST        0.000         0.000         0.000         0.000
+ GROUP          0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PSI_POST      NA_PRE        NA_POST       UE_PRE        UE_POST
+              ________      ________      ________      ________      ________
+                0.000         2.048         1.868        -1.247        -1.456
+
+
+           ALPHA
+              GROUP
+              ________
+                0.000
+
+
+           BETA
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ PHI_PRE        0.000         0.000         0.000         0.000         0.000
+ BETA_PRE       0.000         0.000         0.000         0.000         0.000
+ PSI_PRE        0.000         0.000         0.000         0.000         0.000
+ PHI_POST       1.000         0.000         0.000         0.000         0.000
+ BETA_POS       0.000         1.000         0.000         0.000         0.000
+ PSI_POST       0.000         0.000         1.000         0.000         0.000
+ NA_PRE         0.000         0.000         0.000         0.000         0.000
+ NA_POST        0.000         0.000         0.000         0.000         0.000
+ UE_PRE         0.000         0.000         0.000         0.000         0.000
+ UE_POST        0.000         0.000         0.000         0.000         0.000
+ GROUP          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PSI_POST      NA_PRE        NA_POST       UE_PRE        UE_POST
+              ________      ________      ________      ________      ________
+ PHI_PRE        0.000         0.000         0.000         0.000         0.000
+ BETA_PRE       0.000         0.000         0.000         0.000         0.000
+ PSI_PRE        0.000         0.000         0.000         0.000         0.000
+ PHI_POST       0.000         0.000         0.000         0.000         0.000
+ BETA_POS       0.000         0.000         0.000         0.000         0.000
+ PSI_POST       0.000         0.000         0.000         0.000         0.000
+ NA_PRE         0.000         0.000         0.000         0.000         0.000
+ NA_POST        0.000         1.000         0.000         0.000         0.000
+ UE_PRE         0.000         0.000         0.000         0.000         0.000
+ UE_POST        0.000         0.000         0.000         1.000         0.000
+ GROUP          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              GROUP
+              ________
+ PHI_PRE        0.000
+ BETA_PRE       0.000
+ PSI_PRE        0.000
+ PHI_POST       0.000
+ BETA_POS       0.000
+ PSI_POST       0.000
+ NA_PRE         0.000
+ NA_POST        0.000
+ UE_PRE         0.000
+ UE_POST        0.000
+ GROUP          0.000
+
+
+           PSI
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ PHI_PRE        1.000
+ BETA_PRE       0.000         1.000
+ PSI_PRE        0.000         0.000         1.000
+ PHI_POST       0.000         0.000         0.000         1.000
+ BETA_POS       0.000         0.000         0.000         0.000         1.000
+ PSI_POST       0.000         0.000         0.000         0.000         0.000
+ NA_PRE         0.000         0.000         0.000         0.000         0.000
+ NA_POST        0.000         0.000         0.000         0.000         0.000
+ UE_PRE         0.000         0.000         0.000         0.000         0.000
+ UE_POST        0.000         0.000         0.000         0.000         0.000
+ GROUP          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PSI_POST      NA_PRE        NA_POST       UE_PRE        UE_POST
+              ________      ________      ________      ________      ________
+ PSI_POST       1.000
+ NA_PRE         0.000         0.598
+ NA_POST        0.000         0.000         0.510
+ UE_PRE         0.000         0.000         0.000         1.552
+ UE_POST        0.000         0.000         0.000         0.000         1.296
+ GROUP          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              GROUP
+              ________
+ GROUP          0.125
+
+
+
+     PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
+
+     Parameter 1~IG(-1.000,0.000)          infinity            infinity            infinity
+     Parameter 2~IG(-1.000,0.000)          infinity            infinity            infinity
+     Parameter 3~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 4~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 5~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 6~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 7~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 8~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 9~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 10~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 11~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 12~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 13~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 14~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 15~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 16~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 17~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 18~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 19~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 20~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 21~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 22~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 23~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 24~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 25~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 26~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 27~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 28~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 29~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 30~IW(0.000,-3)             infinity            infinity            infinity
+     Parameter 31~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 32~IW(0.000,-3)             infinity            infinity            infinity
+     Parameter 33~IW(0.000,-3)             infinity            infinity            infinity
+
+
+<a name='tech8_output' class='heading'>TECHNICAL 8 OUTPUT</a>
+
+
+   TECHNICAL 8 OUTPUT FOR BAYES ESTIMATION
+
+     CHAIN    BSEED
+     1        8386
+     2        232622
+
+                     POTENTIAL       PARAMETER WITH
+     ITERATION    SCALE REDUCTION      HIGHEST PSR
+     100              1.254               14
+     200              1.162               18
+     300              1.086               7
+     400              1.082               7
+     500              1.127               33
+     600              1.044               33
+     700              1.036               33
+     800              1.020               22
+     900              1.022               17
+     1000             1.027               17
+     1100             1.024               17
+     1200             1.025               17
+     1300             1.024               17
+     1400             1.013               23
+     1500             1.015               23
+     1600             1.015               23
+     1700             1.033               30
+     1800             1.038               30
+     1900             1.019               30
+     2000             1.014               22
+     2100             1.005               1
+     2200             1.005               26
+     2300             1.012               26
+     2400             1.008               26
+     2500             1.007               1
+     2600             1.015               26
+     2700             1.012               26
+     2800             1.012               26
+     2900             1.014               26
+     3000             1.013               26
+
+
+<a name='summary_plausible' class='heading'>SUMMARIES OF PLAUSIBLE VALUES (N = NUMBER OF OBSERVATIONS * NUMBER OF IMPUTATIONS)</a>
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+                0.489         0.109        -1.183         0.383         0.107
+
+
+           Means
+              PSI_POST      B_NA_PRE      B_NA_POS      B_UE_PRE      B_UE_POS
+              ________      ________      ________      ________      ________
+               -1.572         1.999         1.874        -1.246        -1.455
+
+
+           Covariances
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ PHI_PRE        0.033
+ BETA_PRE       0.000         0.004
+ PSI_PRE        0.011         0.023         0.783
+ PHI_POST       0.017         0.001         0.023         0.066
+ BETA_POS      -0.001         0.003         0.027        -0.001         0.007
+ PSI_POST      -0.024         0.030         0.627        -0.011         0.043
+ B_NA_PRE       0.018         0.014         0.378         0.036         0.014
+ B_NA_POS       0.003         0.016         0.339         0.042         0.016
+ B_UE_PRE       0.014         0.005         0.124         0.033         0.006
+ B_UE_POS       0.008         0.007         0.125         0.039         0.007
+
+
+           Covariances
+              PSI_POST      B_NA_PRE      B_NA_POS      B_UE_PRE      B_UE_POS
+              ________      ________      ________      ________      ________
+ PSI_POST       1.220
+ B_NA_PRE       0.369         0.443
+ B_NA_POS       0.505         0.361         0.529
+ B_UE_PRE       0.125         0.124         0.114         0.270
+ B_UE_POS       0.188         0.109         0.195         0.261         0.355
+
+
+           Correlations
+              PHI_PRE       BETA_PRE      PSI_PRE       PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ PHI_PRE        1.000
+ BETA_PRE      -0.027         1.000
+ PSI_PRE        0.068         0.426         1.000
+ PHI_POST       0.364         0.033         0.102         1.000
+ BETA_POS      -0.057         0.665         0.363        -0.024         1.000
+ PSI_POST      -0.118         0.439         0.641        -0.038         0.467
+ B_NA_PRE       0.146         0.343         0.642         0.209         0.258
+ B_NA_POS       0.021         0.350         0.526         0.223         0.268
+ B_UE_PRE       0.149         0.146         0.270         0.249         0.128
+ B_UE_POS       0.077         0.205         0.237         0.256         0.143
+
+
+           Correlations
+              PSI_POST      B_NA_PRE      B_NA_POS      B_UE_PRE      B_UE_POS
+              ________      ________      ________      ________      ________
+ PSI_POST       1.000
+ B_NA_PRE       0.502         1.000
+ B_NA_POS       0.629         0.745         1.000
+ B_UE_PRE       0.218         0.358         0.302         1.000
+ B_UE_POS       0.286         0.275         0.450         0.841         1.000
+
+
+<a name='summary_plausible_stdev' class='heading'>SUMMARY OF PLAUSIBLE STANDARD DEVIATION (N = NUMBER OF OBSERVATIONS)</a>
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              PHI_PRE_      BETA_PRE      PSI_PRE_      PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+                0.101         0.038         0.212         0.142         0.045
+
+
+           Means
+              PSI_POST      B_NA_PRE      B_NA_POS      B_UE_PRE      B_UE_POS
+              ________      ________      ________      ________      ________
+                0.236         0.146         0.128         0.190         0.192
+
+
+           Covariances
+              PHI_PRE_      BETA_PRE      PSI_PRE_      PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ PHI_PRE_       0.000
+ BETA_PRE       0.000         0.000
+ PSI_PRE_       0.000         0.000         0.001
+ PHI_POST       0.000         0.000         0.000         0.002
+ BETA_POS       0.000         0.000         0.000         0.000         0.000
+ PSI_POST       0.000         0.000         0.000         0.002         0.001
+ B_NA_PRE       0.000         0.000         0.000         0.000         0.000
+ B_NA_POS       0.000         0.000         0.000         0.001         0.001
+ B_UE_PRE       0.000         0.000         0.000         0.000         0.000
+ B_UE_POS       0.000         0.000         0.000         0.001         0.000
+
+
+           Covariances
+              PSI_POST      B_NA_PRE      B_NA_POS      B_UE_PRE      B_UE_POS
+              ________      ________      ________      ________      ________
+ PSI_POST       0.010
+ B_NA_PRE       0.002         0.004
+ B_NA_POS       0.006         0.003         0.007
+ B_UE_PRE       0.001         0.000         0.001         0.000
+ B_UE_POS       0.003         0.000         0.002         0.000         0.001
+
+
+           Correlations
+              PHI_PRE_      BETA_PRE      PSI_PRE_      PHI_POST      BETA_POS
+              ________      ________      ________      ________      ________
+ PHI_PRE_       1.000
+ BETA_PRE       0.063         1.000
+ PSI_PRE_       0.139        -0.052         1.000
+ PHI_POST       0.380         0.040         0.126         1.000
+ BETA_POS       0.212         0.766         0.054         0.227         1.000
+ PSI_POST       0.033         0.190         0.123         0.435         0.334
+ B_NA_PRE      -0.264         0.638         0.105        -0.061         0.431
+ B_NA_POS       0.035         0.545         0.040         0.163         0.732
+ B_UE_PRE       0.319         0.297         0.556         0.343         0.349
+ B_UE_POS       0.150         0.196         0.264         0.506         0.373
+
+
+           Correlations
+              PSI_POST      B_NA_PRE      B_NA_POS      B_UE_PRE      B_UE_POS
+              ________      ________      ________      ________      ________
+ PSI_POST       1.000
+ B_NA_PRE       0.248         1.000
+ B_NA_POS       0.685         0.480         1.000
+ B_UE_PRE       0.515         0.317         0.403         1.000
+ B_UE_POS       0.889         0.209         0.652         0.670         1.000
+
+
+<a name='plot_info' class='heading'>PLOT INFORMATION</a>
+
+The following plots are available:
+
+  <a href='#viewplot:1'>Histograms (sample values, estimated factor scores)</a>
+  <a href='#viewplot:2'>Scatterplots (sample values, estimated factor scores)</a>
+  <a href='#viewplot:3'>Between-level histograms (sample values, sample/estimated means/variances, estimated factor scores)</a>
+  <a href='#viewplot:4'>Between-level scatterplots (sample values, sample/estimated means/variances, estimated factor scores)</a>
+  <a href='#viewplot:5'>Two-level cluster-specific observed and estimated values plots</a>
+  <a href='#viewplot:6'>Time series plots (sample values, ACF, PACF, estimated factor scores)</a>
+  <a href='#viewplot:7'>Histogram of subjects per time point</a>
+  <a href='#viewplot:8'>Time interval plots</a>
+  <a href='#viewplot:9'>Bayesian posterior parameter distributions</a>
+  <a href='#viewplot:10'>Bayesian posterior parameter trace plots</a>
+  <a href='#viewplot:11'>Bayesian autocorrelation plots</a>
+  <a href='#viewplot:12'>Latent variable distribution plots</a>
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  23:01:55
+        Ending Time:  00:23:16
+       Elapsed Time:  01:21:21
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2021 Muthen & Muthen
+</pre>
+</body>
+</html>
