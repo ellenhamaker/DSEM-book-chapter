@@ -224,7 +224,7 @@ We can specify this model using the following `MODEL` command:
 
 
 ## Output for Model 3
-The output file for this analysis can be find [here](https://jeroendmulder.github.io/Hamaker2021/nis1model3.htm).
+The output file for this analysis can be find [here](https://ellenhamaker.github.io/DSEM-book-chapter/nis1model3.htm).
 
 The average parameter estimates obtained for this model are:
 

@@ -117,6 +117,8 @@ As we have given the variances of each variable at each level a name, we can ref
 As each of these new parameters is computed within each iteration in the MCMC algorithm, we will also obtain a posterior distribution for them.
 
 ## Output MLM0
+The output for this analysis is can be found 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/mlm0.htm).
 
 This model provides the following parameter estimates:
 
@@ -203,6 +205,8 @@ The model is now specified as:
 
 
 ## Output MLM1
+The output for this analysis is can be found 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/mlm1.htm).
 
 The parameter estimates for this model are organized by level, with the within level parameters presented first, and the between level parameters afterwards. 
 
@@ -422,6 +426,9 @@ where
 
 
 ## Output MLM2
+The output for this analysis is can be found 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/mlm2.htm).
+
 In contrast to the previous model, in which the autoregressions, cross-regressions, and residual variances were constrained to be invariant across individuals, the current model allows for individual differences. This implies that for each of the 129 persons, in every iteration of the MCMC algorithm, six individual parameters are sampled. This will often result in a warning given by Mplus that we obtained here:
 
         WARNING: PROBLEMS OCCURRED IN SEVERAL ITERATIONS IN THE COMPUTATION OF THE STANDARDIZED 
@@ -720,6 +727,9 @@ Note that with this specification, Mplus will include a covariance for the resid
 
 
 ## Output MLM3
+The output for this analysis is can be found 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/mlm3.htm).
+
 The parameter estimates obtained for this model are:
 
     MODEL RESULTS
@@ -1059,6 +1069,9 @@ The model is specified similar to Multilevel Model 2; it does not include any be
 where the latent variable is created with the `BY`statement. The usual Mplus default of fixing the first factor loading to 1 for identification, does not work here; hence we fix the first factor loading ourselves by stating `na_pre@1`. We use the `*.1` to specify starting values.
 
 ## Output MLM4
+The output for this analysis is can be found 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/mlm4.htm).
+
 Again, this model does not contain any model parameter at the within level. The unstandardized parameters that we obtain are:
 
     MODEL RESULTS
@@ -1237,6 +1250,9 @@ In the `MODEL CONSTRAINT` command, we can now compute the indirect effects, by m
 Note that these lines do not actually constrain any parameters in the model; they are merely used to compute new quantities based on the model parameters. This will happen within each iteration of the MCMC algorithm, such that we will get a posterior distribution for each of these indirect effects, which we can use to determine whether there is evidence they differ from zero or not. 
 
 ## Output MLM5
+The output for this analysis is can be found 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/mlm5_indirect.htm).
+
 The model results in the following parameter estimates:
 
     MODEL RESULTS
@@ -1363,6 +1379,9 @@ Subsequently, we cause the `MODEL CONSTRAINT` command again to compute the indir
 Again, this is not really a constraint on the actual model, but is simply a way to compute a new quantity based on model parameters.
 
 ## Output MLM6
+The output for this analysis is can be found 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/mlm6_indirect.htm).
+
 We obtain the following parameter estimates for this model:
 
     MODEL RESULTS

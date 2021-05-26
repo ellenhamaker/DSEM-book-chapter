@@ -158,6 +158,9 @@ Hence, the between level is now defined as
 
 
 # Output
+The output for this analysis is can be found 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/model2.htm).
+
 We obtain the following parameter estimates for this model:
 
     MODEL RESULTS

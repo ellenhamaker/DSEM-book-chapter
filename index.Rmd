@@ -1,5 +1,5 @@
 ---
-title: "Supplementary materials for the book chapter: _Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling_"
+title: "Supplementary materials for the book chapter: __Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling__"
 author: "Ellen Hamaker, Tihomir Asparouhov, and Bengt Muthén"
 date: "May 2021"
 output:
