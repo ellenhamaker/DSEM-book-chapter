@@ -173,7 +173,7 @@ where the two `ON` statements are used to specify the two regressions, and the l
 
 ## Output for Model 2
 The total output for this model is can be found 
-[here](https://jeroendmulder.github.io/Hamaker2021/nis1model2.htm).
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/nis1model2.htm).
 
 The average parameter estimates are summarized as:
 
