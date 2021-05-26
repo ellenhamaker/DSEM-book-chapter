@@ -1,7 +1,13 @@
 name: "Supplemental Materials DSEM"
 output_dir: "docs"
 navbar:
-  title: "Title of chapter"
+  title: " "
   left:
-    - text: "Supplementary Materials"
+    - text: "Introduction"
       href: index.html
+    - text: "N=1 analyses"
+      href: Nis1.html
+    - text: "Multilevel analysis"
+      href: MLM1to6.html
+    - text: "Pretest-posttest"
+      href: PrePost.html

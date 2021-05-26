@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Dynamic multilevel analyses</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"> </a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Introduction</a>
+</li>
+<li>
+  <a href="Nis1.html">N=1 analyses</a>
+</li>
+<li>
+  <a href="MLM1to6.html">Multilevel analysis</a>
+</li>
+<li>
+  <a href="PrePost.html">Pretest-posttest</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Dynamic multilevel analyses</h1>
+
+</div>
+
+
+<p>Instead of analyzing the data for each person separately using replicated time series analysis, we can analyse the data of the 129 individuals in a single multilevel model.</p>
+<p>In the book chapter we consider 6 dynamic multilevel models:</p>
+<ul>
+<li><p><strong>Multilevel models 1-3</strong> are based on combining time series modeling with multilevel modeling</p></li>
+<li><p><strong>Multilevel models 4-6</strong> are based on combining times series modeling and multilevel modeling with structural equation modeling</p></li>
+</ul>
+<p>As an initial step, we determine the intraclass correlation of each variable in <strong>Multilevel Model 0</strong>.</p>
+<p>Below, we start by discussing some general aspects of the multilevel analyses; then we present each model, discuss how it is specified, and discuss the output.</p>
+<div id="general-comments" class="section level1">
+<h1>General comments</h1>
+<p>This approach should be based on decomposing the observed variables into a within-person part and a between-person part, that is</p>
+<p><span class="math inline">\(x_{it} = x_{it}^{(w)} + x_{i}^{(b)}\)</span></p>
+<p><span class="math inline">\(y_{it} = y_{it}^{(w)} + y_{i}^{(b)}\)</span></p>
+<p>For both components a model is then specified: At the within level a time series model is specified to account for the dynamics in the repeated measures within a person, and at the between level the random effects can be related to each other.</p>
+<p>In Mplus, this approach requires the repeated measures within a person to be represented in long format (as before), while the data of all the individuals are stacked. There has to be a specific variable that indicates to which individual the data belong.</p>
+<p>The <code>DATA</code> command now becomes:</p>
+<pre><code>  DATA: file is ChapterData1.dat;</code></pre>
+<p>The <code>VARIABLE</code> command is given as:</p>
+<pre><code>  NAMES       =   ID prepost TimeHours U2P PA NA PEx NEx
+                  pa_pre na_pre U2P_pre PEx_pre NEx_pre
+                  pa_post na_post U2P_post PEx_post NEx_post
+                  ham_pre ham_post group;
+  CLUSTER     =   ID;
+  USEVAR      =   na_pre ue_pre;
+  MISSING     =   ALL(-999);</code></pre>
+<p>where the statement <code>CLUSTER = ID</code> is used to specify the variable that contains information about the clustering of the data.</p>
+<p>Again, we are using the variable ue_pre in our analyses, which is not part of the observed data file, but created using:</p>
+<pre><code>DEFINE:     ue_pre = -1*U2P_pre;</code></pre>
+<p>Note that we are no longer using the <code>DEFINE</code> command to standardized the variables; if we would use that approach, it would use the total observed variance (i.e., across all time points <em>and</em> participants). As we will see below---and as described in the book chapter---when we standardize parameters, we want this to be based on the variance at the level where the parameter is situated; moreover, we want the individual slopes to be standardized with the individual specific variances, rather than some average across individuals, or a variance that contains both within and between person variance.</p>
+<p>As all the models we run here are multilevel models and we want to use Bayesian estimation, our <code>ANALYSIS</code> command will contain:</p>
+<p>The command <code>ANALYSIS</code> is specified as:</p>
+<pre><code>  ANALYSIS:   TYPE = TWOLEVEL;
+              ESTIMATOR = BAYES;
+              PROC = 2;
+              BITER = (3000);
+              BSEED = 6974;
+              THIN = 5;</code></pre>
+<p>where the statement <code>TYPE = TWOLEVEL</code> ensures that the data are decomposed into a within-person component that varies over time, and a between-person component that does not vary over time. The other statements are all related to Bayesian estimation, and were discussed under the <span class="math inline">\(N=1\)</span> analyses.</p>
+<p>To obtain the plots that are used to evaluate the Bayesian estimation, we include the <code>PLOT</code> command:</p>
+<pre><code> PLOT: TYPE = PLOT3;</code></pre>
+<p>This will allow us to look at trace plots for each parameter (i.e., the MCMC samples of the two chains that are run), posterior distributions of each parameter, the autocorrelation function for each parameter over the MCMC iterations.</p>
+<p>If also include:</p>
+<pre><code>      FACTOR = ALL (500);</code></pre>
+<p>in the<code>PLOT</code> command, Mplus will save 500 samples from the individually sampled parameters per person, and we can plot the means or medians of these per person. It will also allow us to ask for a comparison of the factor scores (i.e., the individual's parameter estimates), as we will show below.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+<div id="multilevel-model-0" class="section level1">
+<h1>Multilevel Model 0</h1>
+<p>The intraclass correlation indicates the proportion of variance that is due to stable between-person differences. It is computed as:</p>
+<p><span class="math display">\[ icc_y = \frac{var(y^{(b)})}{var(y^{(b)})+var(y^{(w)}}) \]</span></p>
+<p>To estimate these quantities for each variable, we specify a bivariate, empty multilevel model, in which each variable is decomposed into a time-varying within-person component, and a time-invariant between-person component. This can be visualized as</p>
+<div class="figure">
+<img src="images/MLM0.jpg" style="width:40.0%" />
+
+</div>
+<p>This model allows us to estimate the variances at the within level and at the between level, and from these we can compute the intraclass correlations.</p>
+<div id="input-mlm0" class="section level2">
+<h2>Input MLM0</h2>
+<p>We make use of the <code>ANALYSIS</code> command such as presented above, indicating <code>TYPE = TWOLEVEL</code> and <code>ANALISYS = TWOLEVEL</code>. Subsequently, we need to define a model at the within level and at the between level. We use the <code>MODEL</code> command:</p>
+<pre><code>  MODEL:
+  %WITHIN%
+  na_pre WITH ue_pre;
+  na_pre (wvar_na);
+  ue_pre (wvar_ue);
+
+  %BETWEEN%
+  na_pre WITH ue_pre;
+  na_pre (bvar_na);
+  ue_pre (bvar_ue);
+  </code></pre>
+<p>As we have given the variances of each variable at each level a name, we can refer to them in the <code>MODEL CONTRAINT</code> command where we create two new parameters, icc_na and icc_ue:</p>
+<pre><code>  MODEL CONSTRAINT:
+  NEW (icc_na); icc_na = bvar_na/(bvar_na + wvar_na);
+  NEW (icc_ue); icc_ue = bvar_ue/(bvar_ue + wvar_ue);</code></pre>
+<p>As each of these new parameters is computed within each iteration in the MCMC algorithm, we will also obtain a posterior distribution for them.</p>
+</div>
+<div id="output-mlm0" class="section level2">
+<h2>Output MLM0</h2>
+<p>This model provides the following parameter estimates:</p>
+<pre><code>MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+ NA_PRE   WITH
+    UE_PRE             0.415       0.019      0.000       0.378       0.452      *
+
+ Variances
+    NA_PRE             0.682       0.012      0.000       0.659       0.707      *
+    UE_PRE             2.842       0.052      0.000       2.742       2.945      *
+
+Between Level
+
+ NA_PRE   WITH
+    UE_PRE             0.171       0.045      0.000       0.090       0.266      *
+
+ Means
+    NA_PRE             2.068       0.067      0.000       1.936       2.200      *
+    UE_PRE            -1.246       0.052      0.000      -1.346      -1.144      *
+
+ Variances
+    NA_PRE             0.569       0.077      0.000       0.443       0.742      *
+    UE_PRE             0.287       0.047      0.000       0.213       0.392      *
+
+New/Additional Parameters
+    ICC_NA             0.455       0.033      0.000       0.392       0.523      *
+    ICC_UE             0.092       0.014      0.000       0.070       0.121      *</code></pre>
+<p>The part of the output that is of interest to us, are the last two lines where the intraclass correlations are computed for each variable. Note that by definition, the 95% CIs that are computed will not cover zero; hence, when zero is not included in the CI, this should not be interpreted as evidence that the intraclass correlation is different from zero. Instead, we may want to consider the lower bound and determine whether this is relatively close to zero or not, based also on the mean of the posterior distribution (i.e., the point estimate that is reported).</p>
+<p>Here we see that the difference in the proportion between-person variance is quite large for these two variables: About 0.46 for negative affect, and only 0.09 for unpleasantness of events. The latter implies that the reported unpleasantness of events contains mostly within-person variation over time, whereas negative affect contains much more substantial differences between persons.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="multilevel-model-1" class="section level1">
+<h1>Multilevel Model 1</h1>
+<p>Our first model is based on decomposing the data into a within-person and a between-person component, and specifying a time series model at the within level with fixed (i.e., non varying) slopes and residual variances. At the between level, we thus have only the two random effects from the decomposition, that is, the persons' means on negative affect and unpleasantness of events. This model can be represented as</p>
+<div class="figure">
+<img src="images/MLM1.jpg" style="width:60.0%" />
+
+</div>
+<p>At the within level we can write:</p>
+<p><span class="math inline">\(x_{it}^{(w)} = \phi_x x_{it-1}^{(w)} + \beta_x y_{it-1}^{(w)} + \zeta_{xit}\)</span></p>
+<p><span class="math inline">\(y_{it}^{(w)} = \phi_y y_{it-1}^{(w)} + \beta_y x_{it}^{(w)} + \zeta_{yit}\)</span></p>
+<p>and at the between level we can write</p>
+<p><span class="math inline">\(x_{i}^{(b)} = \gamma_{x0} + u_{x0i}\)</span></p>
+<p><span class="math inline">\(y_{i}^{(b)} = \gamma_{y0} + u_{y0i}\)</span></p>
+<div id="input-mlm1" class="section level2">
+<h2>Input MLM1</h2>
+<p>To specify this model, we need to specify the model at the within level and at the between level. Since both variables that we use (na_pre and ue_pre) are time-varying, they will exist at both levels. At the within level we specify the same time series model that we ended our <span class="math inline">\(N=1\)</span> analyses with. The four regressions and the residual variances will be non-random, which means every person gets the same values for these. At the between level we therefor only have the two individual means of the two variables; we allow these to be correlated.</p>
+<p>To allow for the lagged regressions, and ensure that the varying length of the time intervals is taken into account, we now add to the <code>VARIABLE</code> command the <code>LAGGED</code> and <code>TINTERVAL</code> option again, that is</p>
+<pre><code>  LAGGED      =   na_pre(1) ue_pre(1);
+  TINTERVAL   =   TimeHours(1);</code></pre>
+<p>The model is now specified as:</p>
+<pre><code>MODEL:
+  %WITHIN%
+  na_pre ON na_pre&amp;1; ! autoregression NA (lag 1)
+  na_pre ON ue_pre;   ! cross-regression from UE to NA (lag 0)
+  ue_pre ON ue_pre&amp;1; ! autoregression UE (lag 1)
+  ue_pre on na_pre&amp;1; ! cross-lagged regression from NA to UE (lag 1)
+
+  %BETWEEN%
+  ! allow all random effects to be correlated
+  na_pre WITH ue_pre;
+  </code></pre>
+</div>
+<div id="output-mlm1" class="section level2">
+<h2>Output MLM1</h2>
+<p>The parameter estimates for this model are organized by level, with the within level parameters presented first, and the between level parameters afterwards.</p>
+<pre><code>MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                   Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+NA_PRE     ON
+    NA_PRE&amp;1           0.534       0.011      0.000       0.512       0.557      *
+    UE_PRE             0.110       0.006      0.000       0.099       0.121      *
+
+UE_PRE     ON
+    UE_PRE&amp;1           0.154       0.020      0.000       0.116       0.194      *
+    NA_PRE&amp;1           0.218       0.033      0.000       0.154       0.283      *
+
+Residual Variances
+    NA_PRE             0.445       0.009      0.000       0.429       0.464      *
+    UE_PRE             2.735       0.051      0.000       2.637       2.839      *
+
+Between Level
+
+NA_PRE   WITH
+    UE_PRE             0.157       0.045      0.000       0.079       0.259      *
+
+Means
+    NA_PRE             2.061       0.068      0.000       1.921       2.196      *
+    UE_PRE            -1.255       0.052      0.000      -1.357      -1.153      *
+
+Variances
+    NA_PRE             0.560       0.078      0.000       0.431       0.734      *
+    UE_PRE             0.270       0.045      0.000       0.198       0.374      *</code></pre>
+<p>Hence, we see that for all four average slopes (i.e., <code>ON</code> statements) there is evidence that they deviate from zero. However, these are all unstandardized parameters.</p>
+<p>Filling in the parameter estimates, the within level becomes:</p>
+<p><span class="math display">\[UE_{it}^{(w)} = 0.15*UE_{it-1}^{(w)} + 0.22*NA_{it-1}^{(w)} + \zeta_{UEit} \;\;\;\;\;\;\; var(\zeta_{UEit})=2.74\]</span></p>
+<p><span class="math display">\[NA_{it}^{(w)} = 0.53*NA_{it-1}^{(w)} + 0.11*UE_{it}^{(w)} + \zeta_{NAit} \;\;\;\;\;\;\; var(\zeta_{NAit}) = 0.46\]</span></p>
+<p>and at the between level we can write</p>
+<span class="math display">\[\begin{align}
+&amp;UE_{i}^{(b)} = 2.06 + u_{UE0i} \;\;\;\;\;\;\;\;\;\;\;\; var(u_{UE0i}) = 0.27\\
+&amp;NA_{i}^{(b)} = -1.26 + u_{NA0i}\;\;\;\;\;\;\;\;\;\;\;\; var(u_{NA0i}) = 0.56 \;\;\;\;\;\;\;\;\;\;\;\; cov(u_{NA0i}, u_{UE0i}) = 0.16
+\end{align}\]</span>
+<p>While autoregressive parameters are hardly affected by standardization (as the predictor and the outcome have the same variance), the cross-regressions are likely to change as a result of standardization. We may prefer the standardized results as they allow for an interpretation in terms of effect sizes. Alternatively, we may prefer the original, unstandardized results, as they allow for an interpretation close to the original scales that were used in measuring the variables.</p>
+<p>The standardized results are obtained as part of the additional <code>OUTPUT</code>:</p>
+<pre><code>STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+Within Level
+
+ NA_PRE     ON
+    NA_PRE&amp;1           0.534       0.011      0.000       0.512       0.557      *
+    UE_PRE             0.221       0.011      0.000       0.199       0.243      *
+
+ UE_PRE     ON
+    UE_PRE&amp;1           0.154       0.020      0.000       0.116       0.194      *
+    NA_PRE&amp;1           0.108       0.017      0.000       0.077       0.141      *
+
+ Residual Variances
+    NA_PRE             0.629       0.013      0.000       0.603       0.654      *
+    UE_PRE             0.954       0.008      0.000       0.937       0.968      *
+
+Between Level
+
+ NA_PRE   WITH
+    UE_PRE             0.405       0.089      0.000       0.222       0.567      *
+
+ Means
+    NA_PRE             2.754       0.208      0.000       2.360       3.175      *
+    UE_PRE            -2.414       0.216      0.000      -2.859      -2.006      *
+
+ Variances
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    UE_PRE             1.000       0.000      0.000       1.000       1.000
+
+
+R-SQUARE
+
+Within Level
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    NA_PRE             0.371       0.013      0.000       0.346       0.397
+    UE_PRE             0.046       0.008      0.000       0.032       0.063</code></pre>
+<p>The regression parameters (i.e., the <code>ON</code> statements) are standardized with the model implies variances at the within level. The residual variances at the within level represent the average proportion of unexplained variance; the corresponding proportions of explained variance can be found at the bottom as the <code>R-SQUARE</code>.</p>
+<p>The <code>WITH</code> statement at the between level can be interpreted as the correlation between the (model implied) means of individuals on negative affect and unpleasantness of events. This correlation of 0.405 indicates that individuals with a higher trait level for negative affect also tend to report more unpleasantness of events on average over time.</p>
+<p>The <code>MEANS</code> in the standardized solution indicate the number of standard deviations that the grand mean differs from zero. In general this is less informative and can be ignored. Furthermore, since there are not predictors of the random means at the between level, the standardized variances of the two variables are simply 1.</p>
+<p>Compared to the highly idiographic approach that we used before (the replicated <span class="math inline">\(N=1\)</span> analyses), the current model is extremely restrictive: While we allow for individual differences in means, everything else is constrained across individuals, meaning that we assume each individual is characterized by the exact same dynamics and sensitivity to external influences. This is not very realistic; therefore, in all the following model we relax these constraints and allow for random slopes and random residual variances.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="multilevel-model-2" class="section level1">
+<h1>Multilevel Model 2</h1>
+<p>In the second model (and all subsequent models) we allow for random slopes and random residual variances. This adds six more random effects to the model. The eight random effects are allowed to covary with each other at the between level. This model can be represented as</p>
+<div class="figure">
+<img src="images/MLM2.jpg" style="width:90.0%" />
+
+</div>
+<p>Note that filled circles at the within level indicate these parameters are random, meaning every individual has their own values for them. These individual parameters are modeled as latent variables at the between level (where there are open circles that correspond to the filled circles from the within level). The arrow system connecting the eight random effects implies they are all allowed to be correlated. These random effects are assumed to come from a multivariate normal distribution. Note that the residual variances from the within level are log transformed at the between level; this implies that when there is a negative value for this quantity at the between level, this is associated with a within-person residual variance between 0 and 1.</p>
+<p>The model above can be expressed at the within level as:</p>
+<span class="math display">\[\begin{align*}
+&amp;y_{it}^{(w)} = \phi_{yi} y_{it-1}^{(w)} + \beta_{yi} x_{it}^{(w)} + \zeta_{yit}\\
+&amp;x_{it}^{(w)} = \phi_{xi} x_{it-1}^{(w)} + \beta_{xi} y_{it-1}^{(w)} + \zeta_{xit}
+\end{align*}\]</span>
+<p>and at the between level as:</p>
+<span class="math display">\[\begin{align*}
+y_{i}^{(b)} &amp;= \gamma_{y0} + u_{y0i}\\
+x_{i}^{(b)} &amp;= \gamma_{x0} + u_{x0i}\\
+\phi_{yi} &amp;= \gamma_{y1} + u_{y1i}\\
+\phi_{xi} &amp;= \gamma_{x1} + u_{x1i}\\
+\beta_{yi} &amp;= \gamma_{y2} + u_{y2i}\\
+\beta_{xi} &amp;= \gamma_{x2} + u_{x2i}\\
+log(\psi_{yi}) &amp;= \gamma_{y3} + u_{y3i}\\
+log(\psi_{xi}) &amp;= \gamma_{x3} + u_{x3i}
+\end{align*}\]</span>
+where the <span class="math inline">\(\gamma\)</span>'s are the fixed (or averaged) effects, and the <span class="math inline">\(u\)</span>'s are the individual deviations from these means. These random components are allowed to be correlated. Specifically, we have
+<span class="math display">\[\begin{align*}
+\begin{bmatrix}
+u_{y0i}\\
+u_{x0i}\\
+u_{y1i}\\
+u_{x1i}\\
+u_{y2i}\\
+u_{x2i}\\
+u_{y3i}\\
+u_{x3i}
+\end{bmatrix}
+\sim
+MN \begin{pmatrix} \begin{bmatrix}
+0\\0\\0\\0\\0\\0\\0\\0
+\end{bmatrix}, 
+\begin{bmatrix}
+\tau^2_{y0}\\
+\tau_{x0y0} &amp; \tau^2_{x0}\\
+\tau_{y1y0} &amp; \tau_{y1x0} &amp; \tau^2_{y1}\\
+\tau_{x1y0} &amp; \tau_{x1x0} &amp; \tau_{x1y1} &amp; \tau^2_{x1}\\
+\tau_{y2y0} &amp; \tau_{y2x0} &amp; \tau_{y2y1} &amp; \tau_{y2x1} &amp; \tau^2_{y2}\\
+\tau_{x2y0} &amp; \tau_{x2x0} &amp; \tau_{x2y1} &amp; \tau_{x2x1} &amp; \tau_{x2y2} &amp; \tau^2_{x2}\\
+\tau_{y3y0} &amp; \tau_{y3x0} &amp; \tau_{y3y1} &amp; \tau_{y3x1} &amp; \tau_{y3y2} &amp; \tau_{y3x2} &amp; \tau^2_{y3}\\
+\tau_{x3y0} &amp; \tau_{x3x0} &amp; \tau_{x3y1} &amp; \tau_{x3x1} &amp; \tau_{x3y2} &amp; \tau_{x3x2} &amp; \tau_{x3y3} &amp; \tau^2_{x3}
+\end{bmatrix}\end{pmatrix}
+\end{align*}\]</span>
+<p>that is, the random effects are assumed to come from a multivariate normal distribution, where the diagonal elements of the covariance matrix (<span class="math inline">\(\tau^2_{y0}\)</span> to <span class="math inline">\(\tau^2_{x3}\)</span>) represent their variances, and the off-diagonal elements represent the covariances.</p>
+<div id="input-mlm2" class="section level2">
+<h2>Input MLM2</h2>
+<p>To allow for random slopes and residual variances, we have to change the <code>TYPE</code> option in the <code>ANALYSIS</code> command to</p>
+<pre><code>ANALYSIS:   TYPE = TWOLEVEL RANDOM;</code></pre>
+<p>where <code>TWOLEVEL</code> ensures we will decompose the time-varying variables in a within-person component that varies over time, and a between-person component that is invariant over time, and <code>RANDOM</code> allows for the additional random effects.</p>
+<p>These random slopes and residual variances are specified in the <code>%WITHIN%</code> model, using a vertical bar <code>|</code>; left of this, the name of the random effect is given, and right of it, an expression is given of the parameter that needs to be included as random. The names that are given at the within level, can then be used to model relations between the random effects at the between level. The current model is specified as:</p>
+<pre><code>  MODEL:
+  %WITHIN%
+  phi_na | na_pre ON na_pre&amp;1; ! autoregression NA (lag 1)
+  b_ae | na_pre ON ue_pre;     ! cross-regression from UE to NA (lag 0)
+  phi_ue | ue_pre ON ue_pre&amp;1; ! autoregression UE (lag 1)
+  b_ea | ue_pre on na_pre&amp;1;   ! cross-lagged regression from NA to UE (lag 1)
+  var_na | na_pre;             ! random residual variance NA
+  var_ue | ue_pre;             ! random residual variance UE
+
+  %BETWEEN%
+  ! allow all random effects to be correlated
+  na_pre ue_pre phi_na-var_ue WITH ue_pre phi_na-var_ue;</code></pre>
+<p>The first four lines of the within level model are used to specify the random slopes; the last two lines of the within level model are used to specify the random residual variances (mote that at the within level these are variances, while at the between level these are log transformed).</p>
+<p>At the between level all eight random effects are allowed to be correlated.</p>
+<p>We will also ask for additional output, through</p>
+<pre><code>OUTPUT: TECH1 TECH8 STDYX FSCOMPARISON STAND(CLUSTER);
+
+PLOT: TYPE = PLOT3;
+      FACTOR = ALL (500);</code></pre>
+<p>where</p>
+<p><code>TECH1</code> provides information about where the free model parameters are (when representing the model using a LISRL format)</p>
+<p><code>TECH8</code> contains the information about the potential scale reduction parameter over every 100 iterations of the MCMC algorithm</p>
+<p><code>STDYX</code> provides the standardized results</p>
+<p><code>FSCOMPARISONS</code> provides comparisons between all 129 participants on their estimated scores for the random effects; this option requires the use of <code>FACTOR = ALL (500)</code> as part of the <code>PLOT</code> command, as this ensures that the MCMC runs an addition---in this case---500 iterations of the MCMC algorithm and saves the individually sampled parameters (i.e., the eight random effects in this model).</p>
+<p><code>STAND(CLUSTER)</code> gives the standardized results per person</p>
+</div>
+<div id="output-mlm2" class="section level2">
+<h2>Output MLM2</h2>
+<p>In contrast to the previous model, in which the autoregressions, cross-regressions, and residual variances were constrained to be invariant across individuals, the current model allows for individual differences. This implies that for each of the 129 persons, in every iteration of the MCMC algorithm, six individual parameters are sampled. This will often result in a warning given by Mplus that we obtained here:</p>
+<pre><code>    WARNING: PROBLEMS OCCURRED IN SEVERAL ITERATIONS IN THE COMPUTATION OF THE STANDARDIZED 
+    ESTIMATES FOR SEVERAL CLUSTERS. THIS IS MOST LIKELY DUE TO AR COEFFICIENTS GREATER 
+    THAN 1 OR PARAMETERS GIVING NON-STATIONARY MODELS. SUCH POSTERIOR DRAWS ARE REMOVED. 
+    THE FOLLOWING CLUSTERS HAD SUCH PROBLEMS:
+      120 66 39 134 116 144 28 117 3 141</code></pre>
+<p>This warning is related to the fact that if the autoregressive parameter in a first-order autoregressive model is 1 or larger than 1 (or -1 or smaller than -1), the process is not stationary, meaning: It does not vary around a constant with the same amount of variance over time. To check whether there is a problem with this analysis, we can: a) look at the sequences of the individuals; and b) check their individual posterior distributions (which we can plot since we used the <code>FACTOR = ALL(500)</code> statement). We may also decide to run the analyses without these individual, to see whether this has an effect on the overall results.</p>
+<p>Since all the slopes and residual variances are random, there are no model parameters at the within level. Instead, all the parameter of this model are: 8 fixed (averaged) effects, 8 variances of these random effects, and 7*8/2=28 covariances between these 8 random effects.</p>
+<pre><code>MODEL RESULTS
+
+                               Posterior  One-Tailed         95% C.I.
+                   Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+Between Level
+
+ NA_PRE   WITH
+    PHI_NA             0.029       0.020      0.072      -0.012       0.068
+    B_AE               0.030       0.008      0.000       0.017       0.047      *
+    PHI_UE             0.007       0.024      0.374      -0.039       0.055
+    B_EA              -0.062       0.038      0.036      -0.145       0.005
+    VAR_NA             0.505       0.091      0.000       0.352       0.705      *
+    VAR_UE            -0.001       0.045      0.491      -0.087       0.087
+
+ UE_PRE   WITH
+    PHI_NA             0.011       0.016      0.246      -0.020       0.044
+    B_AE               0.007       0.005      0.069      -0.002       0.018
+    PHI_UE             0.013       0.018      0.238      -0.024       0.047
+    B_EA              -0.005       0.030      0.436      -0.069       0.051
+    VAR_NA             0.179       0.065      0.002       0.063       0.318      *
+    VAR_UE             0.104       0.037      0.001       0.036       0.182      *
+
+ PHI_NA   WITH
+    B_AE              -0.002       0.002      0.146      -0.007       0.002
+    PHI_UE            -0.003       0.007      0.335      -0.018       0.011
+    B_EA               0.006       0.013      0.303      -0.021       0.030
+    VAR_NA             0.023       0.028      0.195      -0.030       0.080
+    VAR_UE             0.001       0.015      0.472      -0.028       0.032
+
+ B_AE     WITH
+    PHI_UE             0.003       0.002      0.091      -0.002       0.008
+    B_EA              -0.007       0.004      0.017      -0.016      -0.001      *
+    VAR_NA             0.040       0.009      0.000       0.024       0.061      *
+    VAR_UE            -0.006       0.005      0.136      -0.016       0.005
+
+ PHI_UE   WITH
+    B_EA              -0.008       0.013      0.244      -0.036       0.016
+    VAR_NA             0.026       0.029      0.189      -0.031       0.082
+    VAR_UE             0.012       0.015      0.202      -0.017       0.042
+
+ B_EA     WITH
+    VAR_NA            -0.147       0.062      0.003      -0.294      -0.043      *
+    VAR_UE             0.025       0.022      0.106      -0.016       0.072
+
+ VAR_NA   WITH
+    VAR_UE             0.068       0.058      0.112      -0.043       0.187
+
+ NA_PRE   WITH
+    UE_PRE             0.178       0.050      0.000       0.090       0.287      *
+
+ Means
+    NA_PRE             2.035       0.068      0.000       1.903       2.172      *
+    UE_PRE            -1.261       0.056      0.000      -1.369      -1.154      *
+    PHI_NA             0.470       0.024      0.000       0.421       0.516      *
+    B_AE               0.111       0.008      0.000       0.095       0.127      *
+    PHI_UE             0.128       0.026      0.000       0.076       0.177      *
+    B_EA               0.255       0.051      0.000       0.164       0.362      *
+    VAR_NA            -1.160       0.088      0.000      -1.329      -0.982      *
+    VAR_UE             0.873       0.052      0.000       0.767       0.977      *
+
+ Variances
+    NA_PRE             0.556       0.084      0.000       0.421       0.744      *
+    UE_PRE             0.321       0.054      0.000       0.232       0.440      *
+    PHI_NA             0.051       0.010      0.000       0.035       0.074      *
+    B_AE               0.004       0.001      0.000       0.002       0.006      *
+    PHI_UE             0.032       0.010      0.000       0.015       0.055      *
+    B_EA               0.070       0.032      0.000       0.029       0.149      *
+    VAR_NA             0.976       0.146      0.000       0.733       1.311      *
+    VAR_UE             0.292       0.047      0.000       0.215       0.396      *</code></pre>
+<p>Note that the <code>Means</code> are the fixed (or averaged) effects. Specifically for the slopes it is of interest to see that these show evidence for being different from zero. For the log residual variances we see that the fixed effect for negative affect is negative; this implies that on average the residual variance for this variable is smaller than 1 (as we would have to take the exponent to transform it back to the variance, that is, exp(-1.160)=0.313).</p>
+<p>The <code>Variances</code> indicate the variability across the participants for each of these random effects. While the variance for the slopes are relatively small, it is important to realize that---especially for autoregressive parameters---the scale on which individual differences for these parameters can occur is very small.</p>
+<p>The <code>WITH</code> statements contain all the covariances; these are in general difficult to interpret, as they are scale dependent. However, checking whether zero falls in the 95% CI gives an indication of whether there is evidence that the covariance differs from zero.</p>
+<p>In addition to the above parameter estimates, we also get the standardized estimates. We discuss the standardized results for each level separately below.</p>
+<pre><code>STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ PHI_NA | NA_PRE ON
+    NA_PRE&amp;1           0.470       0.013      0.000       0.443       0.495      *
+
+ B_AE | NA_PRE ON
+    UE_PRE             0.232       0.011      0.000       0.210       0.252      *
+
+ PHI_UE | UE_PRE ON
+    UE_PRE&amp;1           0.129       0.020      0.000       0.089       0.166      *
+
+ B_EA | UE_PRE ON
+    NA_PRE&amp;1           0.102       0.017      0.000       0.071       0.137      *
+
+ VAR_NA |
+    NA_PRE             0.637       0.012      0.000       0.613       0.659      *
+
+ VAR_UE |
+    UE_PRE             0.922       0.010      0.000       0.902       0.941      *</code></pre>
+<p>As indicate here, the standardized results at the within level are based on standardizing the parameters per person first (using their model implied variances, rather than their observed variances!), and then taking the average across all 129 participants. Since this is done within each iteration of the MCMC algorithm, this results in a posterior distribution for each of these averaged standardized parameters. Hence, the Posterior S.D. indicates the amount of variability of this averaged standardized parameter, and the lower and upper bound define the 95% credibility interval of it.</p>
+<p>It is important to realize that---in contrast to what we saw in the replicated <span class="math inline">\(N=1\)</span> analyses$---this has nothing to do with variability across individuals!</p>
+<p>The standardized results at the between level contain the following:</p>
+<pre><code>Between Level
+
+ NA_PRE   WITH
+    PHI_NA             0.172       0.114      0.072      -0.071       0.390
+    B_AE               0.647       0.104      0.000       0.415       0.814      *
+    PHI_UE             0.055       0.172      0.374      -0.280       0.386
+    B_EA              -0.329       0.166      0.036      -0.616       0.028
+    VAR_NA             0.692       0.056      0.000       0.568       0.786      *
+    VAR_UE            -0.002       0.108      0.491      -0.210       0.208
+
+ UE_PRE   WITH
+    PHI_NA             0.085       0.122      0.246      -0.154       0.321
+    B_AE               0.210       0.135      0.069      -0.066       0.456
+    PHI_UE             0.125       0.176      0.238      -0.243       0.457
+    B_EA              -0.032       0.191      0.436      -0.408       0.347
+    VAR_NA             0.324       0.099      0.002       0.115       0.504      *
+    VAR_UE             0.346       0.103      0.001       0.130       0.525      *
+
+ PHI_NA   WITH
+    B_AE              -0.158       0.142      0.146      -0.410       0.146
+    PHI_UE            -0.080       0.176      0.335      -0.410       0.274
+    B_EA               0.111       0.212      0.303      -0.304       0.524
+    VAR_NA             0.106       0.120      0.195      -0.136       0.331
+    VAR_UE             0.009       0.120      0.472      -0.225       0.247
+
+ B_AE     WITH
+    PHI_UE             0.278       0.196      0.091      -0.138       0.631
+    B_EA              -0.440       0.188      0.017      -0.765      -0.042      *
+    VAR_NA             0.645       0.086      0.000       0.448       0.789      *
+    VAR_UE            -0.172       0.147      0.136      -0.434       0.135
+
+ PHI_UE   WITH
+    B_EA              -0.175       0.248      0.244      -0.574       0.408
+    VAR_NA             0.146       0.160      0.189      -0.178       0.443
+    VAR_UE             0.130       0.155      0.202      -0.178       0.433
+
+ B_EA     WITH
+    VAR_NA            -0.582       0.163      0.003      -0.825      -0.192      *
+    VAR_UE             0.185       0.147      0.106      -0.107       0.472
+
+ VAR_NA   WITH
+    VAR_UE             0.130       0.104      0.112      -0.082       0.328
+
+ NA_PRE   WITH
+    UE_PRE             0.428       0.090      0.000       0.230       0.586      *
+
+ Means
+    NA_PRE             2.732       0.212      0.000       2.327       3.160      *
+    UE_PRE            -2.233       0.212      0.000      -2.686      -1.841      *
+    PHI_NA             2.092       0.247      0.000       1.649       2.625      *
+    B_AE               1.750       0.229      0.000       1.357       2.266      *
+    PHI_UE             0.722       0.191      0.000       0.386       1.143      *
+    B_EA               0.973       0.234      0.000       0.589       1.487      *
+    VAR_NA            -1.171       0.124      0.000      -1.415      -0.935      *
+    VAR_UE             1.616       0.160      0.000       1.325       1.944      *
+
+ Variances
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    UE_PRE             1.000       0.000      0.000       1.000       1.000
+    PHI_NA             1.000       0.000      0.000       1.000       1.000
+    B_AE               1.000       0.000      0.000       1.000       1.000
+    PHI_UE             1.000       0.000      0.000       1.000       1.000
+    B_EA               1.000       0.000      0.000       1.000       1.000
+    VAR_NA             1.000       0.000      0.000       1.000       1.000
+    VAR_UE             1.000       0.000      0.000       1.000       1.000</code></pre>
+<p>The <code>WITH</code> statements are the correlations between the random effects. Note these are the correlations between the unstandardized random effects; these may differ considerably from the correlations between the individually standardized random effects. The reason for this is that slopes are standardized with the participant's (model implied) variances, and since these may be different for individuals, the standardized random slopes may show a very different ordering of individuals than the ordering of individuals based on the unstandardized random slopes. A similar issue may occur for the residual variances. Furthermore, the correlation reported here between the residual variances and other random effects are based on the log transformed residual variances.</p>
+<p>The individually standardized parameters are obtained by including <code>STAND(CLUSTER)</code> in the <code>OUTPUT</code> command. This leads to additional output for each separate person, that looks like this:</p>
+<pre><code>WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 120
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ PHI_NA | NA_PRE ON
+    NA_PRE&amp;1           0.498       0.170      0.005       0.135       0.804      *
+
+ BETA_NA | NA_PRE ON
+    UE_PRE             0.231       0.071      0.000       0.102       0.386      *
+
+ PHI_UE | UE_PRE ON
+    UE_PRE&amp;1           0.163       0.168      0.165      -0.195       0.482
+
+ BETA_UE | UE_PRE ON
+    NA_PRE&amp;1           0.027       0.171      0.441      -0.328       0.358
+
+ PSI_NA |
+    NA_PRE             0.673       0.162      0.000       0.286       0.908      *
+
+ PSI_UE |
+    UE_PRE             0.937       0.082      0.000       0.704       0.997      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 120
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    NA_PRE             0.327       0.162      0.000       0.092       0.713
+    UE_PRE             0.063       0.082      0.000       0.003       0.294</code></pre>
+<p>We used this information to plot the individually standardized cross-regressions against each other in Figure 7 in the book chapter.</p>
+<p>The unstandardized individual parameter estimates can also be obtained, using <code>FSCOMPARISON</code> in the <code>OUTPUT</code> command (combined with the <code>PLOT: FACTOR = ALL (500)</code> command). It generates the following output</p>
+<pre><code>BETWEEN-LEVEL FACTOR SCORE COMPARISONS
+
+ Results for Factor PHI_NA
+
+ Ranking  Cluster  Factor Score  Ranking  Cluster  Factor Score  Ranking  Cluster  Factor Score
+     1      39      0.856           2       60      0.818           3         3      0.816
+     4     141      0.805           5      116      0.801           6       144      0.800
+   ...
+   124      88      0.167         125       12      0.156         126        17      0.151
+   127      99      0.150         128      118      0.129         129        35      0.105</code></pre>
+<p>These are the individual estimates for <span class="math inline">\(\phi_{yi}\)</span> (i.e., autoregression for negative affect). They are included from highest to lowest, with <code>Cluster</code> referring to the clustering variable (here the variable ID).</p>
+<p>The individual estimates are also included for all the other random effects in the model (<span class="math inline">\(\beta_{yi}\)</span>, <span class="math inline">\(\phi_{xi}\)</span>, <span class="math inline">\(\beta_{xi}\)</span>, log(<span class="math inline">\(\psi_{yi}\)</span>), log(<span class="math inline">\(\psi_{xi}\)</span>), <span class="math inline">\(y^{(b)}_i\)</span>, and <span class="math inline">\(x^{(b)}_i\)</span>). Combined with the <code>PLOT: PLOT = TYPE3</code> command, this also provides us with the opportunity to plot the estimates of the individual random effects against each other (see for instance the middle panel of Figure 7 of the book chapter). Such scatter plots can be created in Mplus for review; the data in the plot can then be easily saved by right-clicking the plot and choosing save, which allows for further editing outside of Mplus.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="multilevel-model-3" class="section level1">
+<h1>Multilevel Model 3</h1>
+<p>In the third multilevel model, we include an observed predictor for the random effects at the between level.</p>
+<div class="figure">
+<img src="images/MLM3.jpg" style="width:90.0%" />
+
+</div>
+The within level of this model is as before (Model 2); the between level can be expressed as:
+<span class="math display">\[\begin{align*}
+x_{i}^{(b)} &amp;= \gamma_{x00} + \gamma_{x01} P_i + u_{x0i}\\
+y_{i}^{(b)} &amp;= \gamma_{y00} + \gamma_{y01} P_i + u_{y0i}\\
+\phi_{xi} &amp;= \gamma_{x10} + \gamma_{x11} P_i + u_{x1i}\\
+\phi_{yi} &amp;= \gamma_{y10} + \gamma_{y11} P_i + u_{y1i}\\
+\beta_{xi} &amp;= \gamma_{x20} + \gamma_{x21} P_i + u_{x2i}\\
+\beta_{yi} &amp;= \gamma_{y20} + \gamma_{y21} P_i + u_{y2i}\\
+log(\psi_{xi}) &amp;= \gamma_{x30} + \gamma_{x31} P_i + u_{x3i}\\
+log(\psi_{yi}) &amp;= \gamma_{y30} + \gamma_{y31} P_i + u_{y3i}
+\end{align*}\]</span>
+<p>where the intercepts (<span class="math inline">\(\gamma_{x00}\)</span> to <span class="math inline">\(\gamma_{y30}\)</span>) are the expected score for the random effects when the covariate <span class="math inline">\(P_i\)</span> is zero; and the regression coefficients (<span class="math inline">\(\gamma_{x01}\)</span> and <span class="math inline">\(\gamma_{y31}\)</span>) indicate the degree to which the random effects can be predicted from the covariate <span class="math inline">\(P_i\)</span>.</p>
+<div id="input-mlm3" class="section level2">
+<h2>Input MLM3</h2>
+<p>The observed predictor ham_pre is a baseline covariate, with between-person variance only. We need to specify it as a between variable in the <code>VARIABLE</code> command. For this, we also need to indicate it is used in the analysis. We do this by specifying</p>
+<pre><code>  USEVAR      =   na_pre ham_pre ue_pre;
+  BETWEEN     =   ham_pre;</code></pre>
+<p>Note that in the <code>USEVAR</code> option, we first need to indicate all the observed variables (from the data file) that are included in our analysis, and then the variables that are created using the <code>DEFINE</code> command (here: ue_pre). Furthermore, with <code>BETWEEN = ham_pre</code> we indicate that the variable ham_pre only exists at the between level.</p>
+<p>When we regressing the random effects at the between level on this observed predictor, the intercepts in these regression equations represent the expected score when the predictor is zero. To make this an easy to interpret parameter, we grand mean center the between level predictor: That way, the intercept is the average random effect (i.e., the expected individual score for someone who is average with respect to the time-invariant covariate). We do this within the <code>DEFINE</code> command, by adding:</p>
+<pre><code>          STANDARDIZE(ham_pre);</code></pre>
+<p>The <code>ANALYSIS</code> command remains unchanged (except for choosing a different seed), and the within part of <code>MODEL</code> command also remains unchanged. However, the between part of the <code>MODEL</code> command is now changed to</p>
+<pre><code>%BETWEEN%
+! regress all random effects on observed predictor  
+na_pre ue_pre phi_na-psi_ue ON ham_pre;</code></pre>
+<p>Note that with this specification, Mplus will include a covariance for the residuals of the between components of the observed variables (akin to stating: <code>na_pre WITH ue_pre</code> at the between level); this is a default setting. We may also decide to allow all residuals to be correlated, as will be shown below.</p>
+</div>
+<div id="output-mlm3" class="section level2">
+<h2>Output MLM3</h2>
+<p>The parameter estimates obtained for this model are:</p>
+<pre><code>MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+Between Level
+
+ PHI_NA     ON
+    HAM_PRE           -0.013       0.022      0.278      -0.057       0.032
+
+ BETA_NA    ON
+    HAM_PRE            0.020       0.007      0.006       0.005       0.033      *
+
+ PHI_UE     ON
+    HAM_PRE            0.035       0.024      0.075      -0.015       0.082
+
+ BETA_UE    ON
+    HAM_PRE           -0.086       0.038      0.014      -0.160      -0.011      *
+
+ PSI_NA     ON
+    HAM_PRE            0.415       0.077      0.000       0.264       0.572      *
+
+ PSI_UE     ON
+    HAM_PRE           -0.039       0.048      0.207      -0.134       0.058
+
+ NA_PRE     ON
+    HAM_PRE            0.303       0.058      0.000       0.191       0.420      *
+
+ UE_PRE     ON
+    HAM_PRE            0.114       0.053      0.014       0.013       0.217      *
+
+ UE_PRE   WITH
+    NA_PRE             0.133       0.040      0.000       0.061       0.222      *
+
+ Intercepts
+    NA_PRE             2.012       0.061      0.000       1.897       2.133      *
+    UE_PRE            -1.285       0.054      0.000      -1.390      -1.182      *
+    PHI_NA             0.476       0.022      0.000       0.430       0.518      *
+    BETA_NA            0.100       0.007      0.000       0.086       0.115      *
+    PHI_UE             0.132       0.025      0.000       0.084       0.181      *
+    BETA_UE            0.233       0.040      0.000       0.158       0.315      *
+    PSI_NA            -1.165       0.075      0.000      -1.314      -1.021      *
+    PSI_UE             0.872       0.050      0.000       0.775       0.971      *
+
+ Residual Variances
+    NA_PRE             0.413       0.062      0.000       0.308       0.555      *
+    UE_PRE             0.275       0.046      0.000       0.201       0.379      *
+    PHI_NA             0.042       0.008      0.000       0.029       0.059      *
+    BETA_NA            0.003       0.001      0.000       0.002       0.005      *
+    PHI_UE             0.024       0.008      0.000       0.010       0.043      *
+    BETA_UE            0.030       0.017      0.000       0.005       0.071      *
+    PSI_NA             0.717       0.101      0.000       0.558       0.946      *
+    PSI_UE             0.256       0.041      0.000       0.190       0.350      *</code></pre>
+<p>The <code>ON</code> statements are the estimates of the regression coefficients (i.e., <span class="math inline">\(\gamma_{x01}\)</span> and <span class="math inline">\(\gamma_{y31}\)</span>), and the <code>Intercepts</code> are the estimates of the intercepts at the between level (i.e., <span class="math inline">\(\gamma_{x00}\)</span> and <span class="math inline">\(\gamma_{y30}\)</span>). The latter can be interpreted as the means across individuals, as we grand mean centered the predictor <span class="math inline">\(P_i\)</span> (here: Ham_pre).</p>
+<p>The <code>Residual variances</code> are the estimates of the between level residuals (i.e., variances of <span class="math inline">\(u_{x0i}\)</span> and <span class="math inline">\(u_{yi}\)</span>). Furthermore, the <code>WITH</code> statement is the default covariance between the residuals of the between components <span class="math inline">\(y^{(b)}_i\)</span> and <span class="math inline">\(x^{(b)}_i\)</span>.</p>
+<p>In addition to the unstandardized estimates, we also obtained the standardized estimates. Note that while the current model has no parameters at the within level (as all the parameters are random), the standardized solution contains within level standardized parameters for all he random slopes and residual variances, as these are standardized per person and then average across individuals, as can be seen below:</p>
+<pre><code>STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ PHI_NA | NA_PRE ON
+    NA_PRE&amp;1           0.476       0.013      0.000       0.450       0.502      *
+
+ BETA_NA | NA_PRE ON
+    UE_PRE             0.218       0.011      0.000       0.197       0.239      *
+
+ PHI_UE | UE_PRE ON
+    UE_PRE&amp;1           0.131       0.021      0.000       0.090       0.172      *
+
+ BETA_UE | UE_PRE ON
+    NA_PRE&amp;1           0.106       0.017      0.000       0.074       0.139      *
+
+ PSI_NA |
+    NA_PRE             0.639       0.012      0.000       0.615       0.663      *
+
+ PSI_UE |
+    UE_PRE             0.924       0.010      0.000       0.906       0.943      *</code></pre>
+<p>At the between level we get between level parameter that are standardized; this means these average regression parameters are standardized with between level variances:</p>
+<pre><code>Between Level
+
+ PHI_NA     ON
+    HAM_PRE           -0.047       0.076      0.278      -0.189       0.109
+
+ BETA_NA    ON
+    HAM_PRE            0.252       0.094      0.006       0.067       0.432      *
+
+ PHI_UE     ON
+    HAM_PRE            0.157       0.116      0.075      -0.065       0.404
+
+ BETA_UE    ON
+    HAM_PRE           -0.336       0.162      0.014      -0.676      -0.047      *
+
+ PSI_NA     ON
+    HAM_PRE            0.329       0.057      0.000       0.208       0.435      *
+
+ PSI_UE     ON
+    HAM_PRE           -0.055       0.067      0.207      -0.182       0.078
+
+ NA_PRE     ON
+    HAM_PRE            0.317       0.058      0.000       0.199       0.429      *
+
+ UE_PRE     ON
+    HAM_PRE            0.152       0.069      0.014       0.017       0.285      *
+
+ UE_PRE   WITH
+    NA_PRE             0.399       0.093      0.000       0.200       0.568      *
+
+ Intercepts
+    NA_PRE             2.969       0.217      0.000       2.547       3.410      *
+    UE_PRE            -2.416       0.222      0.000      -2.889      -2.011      *
+    PHI_NA             2.324       0.252      0.000       1.867       2.841      *
+    BETA_NA            1.808       0.249      0.000       1.372       2.354      *
+    PHI_UE             0.839       0.248      0.000       0.472       1.400      *
+    BETA_UE            1.264       0.433      0.000       0.750       2.456      *
+    PSI_NA            -1.297       0.119      0.000      -1.531      -1.075      *
+    PSI_UE             1.713       0.163      0.000       1.416       2.046      *
+
+ Residual Variances
+    NA_PRE             0.900       0.037      0.000       0.816       0.960      *
+    UE_PRE             0.977       0.022      0.000       0.918       1.000      *
+    PHI_NA             0.996       0.010      0.000       0.963       1.000      *
+    BETA_NA            0.936       0.048      0.000       0.813       0.995      *
+    PHI_UE             0.975       0.045      0.000       0.836       1.000      *
+    BETA_UE            0.887       0.122      0.000       0.544       0.997      *
+    PSI_NA             0.892       0.037      0.000       0.811       0.957      *
+    PSI_UE             0.996       0.009      0.000       0.967       1.000      *</code></pre>
+<p>The standardized intercepts indicate the amount of between level standard deviations that the average parameter deviates form zero. The standardized residual variances indicate the proportion of unexplained variance at the between level.</p>
+<p>We also get the <span class="math inline">\(R^2\)</span> at each level:</p>
+<pre><code>R-SQUARE
+
+Within-Level R-Square Averaged Across Clusters
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    NA_PRE             0.361       0.012      0.000       0.337       0.384
+    UE_PRE             0.076       0.010      0.000       0.057       0.094
+
+Between Level
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    NA_PRE             0.100       0.037      0.000       0.039       0.184
+    UE_PRE             0.023       0.022      0.000       0.000       0.081
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    PHI_NA             0.004       0.010      0.000       0.000       0.037
+    BETA_NA            0.064       0.048      0.000       0.005       0.187
+    PHI_UE             0.025       0.045      0.000       0.000       0.163
+    BETA_UE            0.113       0.122      0.000       0.003       0.456
+    PSI_NA             0.108       0.037      0.000       0.043       0.189
+    PSI_UE             0.004       0.009      0.000       0.000       0.033</code></pre>
+<p>Note that the lower bound of the CIs for these <span class="math inline">\(R^2\)</span>'s will never be smaller than zero; while some are printed as 0.000, they will also not be actually zero, as we are using Bayesian estimation.</p>
+<p>If we allow the residuals of the random effects at the between level to be all correlated, we get the following standardized results:</p>
+<pre><code>STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ PHI_NA | NA_PRE ON
+    NA_PRE&amp;1           0.468       0.013      0.000       0.443       0.494      *
+
+ BETA_NA | NA_PRE ON
+    UE_PRE             0.230       0.011      0.000       0.209       0.253      *
+
+ PHI_UE | UE_PRE ON
+    UE_PRE&amp;1           0.127       0.021      0.000       0.085       0.169      *
+
+ BETA_UE | UE_PRE ON
+    NA_PRE&amp;1           0.104       0.018      0.000       0.070       0.140      *
+
+ PSI_NA |
+    NA_PRE             0.638       0.012      0.000       0.613       0.660      *
+
+ PSI_UE |
+    UE_PRE             0.921       0.010      0.000       0.901       0.941      *
+
+Between Level
+
+ PHI_NA     ON
+    HAM_PRE           -0.036       0.074      0.306      -0.182       0.105
+
+ BETA_NA    ON
+    HAM_PRE            0.236       0.086      0.003       0.063       0.401      *
+
+ PHI_UE     ON
+    HAM_PRE            0.139       0.103      0.087      -0.061       0.342
+
+ BETA_UE    ON
+    HAM_PRE           -0.250       0.113      0.016      -0.466      -0.026      *
+
+ PSI_NA     ON
+    HAM_PRE            0.313       0.060      0.000       0.185       0.419      *
+
+ PSI_UE     ON
+    HAM_PRE           -0.055       0.067      0.199      -0.184       0.081
+
+ NA_PRE     ON
+    HAM_PRE            0.300       0.060      0.000       0.175       0.409      *
+
+ UE_PRE     ON
+    HAM_PRE            0.144       0.069      0.018       0.008       0.280      *
+
+ NA_PRE   WITH
+    PHI_NA             0.220       0.111      0.031      -0.011       0.433
+    BETA_NA            0.578       0.118      0.000       0.309       0.778      *
+    PHI_UE            -0.005       0.167      0.487      -0.320       0.343
+    BETA_UE           -0.191       0.181      0.147      -0.515       0.191
+    PSI_NA             0.618       0.067      0.000       0.472       0.734      *
+    PSI_UE             0.041       0.107      0.352      -0.169       0.254
+
+ UE_PRE   WITH
+    PHI_NA             0.106       0.123      0.208      -0.140       0.334
+    BETA_NA            0.135       0.137      0.172      -0.135       0.388
+    PHI_UE             0.091       0.171      0.317      -0.239       0.415
+    BETA_UE            0.044       0.200      0.417      -0.331       0.451
+    PSI_NA             0.255       0.108      0.013       0.031       0.454      *
+    PSI_UE             0.373       0.102      0.000       0.156       0.556      *
+
+ PHI_NA   WITH
+    BETA_NA           -0.153       0.147      0.164      -0.425       0.155
+    PHI_UE            -0.064       0.178      0.352      -0.417       0.286
+    BETA_UE            0.090       0.233      0.354      -0.339       0.565
+    PSI_NA             0.150       0.116      0.107      -0.086       0.371
+    PSI_UE             0.002       0.118      0.493      -0.224       0.236
+
+ BETA_NA  WITH
+    PHI_UE             0.233       0.202      0.125      -0.175       0.626
+    BETA_UE           -0.355       0.203      0.052      -0.721       0.083
+    PSI_NA             0.579       0.093      0.000       0.381       0.743      *
+    PSI_UE            -0.134       0.156      0.201      -0.440       0.183
+
+ PHI_UE   WITH
+    BETA_UE           -0.128       0.256      0.320      -0.571       0.431
+    PSI_NA             0.064       0.164      0.346      -0.252       0.389
+    PSI_UE             0.183       0.166      0.135      -0.155       0.497
+
+ BETA_UE  WITH
+    PSI_NA            -0.473       0.204      0.023      -0.792      -0.011      *
+    PSI_UE             0.148       0.162      0.185      -0.160       0.475
+
+ PSI_NA   WITH
+    PSI_UE             0.188       0.106      0.041      -0.021       0.386
+
+ NA_PRE   WITH
+    UE_PRE             0.375       0.098      0.000       0.164       0.551      *
+
+ Intercepts
+    NA_PRE             2.880       0.218      0.000       2.449       3.308      *
+    UE_PRE            -2.233       0.212      0.000      -2.661      -1.838      *
+    PHI_NA             2.074       0.243      0.000       1.627       2.596      *
+    BETA_NA            1.798       0.245      0.000       1.364       2.330      *
+    PHI_UE             0.722       0.193      0.000       0.392       1.152      *
+    BETA_UE            0.986       0.233      0.000       0.596       1.528      *
+    PSI_NA            -1.236       0.118      0.000      -1.481      -1.018      *
+    PSI_UE             1.618       0.165      0.000       1.304       1.944      *
+
+ Residual Variances
+    NA_PRE             0.910       0.035      0.000       0.833       0.969      *
+    UE_PRE             0.979       0.021      0.000       0.922       1.000      *
+    PHI_NA             0.997       0.009      0.000       0.967       1.000      *
+    BETA_NA            0.944       0.042      0.000       0.839       0.996      *
+    PHI_UE             0.980       0.033      0.000       0.883       1.000      *
+    BETA_UE            0.938       0.058      0.000       0.783       0.998      *
+    PSI_NA             0.902       0.036      0.000       0.825       0.965      *
+    PSI_UE             0.996       0.010      0.000       0.966       1.000      *</code></pre>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="multilevel-model-4" class="section level1">
+<h1>Multilevel Model 4</h1>
+<p>The addition of SEM to the combination of time series modeling and multilevel modeling, offers additional opportunities for modeling the variables at the between level. Specifically, we can now include a latent variable there, for instance with the random effects as its indicators, but we can also specify mediation models or other path models, either with or without a factor model.</p>
+<p>We begin with specifying a latent variable that uses the eight random effects as its indicators. This latent variable captures what they have in common with each other.</p>
+<div class="figure">
+<img src="images/MLM4.jpg" style="width:90.0%" />
+
+</div>
+The within level of this model is as before (Model 2); the between level can be expressed as:
+<span class="math display">\[\begin{align*}
+x_{i}^{(b)} &amp;= \gamma_{x00} + \gamma_{x01} C_i + u_{x0i}\\
+y_{i}^{(b)} &amp;= \gamma_{y00} + \gamma_{y01} C_i + u_{y0i}\\
+\phi_{xi} &amp;= \gamma_{x10} + \gamma_{x11} C_i + u_{x1i}\\
+\phi_{yi} &amp;= \gamma_{y10} + \gamma_{y11} C_i + u_{y1i}\\
+\beta_{xi} &amp;= \gamma_{x20} + \gamma_{x21} C_i + u_{x2i}\\
+\beta_{yi} &amp;= \gamma_{y20} + \gamma_{y21} C_i + u_{y2i}\\
+log(\psi_{xi}) &amp;= \gamma_{x30} + \gamma_{x31} C_i + u_{x3i}\\
+log(\psi_{yi}) &amp;= \gamma_{y30} + \gamma_{y31} C_i + u_{y3i}
+\end{align*}\]</span>
+<p>where the intercepts (<span class="math inline">\(\gamma_{x00}\)</span> to <span class="math inline">\(\gamma_{y30}\)</span>) are average values of the random effects; and the regression coefficients (<span class="math inline">\(\gamma_{x01}\)</span> and <span class="math inline">\(\gamma_{y31}\)</span>) are the factor loadings.</p>
+<div id="input-mlm4" class="section level2">
+<h2>Input MLM4</h2>
+<p>The model is specified similar to Multilevel Model 2; it does not include any between level covariates. The within level of this model is as specified in Models 2 and 3. The between level of the <code>MODEL</code> command is specified as:</p>
+<pre><code>  %BETWEEN%
+  ! Specify a common factor for the random effects
+  c BY na_pre@1 ue_pre phi_na-psi_ue*.1;</code></pre>
+<p>where the latent variable is created with the <code>BY</code>statement. The usual Mplus default of fixing the first factor loading to 1 for identification, does not work here; hence we fix the first factor loading ourselves by stating <code>na_pre@1</code>. We use the <code>*.1</code> to specify starting values.</p>
+</div>
+<div id="output-mlm4" class="section level2">
+<h2>Output MLM4</h2>
+<p>Again, this model does not contain any model parameter at the within level. The unstandardized parameters that we obtain are:</p>
+<pre><code>MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+Between Level
+
+ C        BY
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    UE_PRE             0.379       0.099      0.000       0.197       0.574      *
+
+ C        BY
+    PHI_NA             0.045       0.044      0.142      -0.038       0.134
+    BETA_NA            0.072       0.014      0.000       0.046       0.101      *
+    PHI_UE             0.047       0.050      0.165      -0.051       0.149
+    BETA_UE           -0.154       0.087      0.036      -0.339       0.015
+    PSI_NA             1.270       0.200      0.000       0.929       1.702      *
+    PSI_UE             0.050       0.096      0.305      -0.138       0.237
+
+ Intercepts
+    NA_PRE             2.030       0.063      0.000       1.908       2.157      *
+    UE_PRE            -1.278       0.053      0.000      -1.382      -1.173      *
+    PHI_NA             0.473       0.023      0.000       0.426       0.517      *
+    BETA_NA            0.108       0.007      0.000       0.094       0.123      *
+    PHI_UE             0.135       0.026      0.000       0.085       0.185      *
+    BETA_UE            0.233       0.043      0.000       0.148       0.319      *
+    PSI_NA            -1.154       0.084      0.000      -1.318      -0.989      *
+    PSI_UE             0.874       0.050      0.000       0.778       0.968      *
+
+ Variances
+    C                  0.347       0.080      0.000       0.216       0.527      *
+
+ Residual Variances
+    NA_PRE             0.127       0.049      0.000       0.034       0.233      *
+    UE_PRE             0.225       0.040      0.000       0.162       0.316      *
+    PHI_NA             0.040       0.008      0.000       0.028       0.059      *
+    BETA_NA            0.001       0.001      0.000       0.000       0.003      *
+    PHI_UE             0.023       0.008      0.000       0.010       0.041      *
+    BETA_UE            0.028       0.019      0.000       0.002       0.074      *
+    PSI_NA             0.310       0.087      0.000       0.160       0.503      *
+    PSI_UE             0.257       0.039      0.000       0.194       0.348      *</code></pre>
+<p>The <code>BY</code> statements contain the factor loading estimates; the CIs indicate whether there is evidence that the factor loading deviates from zero. Note that, in contrast to having an observed predictor as we had in Model 3, where by default the residuals of the individual means (i.e., the between components <span class="math inline">\(x_i^{(b)}\)</span> and <span class="math inline">\(y_i^{(b)}\)</span>) covaried, here all residuals are by default uncorrelated.</p>
+<p>The standardized results are:</p>
+<pre><code>STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ PHI_NA | NA_PRE ON
+    NA_PRE&amp;1           0.473       0.013      0.000       0.446       0.498      *
+
+ BETA_NA | NA_PRE ON
+    UE_PRE             0.229       0.011      0.000       0.207       0.251      *
+
+ PHI_UE | UE_PRE ON
+    UE_PRE&amp;1           0.135       0.021      0.000       0.095       0.175      *
+
+ BETA_UE | UE_PRE ON
+    NA_PRE&amp;1           0.102       0.017      0.000       0.070       0.137      *
+
+ PSI_NA |
+    NA_PRE             0.641       0.012      0.000       0.617       0.664      *
+
+ PSI_UE |
+    UE_PRE             0.927       0.010      0.000       0.906       0.945      *
+
+Between Level
+
+ C        BY
+    NA_PRE             0.856       0.062      0.000       0.721       0.964      *
+    UE_PRE             0.427       0.096      0.000       0.224       0.595      *
+
+ C        BY
+    PHI_NA             0.130       0.121      0.142      -0.105       0.362
+    BETA_NA            0.757       0.099      0.000       0.531       0.914      *
+    PHI_UE             0.179       0.182      0.165      -0.192       0.522
+    BETA_UE           -0.488       0.243      0.036      -0.891       0.051
+    PSI_NA             0.804       0.062      0.000       0.663       0.902      *
+    PSI_UE             0.057       0.108      0.305      -0.158       0.261
+
+ Intercepts
+    NA_PRE             2.941       0.221      0.000       2.530       3.396      *
+    UE_PRE            -2.420       0.222      0.000      -2.875      -2.006      *
+    PHI_NA             2.313       0.264      0.000       1.816       2.855      *
+    BETA_NA            1.928       0.253      0.000       1.501       2.462      *
+    PHI_UE             0.867       0.233      0.000       0.501       1.423      *
+    BETA_UE            1.200       0.542      0.000       0.690       2.595      *
+    PSI_NA            -1.234       0.123      0.000      -1.491      -1.000      *
+    PSI_UE             1.709       0.159      0.000       1.400       2.018      *
+
+ Variances
+    C                  1.000       0.000      0.000       1.000       1.000
+
+ Residual Variances
+    NA_PRE             0.267       0.104      0.000       0.070       0.479      *
+    UE_PRE             0.818       0.079      0.000       0.646       0.950      *
+    PHI_NA             0.982       0.037      0.000       0.868       1.000      *
+    BETA_NA            0.426       0.143      0.000       0.165       0.718      *
+    PHI_UE             0.963       0.075      0.000       0.727       1.000      *
+    BETA_UE            0.761       0.217      0.000       0.207       0.997      *
+    PSI_NA             0.353       0.097      0.000       0.186       0.559      *
+    PSI_UE             0.993       0.020      0.000       0.931       1.000      *</code></pre>
+<p>The standardized results at the within level are as before: They are based on standardizing the parameters per person first, and then taking the average across all individuals within each iteration in the MCMC algorithm. The standardized results at the between level are based on standardizing parameters with between-person variances within each iteration of the MCMC algorithm. The standardized factor loadings (the <code>BY</code> statements) can be considered also as correlations between the random effects (the indicators) and the latent variable; for four out of eight we see evidence that they differ from zero. The standardized residual variances represent the proportion of unexplained variance in each random effect.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="multilevel-model-5" class="section level1">
+<h1>Multilevel Model 5</h1>
+<p>In this model, we include an observed predictor <span class="math inline">\(P_i\)</span> and an observed outcome variable <span class="math inline">\(O_i\)</span> at the between level, and use the eight random effects to model indirect effects.</p>
+<div class="figure">
+<img src="images/MLM5.jpg" style="width:90.0%" />
+
+</div>
+<p>In this model, the within level is as in Models 2, 3, and 4, while the between level is similar to that of Model 3 but with the additional expression for the distal outcome <span class="math inline">\(O_i\)</span>, that is:</p>
+<span class="math display">\[\begin{align*}
+x_{i}^{(b)} &amp;= \gamma_{x00} + \gamma_{x01} P_i + u_{x0i}\\
+y_{i}^{(b)} &amp;= \gamma_{y00} + \gamma_{y01} P_i + u_{y0i}\\
+\phi_{xi} &amp;= \gamma_{x10} + \gamma_{x11} P_i + u_{x1i}\\
+\phi_{yi} &amp;= \gamma_{y10} + \gamma_{y11} P_i + u_{y1i}\\
+\beta_{xi} &amp;= \gamma_{x20} + \gamma_{x21} P_i + u_{x2i}\\
+\beta_{yi} &amp;= \gamma_{y20} + \gamma_{y21} P_i + u_{y2i}\\
+log(\psi_{xi}) &amp;= \gamma_{x30} + \gamma_{x31} P_i + u_{x3i}\\
+log(\psi_{yi}) &amp;= \gamma_{y30} + \gamma_{y31} P_i + u_{y3i}\\
+O_i &amp;= \tau_0 + \tau_1 P_i + \tau_2 x_{i}^{(b)} + \tau_3 y_{i}^{(b)} + \tau_4 \phi_{xi} + \tau_5 \phi_{yi} + \tau_6 \beta_{xi} + \tau_7 \beta_{yi}+ \tau_8 log(\psi_{xi}) + \tau_9 log(\psi_{xi}) + \epsilon_i
+\end{align*}\]</span>
+<div id="input-mlm5" class="section level2">
+<h2>Input MLM5</h2>
+<p>We now include two time-invariant variables at the between level, that is, depression measured prior to the first episode of ESM measures, and depression afterwards (measured prior to the second episode of ESM measures).</p>
+<p>Hence, in the <code>VARIABLE</code> command, we now have</p>
+<pre><code>  USEVAR      =   na_pre ham_pre ham_post ue_pre;
+  BETWEEN     =   ham_pre ham_post;</code></pre>
+<p>The <code>MODEL</code> command for the within part remains the same. At the between level, we include the observed outcome variable and regress this on the observed predictor and the eight random effects. We now give labels to the regression parameters that involve the random effects such that we can use these parameters in the subsequent <code>MODEL CONSTRAINT</code> command, that is:</p>
+<pre><code>%BETWEEN%
+! regress all random effects on observed predictor
+na_pre ue_pre phi_na-psi_ue ON ham_pre (a1-a8); 
+
+! regress observed outcome on all random effects and observed predictor         ham_post ON ham_pre;
+ham_post ON na_pre ue_pre phi_na-psi_ue (b1-b8);  </code></pre>
+<p>In the <code>MODEL CONSTRAINT</code> command, we can now compute the indirect effects, by multiplying the two coefficients associated with each random effect:</p>
+<pre><code>MODEL CONSTRAINT:
+  new (i_bc_na); i_bc_na=a1*b1;     ! Indirect effect through between component NA
+  new (i_bc_ue); i_bc_ue=a2*b2;     ! Indirect effect through between component UE
+  new (i_phi_na); i_phi_na=a3*b3;   ! Indirect effect through autoregression phi_na
+  new (i_bet_na); i_bet_na=a4*b4;   ! Indirect effect through cross-regression beta_na
+  new (i_phi_ue); i_phi_ue=a5*b5;   ! Indirect effect through autoregression phi_ue
+  new (i_bet_ue); i_bet_ue=a6*b6;   ! Indirect effect through cross-regreesion beta_ue
+  new (i_psi_na); i_psi_na=a7*b7;   ! Indirect effect through log of the residual variance of NA
+  new (i_psi_ue); i_psi_ue=a8*b8;   ! Indirect effect through log of the residaul variance of UE</code></pre>
+<p>Note that these lines do not actually constrain any parameters in the model; they are merely used to compute new quantities based on the model parameters. This will happen within each iteration of the MCMC algorithm, such that we will get a posterior distribution for each of these indirect effects, which we can use to determine whether there is evidence they differ from zero or not.</p>
+</div>
+<div id="output-mlm5" class="section level2">
+<h2>Output MLM5</h2>
+<p>The model results in the following parameter estimates:</p>
+<pre><code>MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+Between Level
+
+ PHI_NA     ON
+    HAM_PRE           -0.014       0.022      0.264      -0.058       0.028
+
+ BETA_NA    ON
+    HAM_PRE            0.020       0.007      0.003       0.006       0.033      *
+
+ PHI_UE     ON
+    HAM_PRE            0.035       0.024      0.070      -0.012       0.082
+
+ BETA_UE    ON
+    HAM_PRE           -0.085       0.036      0.011      -0.155      -0.013      *
+
+ PSI_NA     ON
+    HAM_PRE            0.415       0.077      0.000       0.265       0.567      *
+
+ PSI_UE     ON
+    HAM_PRE           -0.041       0.049      0.205      -0.137       0.058
+
+ HAM_POST   ON
+    PHI_NA            -0.171       0.548      0.372      -1.290       0.873
+    BETA_NA            1.865       3.287      0.281      -4.235       8.957
+    PHI_UE            -0.076       1.326      0.478      -3.018       2.277
+    BETA_UE            2.137       7.085      0.095      -2.100      16.495
+    PSI_NA             0.106       0.152      0.240      -0.193       0.405
+    PSI_UE             0.007       0.218      0.485      -0.404       0.445
+
+ NA_PRE     ON
+    HAM_PRE            0.306       0.057      0.000       0.193       0.416      *
+
+ UE_PRE     ON
+    HAM_PRE            0.114       0.050      0.014       0.016       0.212      *
+
+ HAM_POST   ON
+    HAM_PRE            0.437       0.571      0.028      -0.035       1.541
+    NA_PRE             0.108       0.195      0.284      -0.263       0.502
+    UE_PRE            -0.010       0.226      0.483      -0.448       0.431
+
+ Intercepts
+    HAM_POST          -0.800       1.826      0.207      -3.892       1.248
+    NA_PRE             2.009       0.059      0.000       1.896       2.128      *
+    UE_PRE            -1.290       0.052      0.000      -1.390      -1.188      *
+    PHI_NA             0.476       0.023      0.000       0.431       0.519      *
+    BETA_NA            0.100       0.007      0.000       0.086       0.114      *
+    PHI_UE             0.134       0.025      0.000       0.083       0.182      *
+    BETA_UE            0.236       0.037      0.000       0.164       0.312      *
+    PSI_NA            -1.169       0.077      0.000      -1.317      -1.020      *
+    PSI_UE             0.879       0.049      0.000       0.783       0.976      *
+
+ Residual Variances
+    HAM_POST           0.779       0.208      0.000       0.245       1.106      *
+    NA_PRE             0.397       0.060      0.000       0.299       0.530      *
+    UE_PRE             0.255       0.042      0.000       0.186       0.349      *
+    PHI_NA             0.041       0.008      0.000       0.028       0.060      *
+    BETA_NA            0.003       0.001      0.000       0.001       0.005      *
+    PHI_UE             0.022       0.008      0.000       0.008       0.040      *
+    BETA_UE            0.021       0.018      0.000       0.001       0.067      *
+    PSI_NA             0.708       0.099      0.000       0.545       0.936      *
+    PSI_UE             0.254       0.041      0.000       0.188       0.346      *</code></pre>
+<p>We only find evidence of an effect if ham_pre on the the distal outcome ham_post; none of the random effects seems to predict ham_post. When considering the indirect effects we asked Mplus to compute, we find:</p>
+<pre><code>New/Additional Parameters
+    I_BC_NA            0.031       0.061      0.284      -0.080       0.160
+    I_BC_UE           -0.001       0.028      0.482      -0.060       0.059
+    I_PHI_NA           0.001       0.015      0.430      -0.025       0.039
+    I_BET_NA           0.033       0.070      0.283      -0.088       0.200
+    I_PHI_UE          -0.001       0.057      0.476      -0.130       0.107
+    I_BET_UE          -0.160       0.559      0.105      -1.260       0.187
+    I_PSI_NA           0.042       0.065      0.240      -0.081       0.177
+    I_PSI_UE           0.000       0.014      0.500      -0.033       0.029</code></pre>
+<p>which also implies we have no evidence that any of the indirect effects differs from zero. However, the trace plots for some of the parameters in this model give rise to concern, as they show rather extreme values are sampled for a number of iterations in the MCMC algorithm, as shown below</p>
+<div class="figure">
+<img src="images/Model5TracePlot.png" style="width:90.0%" />
+
+</div>
+<p>As explained in the book chapter, this is an indication that the current model is too complex given the data, and we could proceed with either fixing certain parameters to zero, or specifying more informative priors. However, we decided to simplify the model through modeling the indirect effect through a single common factor of the random effects, rather than through all eight random effects separately.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="multilevel-model-6" class="section level1">
+<h1>Multilevel Model 6</h1>
+<p>This final dynamic multilevel model combines path analysis and factor analysis at the between level; as such it makes full use of the SEM component of DSEM.</p>
+<div class="figure">
+<img src="images/MLM6.jpg" style="width:90.0%" />
+
+</div>
+<p>Hence, this model can be expressed as Model 4, with the addition</p>
+<span class="math display">\[\begin{align*}
+O_i &amp;= \tau_0 + \tau_1 P_i + \tau_2 C_i + \epsilon_{Oi}\\
+C_i &amp;= \tau_3 P_i + \epsilon_{Ci}
+\end{align*}\]</span>
+<p>The effect of <span class="math inline">\(P_i\)</span> then is the direct effect <span class="math inline">\(\tau_1\)</span> plus the indirect effect <span class="math inline">\(\tau_2*\tau_3\)</span>.</p>
+<div id="input-mlm6" class="section level2">
+<h2>Input MLM6</h2>
+<p>At the within level the model is specified as before. At the between level we specify the model as</p>
+<pre><code>  %BETWEEN%
+  ! Specify a common factor for the random effects
+  c BY na_pre@1 ue_pre phi_na-psi_ue*.1;
+
+  ! Formulate a path model for the observed predictor
+  ! the observed outcome, and the common factor
+  c ON ham_pre (s);
+  ham_post ON c ham_pre (b d);</code></pre>
+<p>Subsequently, we cause the <code>MODEL CONSTRAINT</code> command again to compute the indirect effect as an additional parameter, through</p>
+<pre><code>MODEL CONSTRAINT:
+  new (indirect); indirect=a*b; ! Indirect effect through common factor c</code></pre>
+<p>Again, this is not really a constraint on the actual model, but is simply a way to compute a new quantity based on model parameters.</p>
+</div>
+<div id="output-mlm6" class="section level2">
+<h2>Output MLM6</h2>
+<p>We obtain the following parameter estimates for this model:</p>
+<pre><code>MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+Between Level
+
+ C        BY
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    UE_PRE             0.379       0.104      0.000       0.193       0.600      *
+
+ C        BY
+    PHI_NA             0.041       0.046      0.185      -0.050       0.132
+    BETA_NA            0.073       0.013      0.000       0.050       0.101      *
+    PHI_UE             0.059       0.053      0.116      -0.041       0.170
+    BETA_UE           -0.185       0.092      0.014      -0.395      -0.024      *
+    PSI_NA             1.367       0.197      0.000       1.041       1.826      *
+    PSI_UE             0.042       0.099      0.334      -0.152       0.246
+
+ C          ON
+    HAM_PRE            0.289       0.054      0.000       0.184       0.399      *
+
+ HAM_POST   ON
+    C                  0.390       0.210      0.030      -0.019       0.803
+
+ HAM_POST   ON
+    HAM_PRE            0.263       0.104      0.008       0.052       0.467      *
+
+ Intercepts
+    HAM_POST           0.014       0.086      0.439      -0.155       0.184
+    NA_PRE             2.015       0.058      0.000       1.903       2.133      *
+    UE_PRE            -1.281       0.052      0.000      -1.381      -1.175      *
+    PHI_NA             0.475       0.023      0.000       0.428       0.517      *
+    BETA_NA            0.108       0.007      0.000       0.094       0.122      *
+    PHI_UE             0.133       0.024      0.000       0.085       0.179      *
+    BETA_UE            0.245       0.044      0.000       0.160       0.334      *
+    PSI_NA            -1.169       0.077      0.000      -1.322      -1.017      *
+    PSI_UE             0.874       0.050      0.000       0.778       0.972      *
+
+ Residual Variances
+    HAM_POST           0.907       0.123      0.000       0.707       1.180      *
+    NA_PRE             0.144       0.046      0.000       0.057       0.238      *
+    UE_PRE             0.226       0.038      0.000       0.162       0.311      *
+    C                  0.240       0.057      0.000       0.142       0.363      *
+    PHI_NA             0.041       0.008      0.000       0.029       0.061      *
+    BETA_NA            0.001       0.001      0.000       0.000       0.003      *
+    PHI_UE             0.022       0.009      0.000       0.007       0.042      *
+    BETA_UE            0.027       0.019      0.000       0.002       0.075      *
+    PSI_NA             0.270       0.075      0.000       0.132       0.429      *
+    PSI_UE             0.257       0.039      0.000       0.192       0.348      *
+
+New/Additional Parameters
+    INDIRECT           0.109       0.063      0.030      -0.006       0.244</code></pre>
+<p>It shows that while the common factor can be predicted from the baseline covariate ham_pre, it does not predict the distal outcome ham_post. This is also in agreement with the result we find for the indirect path that we computed as an additional parameter, for which there is no evidence that it differs from zero. The distal outcome ham_post can be predicted from the baseline covariate ham_pre though (regression coefficient is 0.26).</p>
+<p>We can consider the standardized results to see what the relative sizes of parameters are:</p>
+<pre><code>STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ PHI_NA | NA_PRE ON
+    NA_PRE&amp;1           0.474       0.014      0.000       0.447       0.500      *
+
+ BETA_NA | NA_PRE ON
+    UE_PRE             0.229       0.011      0.000       0.209       0.250      *
+
+ PHI_UE | UE_PRE ON
+    UE_PRE&amp;1           0.134       0.020      0.000       0.093       0.171      *
+
+ BETA_UE | UE_PRE ON
+    NA_PRE&amp;1           0.105       0.016      0.000       0.073       0.138      *
+
+ PSI_NA |
+    NA_PRE             0.640       0.013      0.000       0.615       0.663      *
+
+ PSI_UE |
+    UE_PRE             0.927       0.010      0.000       0.907       0.946      *
+
+Between Level
+
+ C        BY
+    NA_PRE             0.813       0.064      0.000       0.673       0.928      *
+    UE_PRE             0.392       0.094      0.000       0.203       0.555      *
+
+ C        BY
+    PHI_NA             0.104       0.115      0.185      -0.125       0.327
+    BETA_NA            0.736       0.105      0.000       0.517       0.930      *
+    PHI_UE             0.211       0.180      0.116      -0.156       0.557
+    BETA_UE           -0.508       0.224      0.014      -0.940      -0.068      *
+    PSI_NA             0.813       0.056      0.000       0.694       0.912      *
+    PSI_UE             0.043       0.101      0.334      -0.158       0.235
+
+ C          ON
+    HAM_PRE            0.386       0.063      0.000       0.255       0.500      *
+
+ HAM_POST   ON
+    C                  0.203       0.105      0.030      -0.010       0.396
+
+ HAM_POST   ON
+    HAM_PRE            0.184       0.072      0.008       0.036       0.323      *
+
+ Intercepts
+    HAM_POST           0.014       0.084      0.439      -0.153       0.178
+    NA_PRE             3.084       0.222      0.000       2.657       3.546      *
+    UE_PRE            -2.468       0.218      0.000      -2.917      -2.062      *
+    PHI_NA             2.302       0.263      0.000       1.819       2.857      *
+    BETA_NA            2.013       0.284      0.000       1.550       2.663      *
+    PHI_UE             0.866       0.303      0.000       0.481       1.592      *
+    BETA_UE            1.254       0.392      0.000       0.706       2.262      *
+    PSI_NA            -1.308       0.124      0.000      -1.559      -1.072      *
+    PSI_UE             1.712       0.163      0.000       1.403       2.049      *
+
+ Residual Variances
+    HAM_POST           0.890       0.045      0.000       0.785       0.962      *
+    NA_PRE             0.338       0.103      0.000       0.139       0.547      *
+    UE_PRE             0.846       0.072      0.000       0.691       0.959      *
+    C                  0.851       0.048      0.000       0.750       0.934      *
+    PHI_NA             0.987       0.030      0.000       0.893       1.000      *
+    BETA_NA            0.459       0.152      0.000       0.134       0.733      *
+    PHI_UE             0.954       0.086      0.000       0.681       1.000      *
+    BETA_UE            0.741       0.230      0.000       0.116       0.993      *
+    PSI_NA             0.339       0.089      0.000       0.168       0.518      *
+    PSI_UE             0.995       0.016      0.000       0.943       1.000      *
+
+
+R-SQUARE
+
+Within-Level R-Square Averaged Across Clusters
+
+                                    Posterior  One-Tailed         95% C.I.
+        Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+        NA_PRE             0.360       0.013      0.000       0.337       0.385
+        UE_PRE             0.073       0.010      0.000       0.054       0.093
+
+    Between Level
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    HAM_POST           0.110       0.045      0.000       0.038       0.215
+    NA_PRE             0.662       0.103      0.000       0.452       0.860
+    UE_PRE             0.154       0.072      0.000       0.041       0.308
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    C                  0.149       0.048      0.000       0.065       0.250
+    PHI_NA             0.013       0.030      0.000       0.000       0.107
+    BETA_NA            0.541       0.152      0.000       0.267       0.866
+    PHI_UE             0.046       0.086      0.000       0.000       0.314
+    BETA_UE            0.259       0.230      0.000       0.007       0.881
+    PSI_NA             0.661       0.089      0.000       0.482       0.832
+    PSI_UE             0.005       0.016      0.000       0.000       0.057</code></pre>
+<p>Here we specifically consider the <span class="math inline">\(R^2\)</span>'s of the variables, as it indicates the proportion of explained variance. At the within level we see that averaged across participants, 36% of the variance in negative affect can be explained by negative affect one hour earlier, and by the unpleasantness of events since the previous beep. In contrast, only 7% of the variance in unpleasantness of events can be predicted from unpleasantness of events in the preceding interval, and from negative affect one hour earlier.</p>
+<p>At the between level, each of the dependent variables has only one predictor, which implies that the proportions of explained variance directly indicate how much variance is explained by that predictor. It shows that ham_pre explains almost 15% variance in the common factor or the random effects c, and 11% in the distal outcome ham_post. Furthermore, we see that the common factor c explains more than half of the individual differences in</p>
+<ul>
+<li><p>the mean of negative affect (i.e., 66.2% in <span class="math inline">\(y_i^{(b)}\)</span>)</p></li>
+<li><p>the sensitivity in negative affect to unpleasantness of events as captured by the random slope from events to affect (i.e., 54.1% in <span class="math inline">\(\beta_{yi}\)</span>)</p></li>
+<li><p>the sensitivity in negative affect to additional, unmeasured factors, as captured by the log residual variance of negative affect (i.e., 66.1% in <span class="math inline">\(log(\psi_{yi})\)</span>)</p></li>
+</ul>
+<p>The other random effect that are partly explained by the common factor are:</p>
+<ul>
+<li><p>the mean of unpleasantness of events (i.e., 15.4% in <span class="math inline">\(x_{i}^{(b)}\)</span>)</p></li>
+<li><p>the spill-over of negative affect into unpleasantness of events (i.e., 25.9% in <span class="math inline">\(\beta_{xi}\)</span>)</p></li>
+</ul>
+<p>Note that as with variances, the <span class="math inline">\(R^2\)</span>'s have CIs that never include zero. Heine, to determine whether there is evidence that a predictor really explains variance in the outcome, we should consider the CIs of the regression parameters (i.e., factor loadings and/or structural parameters).</p>
+<hr />
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

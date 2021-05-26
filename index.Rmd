@@ -1,0 +1,53 @@
+---
+title: "Supplementary materials for the book chapter: _Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling_"
+author: "Ellen Hamaker, Tihomir Asparouhov, and Bengt Muthén"
+date: "May 2021"
+output:
+  html_document:
+    highlight: default
+---
+This is a website with supporting material for the book chapter _Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling_. 
+
+Specifically, this website contains descriptions of the various models that are discussed in the book chapter, detailed discussions of the Mplus input that was used to run these models, and step-by-step discussions of the output of these models. 
+
+While other data and other research questions most likely require other model specifications, the descriptions and considerations provided here will hopefully prove helpful to you in making informed decisions about you DSEM analyses.
+
+$~$
+
+# Background
+Dynamic structural equation modeling (DSEM) is a framework that can be used to model intensive longitudinal data, such as obtained with experience sampling methodology (ESM), ecological momentary assessments (EMA), daily diaries, real time data capture, ambulatory assessments, observation data, and other techniques that result in a large number of repeated measures form the same case, such as an individual or dyad. DSEM is specifically concerned with the dynamics, that is, lagged relations between observed and/or unobserved variables over time. 
+
+
+In the book chapter we explain how DSEM can be considered a combination of three modeling traditions: a) _time series modeling_, by which we can model the dynamic (i.e., lagged) relations within a person over time; b) _multilevel modeling_, that allows us to relate individual differences in the means and dynamics (i.e., random effects) to each other, and to predict them from observed time-invariant covariates; and c) _structural equation modeling_, which allows us to specify latent variables and path models for the stable between person differences in means and dynamics. 
+
+In the book chapter we present a number of DSEM models that we illustrate with an empirical data set. These models include:
+
+* Three __replicated $N=1$ models__; this approach is based on analyzing the data of each individual separately
+
+* Six __multilevel models__; these are further divided into two categories, that is: 
+    + three models based on combining time series modeling and multilevel modeling
+    + three models based on combining time series modeling, multilevel modeling, and structural equation modeling
+
+* A __pretest-posttest model__; this model can be used to investigate whether individual means or dynamics have changed from one ESM episode to the next, either due to time or to an intervention
+
+On this website we present the Mplus input and output of these models, and elaborate on their interpretation.  
+
+$~$
+
+# General comments about the empricial data
+
+These data come from 129 participants who were measured using experience sampling during two episodes. Each episode consisted of 10 beeps per day for 6 days. The first episode took place before the intervention. After completing this episode, they were randomly assigned to either a mindfulness training or a control group, and a second episode of experience sampling took place after the intervention. In the $N=1$ analyses and the first six multilevel models, we focus on data from the first episode only. Subsequently, we consider the data from both episodes in a pretest-posttest analysis. 
+
+The data are in long format, meaning that each beep for each individual is represented by a separate row. Throughout we focus on two time-varying variables: negative affect ($y$) and unpleasantness of events ($x$). The latter is actually based on a variable that was measured with 0 representing a neutral event, negative values representing the degree of unpleasantness of events, and positive values representing the degree of pleasantness of events. This was rescaled by multiplying it by -1, using the `DEFINE` command:
+
+    DEFINE:     ue_pre = -1*U2P_pre; 
+
+In some of the multilevel analyses we also include a time-invariant predictor, measured prior to the first episode of experience sampling, and a time-invariant outcome, measured after the first episode of experience sampling.
+
+To be able to account for the unequal length of the time intervals between the measurements, we have created a variable that represents time (in hours) since the start of the first day. This is thus a variable that within a person is ever increasing. 
+
+
+
+
+
+---

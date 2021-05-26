@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Ellen Hamaker, Tihomir Asparouhov, and Bengt Muthén" />
+
+
+<title>Supplementary materials for the book chapter: Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"> </a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Introduction</a>
+</li>
+<li>
+  <a href="Nis1.html">N=1 analyses</a>
+</li>
+<li>
+  <a href="MLM1to6.html">Multilevel analysis</a>
+</li>
+<li>
+  <a href="PrePost.html">Pretest-posttest</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Supplementary materials for the book chapter: <em>Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling</em></h1>
+<h4 class="author">Ellen Hamaker, Tihomir Asparouhov, and Bengt Muthén</h4>
+<h4 class="date">May 2021</h4>
+
+</div>
+
+
+<p>This is a website with supporting material for the book chapter <em>Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling</em>.</p>
+<p>Specifically, this website contains descriptions of the various models that are discussed in the book chapter, detailed discussions of the Mplus input that was used to run these models, and step-by-step discussions of the output of these models.</p>
+<p>While other data and other research questions most likely require other model specifications, the descriptions and considerations provided here will hopefully prove helpful to you in making informed decisions about you DSEM analyses.</p>
+<p><span class="math inline">\(~\)</span></p>
+<div id="background" class="section level1">
+<h1>Background</h1>
+<p>Dynamic structural equation modeling (DSEM) is a framework that can be used to model intensive longitudinal data, such as obtained with experience sampling methodology (ESM), ecological momentary assessments (EMA), daily diaries, real time data capture, ambulatory assessments, observation data, and other techniques that result in a large number of repeated measures form the same case, such as an individual or dyad. DSEM is specifically concerned with the dynamics, that is, lagged relations between observed and/or unobserved variables over time.</p>
+<p>In the book chapter we explain how DSEM can be considered a combination of three modeling traditions: a) <em>time series modeling</em>, by which we can model the dynamic (i.e., lagged) relations within a person over time; b) <em>multilevel modeling</em>, that allows us to relate individual differences in the means and dynamics (i.e., random effects) to each other, and to predict them from observed time-invariant covariates; and c) <em>structural equation modeling</em>, which allows us to specify latent variables and path models for the stable between person differences in means and dynamics.</p>
+<p>In the book chapter we present a number of DSEM models that we illustrate with an empirical data set. These models include:</p>
+<ul>
+<li><p>Three <strong>replicated <span class="math inline">\(N=1\)</span> models</strong>; this approach is based on analyzing the data of each individual separately</p></li>
+<li>Six <strong>multilevel models</strong>; these are further divided into two categories, that is:
+<ul>
+<li>three models based on combining time series modeling and multilevel modeling</li>
+<li>three models based on combining time series modeling, multilevel modeling, and structural equation modeling</li>
+</ul></li>
+<li><p>A <strong>pretest-posttest model</strong>; this model can be used to investigate whether individual means or dynamics have changed from one ESM episode to the next, either due to time or to an intervention</p></li>
+</ul>
+<p>On this website we present the Mplus input and output of these models, and elaborate on their interpretation.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+<div id="general-comments-about-the-empricial-data" class="section level1">
+<h1>General comments about the empricial data</h1>
+<p>These data come from 129 participants who were measured using experience sampling during two episodes. Each episode consisted of 10 beeps per day for 6 days. The first episode took place before the intervention. After completing this episode, they were randomly assigned to either a mindfulness training or a control group, and a second episode of experience sampling took place after the intervention. In the <span class="math inline">\(N=1\)</span> analyses and the first six multilevel models, we focus on data from the first episode only. Subsequently, we consider the data from both episodes in a pretest-posttest analysis.</p>
+<p>The data are in long format, meaning that each beep for each individual is represented by a separate row. Throughout we focus on two time-varying variables: negative affect (<span class="math inline">\(y\)</span>) and unpleasantness of events (<span class="math inline">\(x\)</span>). The latter is actually based on a variable that was measured with 0 representing a neutral event, negative values representing the degree of unpleasantness of events, and positive values representing the degree of pleasantness of events. This was rescaled by multiplying it by -1, using the <code>DEFINE</code> command:</p>
+<pre><code>DEFINE:     ue_pre = -1*U2P_pre; </code></pre>
+<p>In some of the multilevel analyses we also include a time-invariant predictor, measured prior to the first episode of experience sampling, and a time-invariant outcome, measured after the first episode of experience sampling.</p>
+<p>To be able to account for the unequal length of the time intervals between the measurements, we have created a variable that represents time (in hours) since the start of the first day. This is thus a variable that within a person is ever increasing.</p>
+<hr />
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Replicated N=1 analyses</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"> </a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Introduction</a>
+</li>
+<li>
+  <a href="Nis1.html">N=1 analyses</a>
+</li>
+<li>
+  <a href="MLM1to6.html">Multilevel analysis</a>
+</li>
+<li>
+  <a href="PrePost.html">Pretest-posttest</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Replicated N=1 analyses</h1>
+
+</div>
+
+
+<p>The <span class="math inline">\(N=1\)</span> analyses are based on analyzing the data of each individual separately, and then taking the average across the results. We begin with discussing how such an approach can be taken in Mplus, and discuss some general aspects of the set-up of the analyses. Subsequently, we discuss the three <span class="math inline">\(N=1\)</span> models that were presented in the book chapter.</p>
+<div id="general-comments" class="section level1">
+<h1>General comments</h1>
+<p>To analyse the data of all 129 participants in sequence, and summarize the data across all participants, we analyse the data as would be done in a simulation study. Hence, we have to ensure the data for each individual is saved in a separate file with a different name, and we need one file in which all these file names are included.</p>
+<p>Below we describe how this kind of analysis is set up, how to obtain standardized parameters, and how to specify that we want to use Bayesian estimation.</p>
+<div id="setting-up-replicated-n1-analyses" class="section level2">
+<h2>Setting up replicated <span class="math inline">\(N=1\)</span> analyses</h2>
+<p>To run separate analyses for each individual and obtain the average results across all these analyses, we make use of the <code>TYPE = MONTECARLO</code> option of the <code>DATA</code> command; this requires the data for each replication (here: person) to be saved in a separate file. The data file that is then specified in the input file, is a list with the names of these separate data files. Here we use:</p>
+<pre><code>DATA:       FILE = IDlist.dat; 
+            TYPE = MONTECARLO;  
+            </code></pre>
+<p>In addition, we specify the <code>VARIABLE</code> command using:</p>
+<pre><code>VARIABLES:
+  NAMES       =   ID prepost TimeHours U2P PA NA PEx NEx
+                  pa_pre na_pre U2P_pre PEx_pre NEx_pre
+                  pa_post na_post U2P_post PEx_post NEx_post
+                  ham_pre ham_post group;
+  USEVAR      =   na_pre ue_pre;
+  MISSING     =   ALL(-999);</code></pre>
+<p>Note that we indicate our analysis are based on the variables na_pre and ue_pre, but the latter is not one of the variables in the original data file (it is not included in the list with <code>NAMES</code>). It is based on the observed variable U2P_pre, and created using the <code>DEFINE</code> command, through multiplying the observed variable with -1 (such that higher scores indicate more unpleasant events):</p>
+<pre><code>DEFINE:     ue_pre = -1*U2P_pre; 
+            STANDARDIZE(na_pre);
+            STANDARDIZE(ue_pre);</code></pre>
+</div>
+<div id="standardization" class="section level2">
+<h2>Standardization</h2>
+<p>The two <code>STANDARDIZE</code> statements imply that these two variables are standardized; in the current context, it means they are standardized for each person separately. The advantage of this is that our regression coefficients can be interpreted in terms of effect sizes.</p>
+<p>Alternatively, we could also use the <code>STDYX</code> option in the <code>OUTPUT</code> command; this will imply that first the unstandardized parameter estimates are obtained, which are then standardized using the model implied standard deviations. Note that while for models without lagged relations, these two approaches will lead to very similar results, but for models that include lagged relations (e.g., autoregression), they may deviate: The reason for this is that taking into account the autocorrelation structure in the data, the model implied mean and/or variance of a variable may deviate considerably from the observed mean and variance (specifically when the probability of missing data is different for for instance higher scores than for lower scores).</p>
+</div>
+<div id="bayesian-esitmation" class="section level2">
+<h2>Bayesian esitmation</h2>
+<p>Throughout, we make use of Bayesian estimation, which is required for doing DSEM analysis in Mplus. We do this by specifying:</p>
+<pre><code>ANALYSIS: ESTIMATOR = BAYES; 
+          PROC = 2;
+          BITER = (5000);
+          THIN = 10;
+          BSEED = 9371;</code></pre>
+<p>where:</p>
+<p><code>PROC = 2</code> indicates the number of processors to use for this analysis;</p>
+<p><code>BITER = (5000)</code> indicates that the number of iterations for the MCMC algorithm must be at least 5000 (Mplus will use more when the Potential Scale Reduction (PRS) statistic indicates that the MCMC algorithm has not converged yet); note that in fact two chains with different starting values are run, both for (at least) 5000 iterations, and the first half of them is discarded as burn-in; hence, the parameter estimates are based on the combination of the second half of both chains.</p>
+<p><code>THIN = 10</code> implies that only 1 in 10 iterations of the MCMC sequence are saved; hence, rather than running two chains of at least 5000 iterations each, Mplus will run two chains of 10*5000 each; thinning is used to account for autocorrelation in the MCMC iterations.</p>
+<p><code>BSEED = 9371</code> sets the seed with which to start the first MCMC chain; by default, 2 chains are run. Note that by setting the seed, we can exactly replicate the results that are obtained with such an algorithm. We use a different seed in each analysis.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="n1-model-1" class="section level1">
+<h1><span class="math inline">\(N=1\)</span> Model 1</h1>
+<p>Model 1 is based on regressing the outcome <span class="math inline">\(y_t\)</span> on the predictor <span class="math inline">\(x_t\)</span>. Note that while <span class="math inline">\(y_t\)</span> and <span class="math inline">\(x_t\)</span> are measured at the same time point, there is an implicit lagged relation between these measures, as <span class="math inline">\(y_t\)</span> is measured with reference to the current moment, whereas <span class="math inline">\(x_t\)</span> is measured with reference to everything since the previous beep.</p>
+<p>This model can be represented as:</p>
+<div class="figure">
+<img src="images/FigNis1Model1a.jpg" style="width:35.0%" />
+
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>which can be expressed as: <span class="math inline">\(y_t = \nu + \beta x_t + \zeta_t\)</span>. The main interest here is in the parameter <span class="math inline">\(\beta\)</span>, which represents the expected change in <span class="math inline">\(y_t\)</span> (here: negative affect) after a one unit increase in <span class="math inline">\(x_t\)</span> (here: unpleasantness of events). It can be described as a person's responsiveness, or more specifically here, their <em>stresss-sensitivity</em>.</p>
+<p>Instead of considering the unstandardized <span class="math inline">\(\beta\)</span>, we decided to focus on the standardized <span class="math inline">\(\beta\)</span> here, which is obtained by standardizing the data prior to analysis. The <span class="math inline">\(\beta\)</span> that is obtained from this analysis represents the number of standard deviations increase in <span class="math inline">\(y_t\)</span> that is expected after a standard deviation increase in <span class="math inline">\(x_t\)</span>. Note that since the standard deviations of these variables can be very different for different individuals, the difference between the unstandardized and the standardized <span class="math inline">\(\beta\)</span> will also be person-specific.</p>
+<div id="input-for-model-1" class="section level2">
+<h2>Input for Model 1</h2>
+<p>In contrast to all the other models considered here, this model does not include any lagged relations; the latter would imply that the time subscript on the left of the equal sign is not the same as the time subscript on the right of it. Hence, for the current model, we do not need to include any information about the timing of our observations.</p>
+<p>The model is then specified using:</p>
+<pre><code>MODEL:
+na_pre ON ue_pre;
+ue_pre;</code></pre>
+<p>where the <code>ON</code> statement implies that negative affect (measured prior to intervention: na_pre) is regressed on unpleasantness of events (measured prior to intervention: ue_pre); and the second line is to ensure that Mplus will treat the predictor as an endogenous variable, rather than as an exogenous variable (the latter would imply Mplus uses case-wise deletion if there is a missing value on the predictor).</p>
+<p>We ask for additional output using:</p>
+<pre><code>OUTPUT: TECH1 TECH8;</code></pre>
+<p>where <code>TECH1</code> provides information about the model parameters in terms of the LISREL notation; and <code>TECH8</code> provides additional information about convergence of the MCMC algorithm.</p>
+</div>
+<div id="output-for-model-1" class="section level2">
+<h2>Output for Model 1</h2>
+<p>The complete output file for this analysis can be found <a href="https://ellenhamaker.github.io/DSEM-book-chapter/nis1model1.htm">here</a>.</p>
+<p>The parameter estimates that we obtain are averaged across all 129 participants. Specifically, these are:</p>
+<pre><code>MODEL RESULTS
+
+                              ESTIMATES              S. E.     M. S. E.  95%  % Sig
+                  Population   Average   Std. Dev.   Average             Cover Coeff
+
+NA_PRE     ON
+  UE_PRE              0.000     0.3040     0.1735     0.1487     0.1222 0.496 0.504
+
+Means
+  UE_PRE              0.000     0.0016     0.0122     0.1586     0.0002 1.000 0.000
+
+Intercepts
+  NA_PRE              0.000     0.0013     0.0073     0.1477     0.0001 1.000 0.000
+
+Variances
+  UE_PRE              0.500     1.0936     0.0287     0.2617     0.3531 0.000 1.000
+
+Residual Variances
+  NA_PRE              0.500     0.9760     0.1178     0.2329     0.2404 0.062 1.000</code></pre>
+<p>The first column <code>Population</code> should be ignored, as this is only relevant when a simulation study was performed.</p>
+<p>The column <code>Average</code> contains the point estimate averaged across all 129 participants; the column <code>Std. Dev.</code> contains the standard deviation of these point estimates across all cases.</p>
+<p>The column <code>S.E. Average</code> contains the average standard error cross all cases; note that since we performed a Bayesian analysis, this is the average posterior standard deviation.</p>
+<p>The column <code>M.S.E.</code> contains the mean squared error, and <code>95% Cover</code> contains the proportion of cases whose 95% credibility interval covers the value in the first column. Both are only relevant if a simulation was done, and should be ignored here.</p>
+<p>The last column <code>% Sig Coeff</code> indicates the proportion of cases who have a credibility interval that does not contain zero. The latter can be interpreted as cases whose data contain evidence that this parameter deviates from zero.</p>
+<p>Hence, the current results show that on average the standardized regression coefficient is 0.30, and that about half if the 129 participants have a CI for this parameter that does not contain zero.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="n1-model-2" class="section level1">
+<h1><span class="math inline">\(N=1\)</span> Model 2</h1>
+<p>In model 2, we still consider only negative affect as an outcome variable, which is regressed on the predictor unpleasantness of events. In addition to this concurrent regression, we also regress negative affect on itself at the preceding time point. This is referred to as autoregression, which is described as a form of inertia, carry-over, or regulatory or attractor weakness.</p>
+<p>This model can be represented as:</p>
+<div class="figure">
+<img src="images/FigNis1Model2a.jpg" style="width:40.0%" />
+
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>which can be expressed as: <span class="math inline">\(y_t = \nu + \beta x_t + \phi y_{t-1} + \zeta_t\)</span>. Again, <span class="math inline">\(\beta\)</span> represents the person's responsiveness (or stress-sensitivity), while the autoregressive parameter <span class="math inline">\(\phi\)</span> represents carry-over of <span class="math inline">\(y_{t-1}\)</span> to <span class="math inline">\(y_{t}\)</span> (here: from previous negative affect to current negative affect). Since the autoregressive parameter captures the extent to which a person tends to get stuck in their (affective) state, it has also been referred to as inertia or regulatory weakness.</p>
+<div id="input-for-model-2" class="section level2">
+<h2>Input for Model 2</h2>
+<p>Since we now have a lagged effect in our model, we need to consider the intervals between subsequent observations. Here we are dealing with experience sampling, which were obtained at random time points within blocks of 90 minutes. Furthermore, during the night, no measures were obtained. As a result the intervals between subsequent observations can vary from a few minutes to several hours.</p>
+<p>Our data file contains a variable TimeHours that indicates the hours since the beginning of the first day that a person participated in the study. We will use this variable for the <code>TINTERVAL</code> option as part of the <code>VARIABLE</code> command, through including:</p>
+<pre><code>TINTERVAL   =   TimeHours(1);</code></pre>
+<p>The specification <code>(1)</code> indicates the time grid that we use (here: 1 hour, as the TimeHour variable is in hours; 0.5 would result in a half hour time grid).</p>
+<p>In addition, we also need a lagged version of the observed variable for the autoregression. To this end we use the <code>LAGGED</code> option in the <code>VARIABLE</code> command:</p>
+<pre><code>LAGGED      =   na_pre(1);</code></pre>
+<p>This creates a new variable na_pre&amp;1 which we can use in our <code>MODEL</code>command, where we specify the model as:</p>
+<pre><code>MODEL:
+na_pre ON na_pre&amp;1;
+na_pre ON ue_pre;
+ue_pre;</code></pre>
+<p>where the two <code>ON</code> statements are used to specify the two regressions, and the last line is again included to change the predictor into an endogenous variable.</p>
+</div>
+<div id="output-for-model-2" class="section level2">
+<h2>Output for Model 2</h2>
+<p>The total output for this model is can be found <a href="https://jeroendmulder.github.io/Hamaker2021/nis1model2.htm">here</a>.</p>
+<p>The average parameter estimates are summarized as:</p>
+<pre><code>MODEL RESULTS
+
+                               ESTIMATES              S. E.     M. S. E.  95%  % Sig
+                  Population   Average   Std. Dev.   Average             Cover Coeff
+
+NA_PRE     ON
+  NA_PRE&amp;1            0.000     0.3620     0.2764     0.1693     0.2069 0.504 0.496
+  UE_PRE              0.000     0.2668     0.1614     0.1410     0.0970 0.496 0.504
+
+Means
+  UE_PRE              0.000     0.0025     0.0187     0.1572     0.0004 1.000 0.000
+
+Intercepts
+  NA_PRE              0.000    -0.0062     0.0198     0.1159     0.0004 1.000 0.000
+
+Variances
+  UE_PRE              0.500     1.0869     0.0284     0.2587     0.3452 0.000 1.000
+
+Residual Variances
+  NA_PRE              0.500     0.7377     0.2271     0.1941     0.1077 0.419 1.000</code></pre>
+<p>Again, we should only focus on the columns <code>Average</code>, <code>Std. Dev.</code>, and <code>% Sig. Coeff</code>. It shows that the average standardized regression coefficient for unpleasantness of events (<span class="math inline">\(\beta\)</span>) has gone down somewhat in comparison to Model 1; it is now 0.267. The average autoregressive effect (<span class="math inline">\(\phi\)</span>) is somewhat larger than the average standardized regression coefficient; it is 0.362. Furthermore, both parameters seem to show quite some variation across participants, and about half of the participants have an autoregressive parameter for which there is evidence that it deviates from zero, and the same is true for the other standardized regression parameter.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+</div>
+<div id="n1-model-3" class="section level1">
+<h1><span class="math inline">\(N=1\)</span> Model 3</h1>
+<p>In Model 3 we consider not only negative affect as an outcome, but also unpleasantness of event. Hence, we have a bivariate time series model, in which we regress negative affect <span class="math inline">\(y_t\)</span> on <span class="math inline">\(x_t\)</span> AFMAKEN</p>
+<div class="figure">
+<img src="images/FigNis1Model3a.jpg" style="width:40.0%" />
+
+</div>
+<div id="input-for-model-3" class="section level2">
+<h2>Input for Model 3</h2>
+<p>We can specify this model using the following <code>MODEL</code> command:</p>
+<pre><code>  MODEL:
+      na_pre ON na_pre&amp;1;
+      na_pre ON ue_pre;
+      ue_pre ON ue_pre&amp;1;
+      ue_pre ON na_pre&amp;1;</code></pre>
+</div>
+<div id="output-for-model-3" class="section level2">
+<h2>Output for Model 3</h2>
+<p>The output file for this analysis can be find <a href="https://jeroendmulder.github.io/Hamaker2021/nis1model3.htm">here</a>.</p>
+<p>The average parameter estimates obtained for this model are:</p>
+<pre><code>MODEL RESULTS
+
+                              ESTIMATES              S. E.     M. S. E.  95%  % Sig
+                 Population   Average   Std. Dev.   Average             Cover Coeff
+
+ NA_PRE     ON
+  NA_PRE&amp;1            0.000     0.3638     0.2780     0.1762     0.2090 0.504 0.496
+  UE_PRE              0.000     0.2496     0.1740     0.1547     0.0923 0.620 0.380
+
+ UE_PRE     ON
+  UE_PRE&amp;1            0.000     0.0375     0.2321     0.2064     0.0548 0.938 0.062
+  NA_PRE&amp;1            0.000     0.1007     0.2414     0.2151     0.0680 0.876 0.124
+
+ Intercepts
+  NA_PRE              0.000    -0.0058     0.0225     0.1150     0.0005 1.000 0.000
+  UE_PRE              0.000     0.0056     0.0372     0.1551     0.0014 1.000 0.000
+
+ Residual Variances
+  NA_PRE              0.500     0.7404     0.2253     0.1927     0.1082 0.442 1.000
+  UE_PRE              0.500     0.9537     0.1220     0.2494     0.2206 0.163 1.000</code></pre>
+<p>It shows that while negative affect seems to be characterized by carry-over (autoregression) and spill-over (cross-regression) defect for a substantial number of participants (49.5% and 38.0% respectively), there is very little evidence that unpleasantness of events is characterized by carry-over (only 6.2% of participants showed evidence for autoregression), and there is only some evidence for spill-over of negative affect into unpleasantness of events (12.4% of participants show evidence for a non-zero cross-lagged regression).</p>
+<hr />
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

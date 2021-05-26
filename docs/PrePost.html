@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Pretest-posttest analyses</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"> </a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Introduction</a>
+</li>
+<li>
+  <a href="Nis1.html">N=1 analyses</a>
+</li>
+<li>
+  <a href="MLM1to6.html">Multilevel analysis</a>
+</li>
+<li>
+  <a href="PrePost.html">Pretest-posttest</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Pretest-posttest analyses</h1>
+
+</div>
+
+
+<p>The data that we analyzed in the book chapter actually come from a pretest-posttest design in which individuals were randomly assigned to a treatment or a control condition, and they were measured with experience sampling prior to treatment, and afterwards again. Hence, we have intensive longitudinal data from two episodes (i.e., pre-intervention and post-intervention), from two groups of individuals (i.e., treated and non-treated).</p>
+<div id="data-structure" class="section level1">
+<h1>Data structure</h1>
+<p>If we have intensive longitudinal data that were obtained at multiple waves, for instance in a pretest-posttest design, or in a measurement-burst design, it is preferable to have the waves represented in wide format, while the repeated measures within a wave are represented in long format.</p>
+<p>Below we see an example of what the original data structure may be: It contains a separate column for each separate variables that was measured within an individual, including:</p>
+<ul>
+<li><p>ID: a variable that indicates which person a row belongs to</p></li>
+<li><p>T: a variable that indicates time (in this case since the beginning of the first day of the study)</p></li>
+<li><p>X and Y: two momentary measurements</p></li>
+<li><p>P: a baseline covariate that is measured prior to each episode of intensive longitudinal measurements</p></li>
+<li><p>E: a variable that indicates which episode (or wave) an observation belongs to</p></li>
+<li><p>G: a variable that indicates what group a person belongs to (this does not vary within a person)</p></li>
+</ul>
+<div class="figure">
+<img src="images/PretestPosttestRestructure1.jpg" style="width:90.0%" />
+
+</div>
+<p>These data are restructured such that the measurements that vary within a person (either from moment to moment, such as X and Y, or from one wave to the next, such as P) are represented by different columns for different episodes. As a consequence, these newly created variables will contain many missings.</p>
+<p>The advantage of this approach is that the variables will now be decomposed into a within-person and a between-person component <em>per</em> episode. This allows us to investigate changes in the means of individuals, but also in their autoregressive, cross-regressive and (residual) variances from one wave to another.</p>
+</div>
+<div id="model" class="section level1">
+<h1>Model</h1>
+<p>We are interested in whether there are changes in specific aspects of the intensive longitudinal measurements due to treatment. Specifically, our focus is on changes in the individuals':</p>
+<ul>
+<li><p>average tendency to experience negative affect, that is, the mean on negative affect: <span class="math inline">\(\Delta y_i^{(b)}= y2_i^{(b)} - y1_{i}^{(b)}\)</span></p></li>
+<li><p>inertia of negative affect, that is, the autoregressive parameter for negative affect: <span class="math inline">\(\Delta \phi_{i} =\phi_{2i} - \phi_{1i}\)</span></p></li>
+<li><p>sensitivity of negative affect to unpleasantness events, that is, the cross-regression from unpleasantness of events to negative effect: <span class="math inline">\(\Delta \beta_{i} =\beta_{2i} - \beta_{1i}\)</span></p></li>
+<li><p>sensitivity of negative affect to other factors, that is, the residual variance of negative affect: <span class="math inline">\(\Delta \phi_{i} =\phi_{2i} - \phi_{1i}\)</span></p></li>
+<li><p>average level of unpleasant events experienced, that is, the mean on unpleasantness of events: <span class="math inline">\(\Delta \psi_{i} =\psi_{2i} - \psi_{1i}\)</span></p></li>
+</ul>
+<p>We are interested in whether these changes are a result of time, and to what extent they are the results of treatment. Furthermore, to make it possible to make sensible comparisons, we should also consider whether there were initial differences between the two treatment groups prior to treatment.</p>
+<p>T investigate all these aspects, we regress all the random effects on the dummy variable <span class="math inline">\(G_i\)</span>, which equals 1 for the treated and 0 for the untreated. Hence, at the within level for we have:</p>
+<span class="math display">\[\begin{align*}
+y1_{it}^{(w)} &amp;= \phi_{1i} y1_{it-1}^{(w)} + \beta_{1i} x1_{it}^{(w)} + \zeta_{xit}\\
+y2_{it}^{(w)} &amp;= \phi_{2i} y2_{it-1}^{(w)} + \beta_{2i} x2_{it}^{(w)} + \zeta_{xit}
+\end{align*}\]</span>
+<p>where the first equation is for the variable containing the data from the first episode (prior to treatment), and the second equation is for the variable containing the data for the second episode (after treatment). Note that the autoregressions and the cross-regressions are not constrained to be the same across these episodes.</p>
+<p>At the between level we now have</p>
+<span class="math display">\[\begin{align*}
+y1_{i}^{(b)} &amp;= \gamma_{00} + \gamma_{01} G_i + u_{0i}\\\
+\phi_{1i} &amp;=\gamma_{10} + \gamma_{11} G_i + u_{1i}\\
+\beta_{1i} &amp;= \gamma_{20} + \gamma_{21} G_i + u_{2i}\\
+log(\psi_{1i})&amp;= \gamma_{30} + \gamma_{31} G_i + u_{3i}\\
+x1_{it}^{(b)} &amp;= \gamma_{40} + \gamma_{41} G_i + u_{4i}\\
+ \\
+\Delta y_{i}^{(b)} = y2_{i}^{(b)}-y1_i^{(b)}&amp;=\gamma_{50} + \gamma_{51} G_i + u_{5i} \\
+\Delta \phi_{i} = \phi_{2i} - \phi_{1i}&amp;=\gamma_{60} + \gamma_{61} G_i + u_{6i}\\
+\Delta \beta_{i} = \beta_{2i} - \beta_{1i} &amp;= \gamma_{70} + \gamma_{71} G_i + u_{7i}\\
+\Delta log(\psi_{i})= log(\psi_{2i}) - log(\psi_{1i})&amp;=\gamma_{80} + \gamma_{81} G_i + u_{8i}\\
+\Delta x_{it}^{(b)} = x2_{it}^{(b)}-x1_{it}^{(b)}&amp;=\gamma_{90} + \gamma_{91} G_i + u_{9i}
+\end{align*}\]</span>
+<p>where the first set of five regressions equations are for the random effects associated with episode 1, while the second set of five regression equations are for the changes in the random effects from episode 1 to episode 2.</p>
+<p>Hence</p>
+<ul>
+<li><p>the regression parameters <span class="math inline">\(\gamma_{01}\)</span> to <span class="math inline">\(\gamma_{41}\)</span> indicate whether there are initial differences between the two groups</p></li>
+<li><p>the regression parameters <span class="math inline">\(\gamma_{51}\)</span> to <span class="math inline">\(\gamma_{91}\)</span> indicate whether there are group differences in the changes of the random effects (i.e., a treatment effect)</p></li>
+<li><p>the intercepts <span class="math inline">\(\gamma_{50}\)</span> to <span class="math inline">\(\gamma_{90}\)</span> indicate whether there is a change in the random effects for the no-treatment group (i.e., a time effect)</p></li>
+</ul>
+</div>
+<div id="input" class="section level1">
+<h1>Input</h1>
+<p>To specify this model in Mplus, we have to indicate which variable we specify the <code>VARIABLE</code> command as:</p>
+<pre><code>  VARIABLE:
+  NAMES       =   ID prepost TimeHours U2P PA NA PEx NEx
+                  pa_pre na_pre U2P_pre PEx_pre NEx_pre
+                  pa_post na_post U2P_post PEx_post NEx_post
+                  ham_pre ham_post group;
+  CLUSTER     =   ID;
+  USEVAR      =   na_pre na_post group ue_pre ue_post;
+  BETWEEN     =   group;
+  LAGGED      =   na_pre(1) na_post(1);
+  TINTERVAL   =   TimeHours(1);
+  MISSING     =   ALL(-999);
+  </code></pre>
+<p>that is, we make use of the two variables that form the outcome variable of interest during each episode (for which we also create lagged versions so we can include autoregression), the grouping variable (with information about the treatment group each person belongs to; this is a between level variable), and the two variables that serve as the time-varying predictor during each episode.</p>
+<p>The <code>DEFINE</code> command is used to create the predictor variable for each episode, by multiplying an observed variable from the data set by minus 1 (as we also did in all the other analyses):</p>
+<pre><code>  DEFINE:     ue_pre = -1*U2P_pre;
+              ue_post = -1*U2P_post;
+              </code></pre>
+<p>The <code>ANALYSIS</code> command is also similar to what we had before:</p>
+<pre><code>  ANALYSIS:   TYPE = TWOLEVEL RANDOM;
+                ESTIMATOR = BAYES;
+              PROC = 2;
+              BITER = (3000);
+              BSEED = 8386;
+              THIN = 5;
+              </code></pre>
+<p>The <code>MODEL</code> command contains two parts again. The within part is:</p>
+<pre><code>  MODEL:
+      %WITHIN%
+      phi_pre | na_pre ON na_pre&amp;1;
+      beta_pre | na_pre ON ue_pre;
+      psi_pre | na_pre;
+      phi_post | na_post ON na_post&amp;1;
+      beta_post | na_post ON ue_post;
+      psi_post | na_post;
+      ue_pre WITH ue_post@0;</code></pre>
+<p>where the first three lines are for the first episode, and the second set of three lines is for the second episode. The last line is to ensure that Mplus does not try to estimate the covariance of the two exogenous variables; not that these variables will never be both observed within the same occasion, because the observation took either part during the first episode, meaning that ue_pre will be observed and ue_post will be missing, of the observation took place during the second episode, meaning that ue_post is observed and ue_pre is missing.</p>
+<p>Note that this is also true for na_pre and na_post; however, we do not have to constrain the residuals of these variables to be uncorrelated, or to be uncorrelated with ue_pre and ue_post, as we have defined the residuals to come from a individual specific distribution (using the <code>|</code> notation); such random (residual) variances are by definition for components that are not correlated with other components.</p>
+<p>At the between level we want to:</p>
+<ul>
+<li><p>regress the random effects associated with the first episode on the grouping variable <span class="math inline">\(G_i\)</span>, to ensure there were no initial differences between the randomly created groups</p></li>
+<li><p>regress the change in each of the random effects between the two episodes on the grouping variable <span class="math inline">\(G_i\)</span>, to investigate the effect of treatment.</p></li>
+</ul>
+<p>The latter is however not possible, as Mplus does not allow us to regress the change between two random effects on another variable. However, we can accomplish the same by regressing the random effect of the second episode on the random effect at the first episode and fixing the regression coefficient to one. For instance, for the change in individual mean of negative affect we have:</p>
+<p><span class="math display">\[\Delta y_i^{(b)} = y2_i^{(b)} - y1_i^{(b)} = \gamma_{50} + \gamma_{51} G_i + u_{5i}\]</span></p>
+<p>which can be rewritten as</p>
+<p><span class="math display">\[y2_i^{(b)} = \gamma_{50} + \gamma_{51} G_i + y1_i^{(b)} + u_{5i}\]</span></p>
+<p>Hence, the between level is now defined as</p>
+<pre><code>      %BETWEEN%
+      na_pre ue_pre phi_pre beta_pre psi_pre ON group;
+      na_post ON na_pre@1 group;
+      ue_post ON ue_pre@1 group;
+      phi_post ON phi_pre@1 group;
+      beta_post ON beta_pre@1 group;
+      psi_post ON psi_pre@1 group;</code></pre>
+</div>
+<div id="output" class="section level1">
+<h1>Output</h1>
+<p>We obtain the following parameter estimates for this model:</p>
+<pre><code>MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+ UE_PRE   WITH
+    UE_POST            0.000       0.000      1.000       0.000       0.000
+
+ Variances
+    UE_PRE             2.838       0.053      0.000       2.734       2.942      *
+    UE_POST            2.253       0.042      0.000       2.174       2.342      *
+
+Between Level
+
+ PHI_POST   ON
+    PHI_PRE            1.000       0.000      0.000       1.000       1.000
+
+ BETA_POST  ON
+    BETA_PRE           1.000       0.000      0.000       1.000       1.000
+
+ PSI_POST   ON
+    PSI_PRE            1.000       0.000      0.000       1.000       1.000
+
+ PHI_PRE    ON
+    GROUP              0.079       0.041      0.030      -0.005       0.159
+
+ BETA_PRE   ON
+    GROUP             -0.013       0.015      0.195      -0.042       0.016
+
+ PSI_PRE    ON
+    GROUP              0.010       0.170      0.472      -0.312       0.351
+
+ PHI_POST   ON
+    GROUP             -0.132       0.060      0.018      -0.247      -0.007      *
+
+ BETA_POST  ON
+    GROUP              0.018       0.019      0.165      -0.019       0.054
+
+ PSI_POST   ON
+    GROUP             -0.240       0.172      0.083      -0.574       0.116
+
+ NA_PRE     ON
+    GROUP             -0.028       0.126      0.415      -0.278       0.219
+
+ UE_PRE     ON
+    GROUP              0.095       0.106      0.195      -0.112       0.300
+
+ NA_POST    ON
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    GROUP             -0.286       0.098      0.002      -0.480      -0.096      *
+
+ UE_POST    ON
+    UE_PRE             1.000       0.000      0.000       1.000       1.000
+    GROUP             -0.264       0.081      0.001      -0.421      -0.106      *
+
+ UE_POST  WITH
+    NA_POST            0.079       0.025      0.000       0.038       0.133      *
+
+ Intercepts
+    NA_PRE             2.025       0.088      0.000       1.847       2.198      *
+    NA_POST            0.023       0.067      0.364      -0.107       0.157
+    UE_PRE            -1.301       0.073      0.000      -1.445      -1.162      *
+    UE_POST           -0.085       0.056      0.066      -0.196       0.029
+    PHI_PRE            0.451       0.030      0.000       0.392       0.508      *
+    BETA_PRE           0.116       0.011      0.000       0.096       0.137      *
+    PSI_PRE           -1.163       0.118      0.000      -1.394      -0.931      *
+    PHI_POST          -0.044       0.042      0.148      -0.130       0.037
+    BETA_POST         -0.012       0.013      0.173      -0.037       0.013
+    PSI_POST          -0.267       0.120      0.016      -0.508      -0.029      *
+
+ Residual Variances
+    NA_PRE             0.468       0.068      0.000       0.359       0.623      *
+    NA_POST            0.229       0.043      0.000       0.161       0.325      *
+    UE_PRE             0.276       0.042      0.000       0.209       0.371      *
+    UE_POST            0.091       0.026      0.000       0.051       0.149      *
+    PHI_PRE            0.034       0.006      0.000       0.023       0.049      *
+    BETA_PRE           0.004       0.001      0.000       0.002       0.006      *
+    PSI_PRE            0.841       0.116      0.000       0.650       1.107      *
+    PHI_POST           0.061       0.014      0.000       0.039       0.093      *
+    BETA_POST          0.004       0.001      0.000       0.002       0.007      *
+    PSI_POST           0.767       0.124      0.000       0.569       1.066      *</code></pre>
+<p>Note that we are not explicitly modeling unpleasantness of events (it is merely included as a predictor in this model); hence Mplus estimates its variance for the two episodes (represented as two separate variables in the data file) at the within level and these can be considered average within-person variances.</p>
+<p>Furthermore, we see that none of the episode 1 random effects are predictable from the grouping variable; this indicates that there are no meaningful differences between the randomly created groups.</p>
+<p>There are three random effects whose change depends on the treatment group:</p>
+<ul>
+<li><p>na_post, after regressing on na_pre and fixing the regression coefficient to 1, has group as a negative predictor (i.e., <span class="math inline">\(\gamma_{51}= -0.286\)</span>), meaning that the average negative affect people report has decreased (on average) after treatment</p></li>
+<li><p>ue_post, after regressing on ue_pre and fixing the regression coefficient to 1, has group as a negative predictor (i.e., <span class="math inline">\(\gamma_{91} = -0.264\)</span>), meaning that the average level of unpleasantness of events that people report has decreased (on average) after treatment</p></li>
+<li><p>phi_post, after regressing on phi_pre and fixing the regression coefficient to 1, has group as a negative predictor (i.e., <span class="math inline">\(\gamma_{61} = -0.132\)</span>), meaning that the carry-over or inertia of negative affect has decreased after treatment</p></li>
+</ul>
+<p>When considering the intercepts of the random effects of the second episode, there is only one that deviates from zero, indicating a time effect (rather than a treatment effect): It is for intercept of psi_post (which is actually the log of the residual variance of negative affect), which is: <span class="math inline">\(\gamma_{80}=-0.267\)</span>. This implies there is a reduction in the residual variance of negative affect over time, which could mean that over time individual become less sensitive to unmeasured factors.</p>
+<hr />
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
