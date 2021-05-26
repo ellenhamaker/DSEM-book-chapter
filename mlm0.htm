@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+a:link
+{
+    color: black;
+    text-decoration: none;
+}
+a[name]:hover
+{
+    text-decoration: none;
+}
+a:hover
+{
+    color: blue;
+    text-decoration: underline;
+}
+a:visited
+{
+    color: black;
+    text-decoration: none;
+}
+.heading
+{
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+}
+.heading:hover
+{
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+    text-decoration: none;
+}
+</style>
+
+<body style="font-family:'Courier New'; font-size:14px;">
+<p class="heading">
+Mplus VERSION 8.6<br />
+MUTHEN & MUTHEN<br />
+05/18/2021   9:38 AM<br />
+</p>
+
+<p class='heading'>OUTPUT SECTIONS</p>
+
+<ul>
+     <li><a href='#input'>Input Instructions</a></li>
+     <li><a href='#inputmessages'>Input Warnings And Errors</a></li>
+     <li><a href='#summary_analysis'>Summary Of Analysis</a></li>
+     <li><a href='#summary_data'>Summary Of Data</a></li>
+     <li><a href='#summary_missing_patterns'>Summary Of Missing Data Patterns</a></li>
+     <li><a href='#covariance_coverage'>Covariance Coverage Of Data</a></li>
+     <li><a href='#univariatess'>Univariate Sample Statistics</a></li>
+     <li><a href='#modelmessages'>Model Warnings And Errors</a></li>
+     <li><a href='#model_fit'>Model Fit Information</a></li>
+     <li><a href='#model_results'>Model Results</a></li>
+     <li><a href='#standardized_results'>Standardized Model Results</a></li>
+     <li><a href='#bayes_fscores_comparisons'>Between-level Factor Score Comparisons</a></li>
+     <li><a href='#tech1_output'>Technical 1 Output</a></li>
+     <li><a href='#tech8_output'>Technical 8 Output</a></li>
+     <li><a href='#summary_plausible'>Summaries Of Plausible Values (n = Number Of Observations * Number Of Imputations)</a></li>
+     <li><a href='#summary_plausible_stdev'>Summary Of Plausible Standard Deviation (n = Number Of Observations)</a></li>
+     <li><a href='#plot_info'>Plot Information</a></li>
+</ul>
+<pre>
+
+<a name='input' class='heading'>INPUT INSTRUCTIONS</a>
+
+
+  TITLE:  Multilevel model for decomposition into
+          within and between variance
+
+  DATA: file is ChapterData1.dat;
+
+  VARIABLE:
+
+  NAMES       =   ID prepost TimeHours U2P PA NA PEx NEx
+                  pa_pre na_pre U2P_pre PEx_pre NEx_pre
+                  pa_post na_post U2P_post PEx_post NEx_post
+                  ham_pre ham_post group;
+  CLUSTER     =   ID;
+  USEVAR      =   na_pre ue_pre;
+  MISSING     =   ALL(-999);
+
+  DEFINE:     ue_pre = -1*U2P_pre;
+
+  ANALYSIS:   TYPE = TWOLEVEL;
+      		ESTIMATOR = BAYES;
+              PROC = 2;
+              BITER = (3000);
+              BSEED = 6974;
+              THIN = 5;
+
+  MODEL:
+  %WITHIN%
+  na_pre WITH ue_pre;
+  na_pre (wvar_na);
+  ue_pre (wvar_ue);
+
+  %BETWEEN%
+  na_pre WITH ue_pre;
+  na_pre (bvar_na);
+  ue_pre (bvar_ue);
+
+  MODEL CONSTRAINT:
+  NEW (icc_na); icc_na = bvar_na/(bvar_na + wvar_na);
+  NEW (icc_ue); icc_ue = bvar_ue/(bvar_ue + wvar_ue);
+
+  OUTPUT: TECH1 TECH8 STDYX FSCOMPARISON;
+
+  PLOT: TYPE = PLOT3;
+        FACTOR =ALL;
+
+
+<a name='inputmessages' class='heading'></a>
+
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  5643
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Multilevel model for decomposition into
+within and between variance
+
+<a name='summary_analysis' class='heading'>SUMMARY OF ANALYSIS</a>
+
+Number of groups                                                 1
+Number of observations                                        6170
+
+Number of dependent variables                                    2
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   NA_PRE      UE_PRE
+
+Variables with special functions
+
+  Cluster variable      ID
+
+Estimator                                                    BAYES
+Specifications for Bayesian Estimation
+  Point estimate                                            MEDIAN
+  Number of Markov chain Monte Carlo (MCMC) chains               2
+  Random seed for the first chain                             6974
+  Starting value information                           UNPERTURBED
+  Algorithm used for Markov chain Monte Carlo           GIBBS(PX1)
+  Convergence criterion                                  0.500D-01
+  Maximum number of iterations                               50000
+  K-th iteration used for thinning                               5
+Specifications for Bayes Factor Score Estimation
+  Number of imputed data sets                                   50
+  Iteration intervals for thinning                               1
+
+Input data file(s)
+  ChapterData1.dat
+Input data format  FREE
+
+
+<a name='summary_data' class='heading'>SUMMARY OF DATA</a>
+
+     Number of clusters                        129
+
+       Size (s)    Cluster ID with Size s
+
+         20        120
+         22        143
+         29        72
+         30        46 66
+         33        49
+         35        107 69
+         36        45 41 43 54 95 12
+         37        58 26 140
+         39        102 136 91 27
+         40        20 131 17 28
+         41        130
+         42        90 82 137 23
+         43        30
+         44        19 10 121 125 73 92 83 86
+         45        122 110 60
+         46        7 81 36 38 113 97 144 1
+         47        37 39 80 84 85
+         48        104 79 135 64 14
+         49        76 48 129 59
+         50        33 71 118 21 70 22 124 47
+         51        62 32 8 134 112 94 11 101 55
+         52        53 68 44 34 109 128 56
+         53        88 52 139
+         54        35 108 40 9 105 115 106 78 50 16
+         55        3 29 126 61 103 138
+         56        117 127 13 141 2 98 99
+         57        100 116 51 123 114 4
+         58        5 42 119 18
+         59        31 15 63
+         60        24 57
+
+
+
+<a name='summary_missing_patterns' class='heading'>SUMMARY OF MISSING DATA PATTERNS</a>
+
+     Number of missing data patterns             3
+
+
+     MISSING DATA PATTERNS (x = not missing)
+
+           1  2  3
+ NA_PRE    x  x
+ UE_PRE    x     x
+
+
+     MISSING DATA PATTERN FREQUENCIES
+
+    Pattern   Frequency     Pattern   Frequency     Pattern   Frequency
+          1        5994           2         172           3           4
+
+
+<a name='covariance_coverage' class='heading'>COVARIANCE COVERAGE OF DATA</a>
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE         0.999
+ UE_PRE         0.971         0.972
+
+
+
+<a name='univariatess' class='heading'>UNIVARIATE SAMPLE STATISTICS</a>
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     NA_PRE                2.048       1.291       1.000   20.73%       1.000      1.430      1.710
+            6166.000       1.197       1.382       7.000    0.08%       2.000      2.860
+     UE_PRE               -1.247       1.014      -3.000   28.36%      -3.000     -2.000     -2.000
+            5998.000       3.104       0.082       3.000    5.94%      -1.000      0.000
+
+<a name='modelmessages' class='heading'></a>
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     USE THE FBITERATIONS OPTION TO INCREASE THE NUMBER OF ITERATIONS BY A FACTOR
+     OF AT LEAST TWO TO CHECK CONVERGENCE AND THAT THE PSR VALUE DOES NOT INCREASE.
+
+
+
+<a name='model_fit' class='heading'>MODEL FIT INFORMATION</a>
+
+Number of Free Parameters                               8
+
+Bayesian Posterior Predictive Checking using Chi-Square
+
+          95% Confidence Interval for the Difference Between
+          the Observed and the Replicated Chi-Square Values
+
+                                -12.243            12.604
+
+          Posterior Predictive P-Value              0.500
+
+Information Criteria
+
+          Deviance (DIC)                        38096.713
+          Estimated Number of Parameters (pD)     230.630
+
+
+
+<a name='model_results' class='heading'>MODEL RESULTS</a>
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+ NA_PRE   WITH
+    UE_PRE             0.415       0.019      0.000       0.378       0.452      *
+
+ Variances
+    NA_PRE             0.682       0.012      0.000       0.659       0.707      *
+    UE_PRE             2.842       0.052      0.000       2.742       2.945      *
+
+Between Level
+
+ NA_PRE   WITH
+    UE_PRE             0.171       0.045      0.000       0.090       0.266      *
+
+ Means
+    NA_PRE             2.068       0.067      0.000       1.936       2.200      *
+    UE_PRE            -1.246       0.052      0.000      -1.346      -1.144      *
+
+ Variances
+    NA_PRE             0.569       0.077      0.000       0.443       0.742      *
+    UE_PRE             0.287       0.047      0.000       0.213       0.392      *
+
+New/Additional Parameters
+    ICC_NA             0.455       0.033      0.000       0.392       0.523      *
+    ICC_UE             0.092       0.014      0.000       0.070       0.121      *
+
+
+<a name='standardized_results' class='heading'>STANDARDIZED MODEL RESULTS</a>
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+Within Level
+
+ NA_PRE   WITH
+    UE_PRE             0.298       0.012      0.000       0.275       0.321      *
+
+ Variances
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    UE_PRE             1.000       0.000      0.000       1.000       1.000
+
+Between Level
+
+ NA_PRE   WITH
+    UE_PRE             0.426       0.084      0.000       0.245       0.572      *
+
+ Means
+    NA_PRE             2.740       0.202      0.000       2.359       3.153      *
+    UE_PRE            -2.322       0.211      0.000      -2.769      -1.931      *
+
+ Variances
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    UE_PRE             1.000       0.000      0.000       1.000       1.000
+
+
+<a name='bayes_fscores_comparisons' class='heading'>BETWEEN-LEVEL FACTOR SCORE COMPARISONS</a>
+
+ Results for NA_PRE (referred to as plausible label B_NA_PRE)
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       134          4.111           2       120          4.068           3       124          3.931
+     4        28          3.681           5        27          3.600           6        49          3.537
+     7        13          3.484           8        66          3.484           9        39          3.436
+    10       107          3.360          11        68          3.335          12       117          3.334
+    13       121          3.316          14        40          3.307          15        64          3.296
+    16       138          3.276          17        76          3.181          18        17          3.106
+    19        82          3.062          20       127          2.938          21        69          2.884
+    22        70          2.745          23        81          2.739          24       131          2.734
+    25       122          2.715          26       139          2.690          27       104          2.621
+    28       105          2.589          29       137          2.567          30       103          2.556
+    31         8          2.487          32        50          2.447          33        72          2.424
+    34       100          2.406          35        95          2.342          36        16          2.330
+    37        31          2.306          38       140          2.262          39       116          2.244
+    40        22          2.238          41         1          2.228          42         9          2.213
+    43       135          2.209          44       106          2.202          45        79          2.198
+    46        58          2.197          47        94          2.190          48        18          2.165
+    49        32          2.136          50        23          2.129          51        71          2.113
+    52        57          2.084          53        30          2.083          54        97          2.080
+    55        10          2.065          56        78          2.061          57        15          2.048
+    58       123          2.029          59         5          2.001          60        19          1.996
+    61       125          1.978          62       136          1.965          63        55          1.917
+    64        36          1.910          65        46          1.897          66       119          1.886
+    67        21          1.883          68        59          1.854          69         4          1.839
+    70       130          1.829          71       126          1.767          72        29          1.765
+    73       128          1.763          74        20          1.759          75       114          1.748
+    76         7          1.748          77        90          1.739          78        53          1.731
+    79       143          1.722          80        61          1.718          81        54          1.698
+    82        52          1.686          83        37          1.684          84         3          1.665
+    85        62          1.638          86       129          1.630          87        48          1.619
+    88        41          1.615          89        26          1.568          90       102          1.561
+    91        24          1.549          92        88          1.536          93       108          1.536
+    94        56          1.525          95        11          1.514          96        51          1.510
+    97        85          1.495          98        60          1.479          99        33          1.476
+   100        92          1.462         101        73          1.429         102        44          1.421
+   103         2          1.409         104       109          1.408         105        83          1.397
+   106       118          1.364         107        98          1.361         108       115          1.351
+   109        14          1.350         110        38          1.347         111        45          1.341
+   112        47          1.338         113       112          1.333         114        42          1.328
+   115       141          1.313         116       110          1.299         117        80          1.287
+   118       144          1.268         119       113          1.260         120       101          1.260
+   121        86          1.252         122        35          1.237         123        91          1.215
+   124        34          1.207         125        63          1.202         126        84          1.189
+   127        12          1.143         128        99          1.079         129        43          1.035
+
+ Results for UE_PRE (referred to as plausible label B_UE_PRE)
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1        49         -0.045           2        82         -0.141           3        81         -0.251
+     4       117         -0.348           5        59         -0.426           6        60         -0.483
+     7        32         -0.503           8       134         -0.517           9        41         -0.562
+    10       127         -0.571          11       105         -0.580          12        53         -0.596
+    13        18         -0.619          14       139         -0.626          15        69         -0.645
+    16        95         -0.682          17       109         -0.693          18        44         -0.720
+    19         5         -0.775          20        78         -0.808          21       120         -0.813
+    22        34         -0.816          23        17         -0.818          24       140         -0.821
+    25        13         -0.822          26       125         -0.840          27        45         -0.843
+    28         3         -0.860          29       114         -0.869          30        20         -0.873
+    31        11         -0.881          32        31         -0.892          33        27         -0.917
+    34        94         -0.925          35       121         -0.927          36        90         -0.947
+    37       137         -0.956          38        64         -0.962          39        62         -0.979
+    40        15         -1.000          41        22         -1.000          42       131         -1.015
+    43        30         -1.015          44       128         -1.038          45        72         -1.062
+    46        16         -1.065          47       100         -1.070          48        50         -1.100
+    49        70         -1.104          50        76         -1.104          51       138         -1.119
+    52         7         -1.131          53        68         -1.133          54       123         -1.135
+    55       119         -1.136          56         4         -1.137          57       115         -1.139
+    58         9         -1.143          59       124         -1.148          60       104         -1.154
+    61        48         -1.156          62        51         -1.214          63        58         -1.214
+    64        38         -1.245          65         1         -1.246          66       107         -1.247
+    67         8         -1.248          68       122         -1.261          69        71         -1.282
+    70        37         -1.312          71        86         -1.315          72       101         -1.316
+    73        21         -1.322          74       136         -1.329          75        56         -1.340
+    76        57         -1.344          77        36         -1.345          78       103         -1.347
+    79       106         -1.351          80       126         -1.378          81        63         -1.385
+    82       143         -1.406          83        40         -1.426          84        29         -1.438
+    85       116         -1.442          86        55         -1.452          87        66         -1.458
+    88        61         -1.464          89        73         -1.471          90        79         -1.473
+    91        80         -1.493          92       129         -1.496          93       112         -1.513
+    94       144         -1.537          95        28         -1.554          96        12         -1.565
+    97       141         -1.577          98        52         -1.591          99        10         -1.595
+   100        23         -1.605         101       110         -1.636         102        92         -1.657
+   103        47         -1.663         104        14         -1.667         105        24         -1.693
+   106        97         -1.698         107        43         -1.718         108       102         -1.720
+   109       113         -1.740         110       130         -1.780         111        39         -1.805
+   112        99         -1.866         113        26         -1.892         114       108         -1.893
+   115         2         -1.895         116        54         -1.919         117        46         -1.937
+   118        88         -1.937         119        85         -1.956         120       118         -1.978
+   121        83         -2.005         122        33         -2.017         123       135         -2.041
+   124        19         -2.043         125        98         -2.066         126        91         -2.088
+   127        84         -2.178         128        42         -2.199         129        35         -2.351
+
+
+<a name='tech1_output' class='heading'>TECHNICAL 1 OUTPUT</a>
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              NA_PRE        UE_PRE
+              ________      ________
+                    0             0
+
+
+           THETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE             1
+ UE_PRE             2             3
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              NA_PRE        UE_PRE
+              ________      ________
+                    4             5
+
+
+           THETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE             6
+ UE_PRE             7             8
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              ICC_NA        ICC_UE
+              ________      ________
+                    9            10
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              NA_PRE        UE_PRE
+              ________      ________
+                0.000         0.000
+
+
+           THETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE         0.598
+ UE_PRE         0.000         1.552
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              NA_PRE        UE_PRE
+              ________      ________
+                2.048        -1.247
+
+
+           THETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE         0.598
+ UE_PRE         0.000         1.552
+
+
+     STARTING VALUES FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              ICC_NA        ICC_UE
+              ________      ________
+                0.500         0.500
+
+
+
+     PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
+
+     Parameter 1~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 2~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 3~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 4~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 5~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 6~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 7~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 8~IW(0.000,-3)              infinity            infinity            infinity
+
+
+<a name='tech8_output' class='heading'>TECHNICAL 8 OUTPUT</a>
+
+
+   TECHNICAL 8 OUTPUT FOR BAYES ESTIMATION
+
+     CHAIN    BSEED
+     1        6974
+     2        534401
+
+                     POTENTIAL       PARAMETER WITH
+     ITERATION    SCALE REDUCTION      HIGHEST PSR
+     100              1.000               1
+     200              1.015               2
+     300              1.015               2
+     400              1.020               8
+     500              1.012               8
+     600              1.006               8
+     700              1.003               6
+     800              1.002               6
+     900              1.003               6
+     1000             1.004               6
+     1100             1.002               6
+     1200             1.001               6
+     1300             1.003               6
+     1400             1.002               6
+     1500             1.003               6
+     1600             1.004               6
+     1700             1.002               6
+     1800             1.001               6
+     1900             1.002               6
+     2000             1.001               6
+     2100             1.001               6
+     2200             1.000               6
+     2300             1.001               5
+     2400             1.001               5
+     2500             1.001               5
+     2600             1.000               5
+     2700             1.000               5
+     2800             1.000               2
+     2900             1.000               5
+     3000             1.000               5
+
+
+<a name='summary_plausible' class='heading'>SUMMARIES OF PLAUSIBLE VALUES (N = NUMBER OF OBSERVATIONS * NUMBER OF IMPUTATIONS)</a>
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+                2.048        -1.249
+
+
+           Covariances
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+ B_NA_PRE       0.517
+ B_UE_PRE       0.158         0.267
+
+
+           Correlations
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+ B_NA_PRE       1.000
+ B_UE_PRE       0.426         1.000
+
+
+<a name='summary_plausible_stdev' class='heading'>SUMMARY OF PLAUSIBLE STANDARD DEVIATION (N = NUMBER OF OBSERVATIONS)</a>
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+                0.117         0.218
+
+
+           Covariances
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+ B_NA_PRE       0.000
+ B_UE_PRE       0.000         0.001
+
+
+           Correlations
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+ B_NA_PRE       1.000
+ B_UE_PRE       0.394         1.000
+
+
+<a name='plot_info' class='heading'>PLOT INFORMATION</a>
+
+The following plots are available:
+
+  <a href='#viewplot:1'>Histograms (sample values, estimated factor scores)</a>
+  <a href='#viewplot:2'>Scatterplots (sample values, estimated factor scores)</a>
+  <a href='#viewplot:3'>Between-level histograms (sample values, sample means/variances, estimated factor scores)</a>
+  <a href='#viewplot:4'>Between-level scatterplots (sample values, sample means/variances, estimated factor scores)</a>
+  <a href='#viewplot:5'>Bayesian posterior parameter distributions</a>
+  <a href='#viewplot:6'>Bayesian posterior parameter trace plots</a>
+  <a href='#viewplot:7'>Bayesian autocorrelation plots</a>
+  <a href='#viewplot:8'>Bayesian posterior predictive checking scatterplots</a>
+  <a href='#viewplot:9'>Bayesian posterior predictive checking distribution plots</a>
+  <a href='#viewplot:10'>Latent variable distribution plots</a>
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  09:38:24
+        Ending Time:  09:38:42
+       Elapsed Time:  00:00:18
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2021 Muthen & Muthen
+</pre>
+</body>
+</html>

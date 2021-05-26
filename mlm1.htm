@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+a:link
+{
+    color: black;
+    text-decoration: none;
+}
+a[name]:hover
+{
+    text-decoration: none;
+}
+a:hover
+{
+    color: blue;
+    text-decoration: underline;
+}
+a:visited
+{
+    color: black;
+    text-decoration: none;
+}
+.heading
+{
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+}
+.heading:hover
+{
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+    text-decoration: none;
+}
+</style>
+
+<body style="font-family:'Courier New'; font-size:14px;">
+<p class="heading">
+Mplus VERSION 8.6<br />
+MUTHEN & MUTHEN<br />
+05/18/2021   9:39 AM<br />
+</p>
+
+<p class='heading'>OUTPUT SECTIONS</p>
+
+<ul>
+     <li><a href='#input'>Input Instructions</a></li>
+     <li><a href='#inputmessages'>Input Warnings And Errors</a></li>
+     <li><a href='#summary_analysis'>Summary Of Analysis</a></li>
+     <li><a href='#summary_data'>Summary Of Data</a></li>
+     <li><a href='#summary_missing_patterns'>Summary Of Missing Data Patterns</a></li>
+     <li><a href='#covariance_coverage'>Covariance Coverage Of Data</a></li>
+     <li><a href='#univariatess'>Univariate Sample Statistics</a></li>
+     <li><a href='#modelmessages'>Model Warnings And Errors</a></li>
+     <li><a href='#model_fit'>Model Fit Information</a></li>
+     <li><a href='#model_results'>Model Results</a></li>
+     <li><a href='#standardized_results'>Standardized Model Results</a></li>
+     <li><a href='#rsquare'>R-square</a></li>
+     <li><a href='#bayes_fscores_comparisons'>Between-level Factor Score Comparisons</a></li>
+     <li><a href='#tech1_output'>Technical 1 Output</a></li>
+     <li><a href='#tech8_output'>Technical 8 Output</a></li>
+     <li><a href='#summary_plausible'>Summaries Of Plausible Values (n = Number Of Observations * Number Of Imputations)</a></li>
+     <li><a href='#summary_plausible_stdev'>Summary Of Plausible Standard Deviation (n = Number Of Observations)</a></li>
+     <li><a href='#plot_info'>Plot Information</a></li>
+</ul>
+<pre>
+
+<a name='input' class='heading'>INPUT INSTRUCTIONS</a>
+
+
+  TITLE:  Multilevel VAR(1) for negative affect (NA) and
+          unpleasant experiences (UE; recoded).
+          With level:
+          - no random slopes or residual variances
+          Between level:
+          - only random means
+
+  DATA: file is ChapterData1.dat;
+
+  VARIABLE:
+
+  NAMES       =   ID prepost TimeHours U2P PA NA PEx NEx
+                  pa_pre na_pre U2P_pre PEx_pre NEx_pre
+                  pa_post na_post U2P_post PEx_post NEx_post
+                  ham_pre ham_post group;
+  CLUSTER     =   ID;
+  USEVAR      =   na_pre ue_pre;
+  LAGGED      =   na_pre(1) ue_pre(1);
+  TINTERVAL   =   TimeHours(1);
+  MISSING     =   ALL(-999);
+
+  DEFINE:     ue_pre = -1*U2P_pre;
+
+  ANALYSIS:   TYPE = TWOLEVEL;
+      		ESTIMATOR = BAYES;
+              PROC = 2;
+              BITER = (3000);
+              BSEED = 4386;
+              THIN = 5;
+
+  MODEL:
+  %WITHIN%
+  na_pre ON na_pre&1; ! autoregression NA (lag 1)
+  na_pre ON ue_pre;   ! cross-regression from UE to NA (lag 0)
+  ue_pre ON ue_pre&1; ! autoregression UE (lag 1)
+  ue_pre on na_pre&1; ! cross-lagged regression from NA to UE (lag 1)
+
+  %BETWEEN%
+  ! allow all random effects to be correlated
+  na_pre WITH ue_pre;
+
+  OUTPUT: TECH1 TECH8 STDYX FSCOMPARISON;
+
+  PLOT: TYPE = PLOT3;
+        FACTOR =ALL;
+
+
+<a name='inputmessages' class='heading'></a>
+
+*** WARNING
+  Data set contains cases with missing on all variables.  Cases that appeared before the first
+  case with observed data and that appeared after the last case with observed data were not
+  included in the analysis.  Number of deleted cases:  37218
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Multilevel VAR(1) for negative affect (NA) and
+unpleasant experiences (UE; recoded).
+With level:
+- no random slopes or residual variances
+Between level:
+- only random means
+
+<a name='summary_analysis' class='heading'>SUMMARY OF ANALYSIS</a>
+
+Number of groups                                                 1
+Number of observations                                       17349
+
+Number of dependent variables                                    2
+Number of independent variables                                  2
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   NA_PRE      UE_PRE
+
+Observed independent variables
+   NA_PRE&1    UE_PRE&1
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   NA_PRE&1    UE_PRE&1
+
+
+Estimator                                                    BAYES
+Specifications for Bayesian Estimation
+  Point estimate                                            MEDIAN
+  Number of Markov chain Monte Carlo (MCMC) chains               2
+  Random seed for the first chain                             4386
+  Starting value information                           UNPERTURBED
+  Algorithm used for Markov chain Monte Carlo           GIBBS(PX1)
+  Convergence criterion                                  0.500D-01
+  Maximum number of iterations                               50000
+  K-th iteration used for thinning                               5
+Specifications for Bayes Factor Score Estimation
+  Number of imputed data sets                                   50
+  Iteration intervals for thinning                               1
+
+Input data file(s)
+  ChapterData1.dat
+Input data format  FREE
+
+
+<a name='summary_data' class='heading'>SUMMARY OF DATA</a>
+
+     Number of clusters                        129
+
+       Size (s)    Cluster ID with Size s
+
+         48        120
+        103        122
+        123        136
+        124        23
+        126        66
+        127        37 39
+        128        72
+        129        69 26 58 130 64 115
+        130        38 125 107 62 124 17 110
+        131        27 86 56 70 30 134 139 140 44 46
+        132        126 143 102 7 129 19 9 82
+        133        8 52 54 105 85 57 116 32 63 36 10 95 71 21 79 40 88
+                   80 41 81 12 144 108 73 49 43 1 90
+        134        121 123 28 13 119 4 91 16 47 83 5 117 138 45 42 24 103
+                   50 2 106 18 109 53 112 113 76 29 118 55 3 14 22 84 61
+                   127 15 34 92 131 35 11 97 68 99 100 141 101 48 51 135
+                   137 114 128 20 98
+        152        104
+        158        78
+        175        31
+        177        94
+        182        59
+        201        60
+        254        33
+
+
+
+<a name='summary_missing_patterns' class='heading'>SUMMARY OF MISSING DATA PATTERNS</a>
+
+     Number of missing data patterns            12
+
+
+     MISSING DATA PATTERNS (x = not missing)
+
+           1  2  3  4  5  6  7  8  9 10 11 12
+ NA_PRE    x  x        x     x  x  x     x
+ UE_PRE    x  x                 x     x  x
+ NA_PRE&1  x     x     x  x     x  x
+ UE_PRE&1  x     x     x                 x  x
+
+
+     MISSING DATA PATTERN FREQUENCIES
+
+    Pattern   Frequency     Pattern   Frequency     Pattern   Frequency
+          1        2547           5          60           9          13
+          2        3386           6          96          10           4
+          3        3262           7          99          11           2
+          4        7819           8          59          12           2
+
+
+<a name='covariance_coverage' class='heading'>COVARIANCE COVERAGE OF DATA</a>
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE         0.355
+ UE_PRE         0.345         0.346
+
+
+
+<a name='univariatess' class='heading'>UNIVARIATE SAMPLE STATISTICS</a>
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     NA_PRE                2.048       1.291       1.000   20.73%       1.000      1.430      1.710
+            6166.000       1.197       1.382       7.000    0.08%       2.000      2.860
+     UE_PRE               -1.247       1.014      -3.000   28.36%      -3.000     -2.000     -2.000
+            5998.000       3.104       0.082       3.000    5.94%      -1.000      0.000
+
+<a name='modelmessages' class='heading'></a>
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     USE THE FBITERATIONS OPTION TO INCREASE THE NUMBER OF ITERATIONS BY A FACTOR
+     OF AT LEAST TWO TO CHECK CONVERGENCE AND THAT THE PSR VALUE DOES NOT INCREASE.
+
+
+
+<a name='model_fit' class='heading'>MODEL FIT INFORMATION</a>
+
+Number of Free Parameters                              11
+
+Information Criteria
+
+          Deviance (DIC)                       124702.009
+          Estimated Number of Parameters (pD)   22782.992
+
+
+
+<a name='model_results' class='heading'>MODEL RESULTS</a>
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+ NA_PRE     ON
+    NA_PRE&1           0.534       0.011      0.000       0.512       0.557      *
+    UE_PRE             0.110       0.006      0.000       0.099       0.121      *
+
+ UE_PRE     ON
+    UE_PRE&1           0.154       0.020      0.000       0.116       0.194      *
+    NA_PRE&1           0.218       0.033      0.000       0.154       0.283      *
+
+ Residual Variances
+    NA_PRE             0.445       0.009      0.000       0.429       0.464      *
+    UE_PRE             2.735       0.051      0.000       2.637       2.839      *
+
+Between Level
+
+ NA_PRE   WITH
+    UE_PRE             0.157       0.045      0.000       0.079       0.259      *
+
+ Means
+    NA_PRE             2.061       0.068      0.000       1.921       2.196      *
+    UE_PRE            -1.255       0.052      0.000      -1.357      -1.153      *
+
+ Variances
+    NA_PRE             0.560       0.078      0.000       0.431       0.734      *
+    UE_PRE             0.270       0.045      0.000       0.198       0.374      *
+
+
+<a name='standardized_results' class='heading'>STANDARDIZED MODEL RESULTS</a>
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+Within Level
+
+ NA_PRE     ON
+    NA_PRE&1           0.534       0.011      0.000       0.512       0.557      *
+    UE_PRE             0.221       0.011      0.000       0.199       0.243      *
+
+ UE_PRE     ON
+    UE_PRE&1           0.154       0.020      0.000       0.116       0.194      *
+    NA_PRE&1           0.108       0.017      0.000       0.077       0.141      *
+
+ Residual Variances
+    NA_PRE             0.629       0.013      0.000       0.603       0.654      *
+    UE_PRE             0.954       0.008      0.000       0.937       0.968      *
+
+Between Level
+
+ NA_PRE   WITH
+    UE_PRE             0.405       0.089      0.000       0.222       0.567      *
+
+ Means
+    NA_PRE             2.754       0.208      0.000       2.360       3.175      *
+    UE_PRE            -2.414       0.216      0.000      -2.859      -2.006      *
+
+ Variances
+    NA_PRE             1.000       0.000      0.000       1.000       1.000
+    UE_PRE             1.000       0.000      0.000       1.000       1.000
+
+
+<a name='rsquare' class='heading'>R-SQUARE</a>
+
+Within Level
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    NA_PRE             0.371       0.013      0.000       0.346       0.397
+    UE_PRE             0.046       0.008      0.000       0.032       0.063
+
+
+<a name='bayes_fscores_comparisons' class='heading'>BETWEEN-LEVEL FACTOR SCORE COMPARISONS</a>
+
+ Results for NA_PRE (referred to as plausible label B_NA_PRE)
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1       120          4.045           2       134          3.953           3       124          3.826
+     4        28          3.674           5        66          3.510           6        49          3.448
+     7        13          3.445           8        39          3.439           9        27          3.434
+    10        40          3.402          11       121          3.361          12        64          3.323
+    13        68          3.300          14       117          3.292          15       138          3.249
+    16       107          3.245          17        17          3.105          18        76          3.103
+    19       127          2.984          20        82          2.911          21        69          2.885
+    22       122          2.764          23       131          2.750          24       139          2.724
+    25        70          2.683          26       104          2.659          27       137          2.531
+    28       105          2.509          29        81          2.491          30       103          2.473
+    31        50          2.438          32        95          2.404          33         8          2.400
+    34        72          2.391          35       100          2.359          36        16          2.352
+    37         1          2.290          38       140          2.239          39       135          2.237
+    40        32          2.232          41         9          2.218          42        22          2.214
+    43        79          2.213          44        31          2.199          45       116          2.189
+    46       106          2.173          47        94          2.131          48        58          2.130
+    49        23          2.127          50        71          2.122          51        18          2.097
+    52        30          2.072          53        97          2.067          54        19          2.062
+    55        57          2.061          56        78          2.046          57       123          2.042
+    58       125          2.038          59        10          2.032          60       136          2.009
+    61        15          1.973          62         5          1.942          63        46          1.933
+    64         4          1.919          65        55          1.908          66        21          1.908
+    67       119          1.892          68        36          1.881          69        59          1.836
+    70       130          1.825          71       126          1.813          72        61          1.805
+    73        29          1.801          74         7          1.795          75        52          1.779
+    76       128          1.740          77        54          1.734          78        90          1.723
+    79        20          1.710          80       114          1.682          81        53          1.671
+    82       129          1.662          83        62          1.647          84         3          1.637
+    85        37          1.628          86       143          1.603          87        41          1.594
+    88        88          1.583          89        48          1.578          90        24          1.575
+    91        92          1.572          92       102          1.568          93        26          1.547
+    94        11          1.512          95        85          1.501          96        56          1.497
+    97       108          1.492          98        33          1.481          99        51          1.475
+   100        98          1.468         101         2          1.465         102        44          1.462
+   103       109          1.440         104        83          1.436         105        60          1.431
+   106        14          1.400         107        73          1.399         108       118          1.394
+   109        45          1.385         110       112          1.374         111        47          1.370
+   112       141          1.362         113        42          1.338         114       115          1.334
+   115        38          1.332         116        35          1.320         117       110          1.313
+   118       144          1.300         119        84          1.270         120        91          1.262
+   121       101          1.256         122        80          1.243         123       113          1.237
+   124        63          1.218         125        86          1.200         126        34          1.166
+   127        99          1.157         128        12          1.108         129        43          1.105
+
+ Results for UE_PRE (referred to as plausible label B_UE_PRE)
+
+ Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score     Ranking  Cluster    Factor Score
+     1        49         -0.111           2        82         -0.275           3        32         -0.384
+     4       117         -0.451           5        81         -0.452           6        60         -0.519
+     7        59         -0.537           8        41         -0.588           9       139         -0.590
+    10       105         -0.599          11       127         -0.623          12       134         -0.623
+    13        53         -0.644          14        44         -0.672          15        69         -0.679
+    16       109         -0.682          17        18         -0.690          18        95         -0.741
+    19        45         -0.796          20        17         -0.802          21       120         -0.804
+    22        34         -0.816          23        13         -0.819          24         5         -0.820
+    25        78         -0.824          26       140         -0.854          27         3         -0.855
+    28       125         -0.859          29        20         -0.884          30        11         -0.905
+    31       137         -0.924          32       114         -0.932          33        64         -0.936
+    34       121         -0.946          35        94         -0.965          36        62         -1.007
+    37        31         -1.007          38        27         -1.009          39       100         -1.011
+    40        90         -1.017          41        15         -1.022          42        30         -1.035
+    43        50         -1.042          44        22         -1.043          45         4         -1.074
+    46       128         -1.079          47        68         -1.095          48       131         -1.114
+    49         7         -1.116          50        76         -1.118          51         9         -1.120
+    52        72         -1.124          53        16         -1.137          54       119         -1.141
+    55       124         -1.145          56         1         -1.146          57       104         -1.149
+    58       123         -1.170          59        48         -1.186          60        70         -1.186
+    61       138         -1.207          62        51         -1.211          63        38         -1.219
+    64       115         -1.222          65       122         -1.268          66       101         -1.270
+    67       136         -1.290          68        37         -1.297          69       103         -1.301
+    70        36         -1.308          71        58         -1.313          72       107         -1.317
+    73         8         -1.326          74        61         -1.327          75        86         -1.331
+    76        56         -1.343          77        71         -1.348          78        21         -1.359
+    79       126         -1.383          80       143         -1.383          81        40         -1.388
+    82        63         -1.396          83        57         -1.398          84        29         -1.411
+    85        66         -1.411          86       144         -1.431          87       106         -1.431
+    88       116         -1.440          89        79         -1.463          90        55         -1.479
+    91       112         -1.487          92        92         -1.501          93        52         -1.506
+    94       129         -1.529          95       141         -1.537          96        73         -1.541
+    97       110         -1.543          98        80         -1.575          99        10         -1.624
+   100        12         -1.625         101        47         -1.643         102        28         -1.649
+   103        43         -1.651         104        24         -1.655         105        23         -1.677
+   106        14         -1.683         107       113         -1.715         108        97         -1.744
+   109        39         -1.763         110       102         -1.771         111         2         -1.794
+   112       130         -1.808         113        99         -1.816         114        88         -1.836
+   115       108         -1.851         116        54         -1.869         117        26         -1.870
+   118        33         -1.890         119        19         -1.899         120        46         -1.914
+   121       118         -1.925         122       135         -1.965         123        98         -1.966
+   124        83         -1.976         125        85         -1.976         126        84         -2.072
+   127        91         -2.079         128        42         -2.182         129        35         -2.314
+
+
+<a name='tech1_output' class='heading'>TECHNICAL 1 OUTPUT</a>
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+                    0             0             0             0
+
+
+           LAMBDA
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+ NA_PRE             0             0             0             0
+ UE_PRE             0             0             0             0
+ NA_PRE&1           0             0             0             0
+ UE_PRE&1           0             0             0             0
+
+
+           THETA
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+ NA_PRE             0
+ UE_PRE             0             0
+ NA_PRE&1           0             0             0
+ UE_PRE&1           0             0             0             0
+
+
+           ALPHA
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+                    0             0             0             0
+
+
+           BETA
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+ NA_PRE             0             1             2             0
+ UE_PRE             0             0             3             4
+ NA_PRE&1           0             0             0             0
+ UE_PRE&1           0             0             0             0
+
+
+           PSI
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+ NA_PRE             5
+ UE_PRE             0             6
+ NA_PRE&1           0             0             0
+ UE_PRE&1           0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              NA_PRE        UE_PRE
+              ________      ________
+                    0             0
+
+
+           LAMBDA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE             0             0
+ UE_PRE             0             0
+
+
+           THETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE             0
+ UE_PRE             0             0
+
+
+           ALPHA
+              NA_PRE        UE_PRE
+              ________      ________
+                    7             8
+
+
+           BETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE             0             0
+ UE_PRE             0             0
+
+
+           PSI
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE             9
+ UE_PRE            10            11
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+ NA_PRE         1.000         0.000         0.000         0.000
+ UE_PRE         0.000         1.000         0.000         0.000
+ NA_PRE&1       0.000         0.000         1.000         0.000
+ UE_PRE&1       0.000         0.000         0.000         1.000
+
+
+           THETA
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+ NA_PRE         0.000
+ UE_PRE         0.000         0.000
+ NA_PRE&1       0.000         0.000         0.000
+ UE_PRE&1       0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           BETA
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+ NA_PRE         0.000         0.000         0.000         0.000
+ UE_PRE         0.000         0.000         0.000         0.000
+ NA_PRE&1       0.000         0.000         0.000         0.000
+ UE_PRE&1       0.000         0.000         0.000         0.000
+
+
+           PSI
+              NA_PRE        UE_PRE        NA_PRE&1      UE_PRE&1
+              ________      ________      ________      ________
+ NA_PRE         0.598
+ UE_PRE         0.000         1.552
+ NA_PRE&1       0.000         0.000         0.596
+ UE_PRE&1       0.000         0.000         0.000         1.550
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              NA_PRE        UE_PRE
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE         1.000         0.000
+ UE_PRE         0.000         1.000
+
+
+           THETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE         0.000
+ UE_PRE         0.000         0.000
+
+
+           ALPHA
+              NA_PRE        UE_PRE
+              ________      ________
+                2.048        -1.247
+
+
+           BETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE         0.000         0.000
+ UE_PRE         0.000         0.000
+
+
+           PSI
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE         0.598
+ UE_PRE         0.000         1.552
+
+
+
+     PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
+
+     Parameter 1~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 2~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 3~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 4~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 5~IG(-1.000,0.000)          infinity            infinity            infinity
+     Parameter 6~IG(-1.000,0.000)          infinity            infinity            infinity
+     Parameter 7~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 8~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 9~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 10~IW(0.000,-3)             infinity            infinity            infinity
+     Parameter 11~IW(0.000,-3)             infinity            infinity            infinity
+
+
+<a name='tech8_output' class='heading'>TECHNICAL 8 OUTPUT</a>
+
+
+   TECHNICAL 8 OUTPUT FOR BAYES ESTIMATION
+
+     CHAIN    BSEED
+     1        4386
+     2        293660
+
+                     POTENTIAL       PARAMETER WITH
+     ITERATION    SCALE REDUCTION      HIGHEST PSR
+     100              1.051               4
+     200              1.009               3
+     300              1.023               4
+     400              1.026               5
+     500              1.008               4
+     600              1.008               4
+     700              1.022               4
+     800              1.014               4
+     900              1.009               4
+     1000             1.003               11
+     1100             1.003               11
+     1200             1.003               3
+     1300             1.003               6
+     1400             1.008               3
+     1500             1.009               3
+     1600             1.010               3
+     1700             1.007               3
+     1800             1.006               3
+     1900             1.005               3
+     2000             1.006               3
+     2100             1.007               3
+     2200             1.007               3
+     2300             1.004               3
+     2400             1.004               3
+     2500             1.003               3
+     2600             1.001               3
+     2700             1.001               2
+     2800             1.002               2
+     2900             1.003               6
+     3000             1.003               6
+
+
+<a name='summary_plausible' class='heading'>SUMMARIES OF PLAUSIBLE VALUES (N = NUMBER OF OBSERVATIONS * NUMBER OF IMPUTATIONS)</a>
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+                2.043        -1.252
+
+
+           Covariances
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+ B_NA_PRE       0.507
+ B_UE_PRE       0.141         0.260
+
+
+           Correlations
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+ B_NA_PRE       1.000
+ B_UE_PRE       0.387         1.000
+
+
+<a name='summary_plausible_stdev' class='heading'>SUMMARY OF PLAUSIBLE STANDARD DEVIATION (N = NUMBER OF OBSERVATIONS)</a>
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+                0.167         0.244
+
+
+           Covariances
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+ B_NA_PRE       0.000
+ B_UE_PRE       0.000         0.001
+
+
+           Correlations
+              B_NA_PRE      B_UE_PRE
+              ________      ________
+ B_NA_PRE       1.000
+ B_UE_PRE       0.395         1.000
+
+
+<a name='plot_info' class='heading'>PLOT INFORMATION</a>
+
+The following plots are available:
+
+  <a href='#viewplot:1'>Histograms (sample values, estimated factor scores)</a>
+  <a href='#viewplot:2'>Scatterplots (sample values, estimated factor scores)</a>
+  <a href='#viewplot:3'>Between-level histograms (sample values, sample means/variances, estimated factor scores)</a>
+  <a href='#viewplot:4'>Between-level scatterplots (sample values, sample means/variances, estimated factor scores)</a>
+  <a href='#viewplot:5'>Time series plots (sample values, ACF, PACF, estimated factor scores)</a>
+  <a href='#viewplot:6'>Histogram of subjects per time point</a>
+  <a href='#viewplot:7'>Time interval plots</a>
+  <a href='#viewplot:8'>Bayesian posterior parameter distributions</a>
+  <a href='#viewplot:9'>Bayesian posterior parameter trace plots</a>
+  <a href='#viewplot:10'>Bayesian autocorrelation plots</a>
+  <a href='#viewplot:11'>Latent variable distribution plots</a>
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  09:39:24
+        Ending Time:  09:42:36
+       Elapsed Time:  00:03:12
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2021 Muthen & Muthen
+</pre>
+</body>
+</html>

@@ -41,7 +41,7 @@ The two `STANDARDIZE` statements imply that these two variables are standardized
 
 Alternatively, we could also use the `STDYX` option in the `OUTPUT` command; this will imply that first the unstandardized parameter estimates are obtained, which are then standardized using the model implied standard deviations. Note that while for models without lagged relations, these two approaches will lead to very similar results, but for models that include lagged relations (e.g., autoregression), they may deviate: The reason for this is that taking into account the autocorrelation structure in the data, the model implied mean and/or variance of a variable may deviate considerably from the observed mean and variance (specifically when the probability of missing data is different for for instance higher scores than for lower scores).    
 
-## Bayesian esitmation
+## Bayesian estimation
 
 Throughout, we make use of Bayesian estimation, which is required for doing DSEM analysis in Mplus. We do this by specifying:
 
