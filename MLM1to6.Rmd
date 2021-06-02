@@ -78,7 +78,7 @@ If also include:
 
           FACTOR = ALL (500);
 
-in the`PLOT` command, Mplus will save 500 factor score values drawn for _each_ person separately. Factor scores include latent variables, but also random effects (i.e., means, slopes, or residual variances). These are drawn from the sampled parameter values of that person. Through using this option, we can then plot the means or medians of these per person (e.g., in histograms univariately, or in scatterplots bivariately). Furthermore, it will also allow us to ask for a comparison of the factor scores (i.e., the individual's parameter estimates), as we will show below.
+in the`PLOT` command, Mplus will save 500 factor score values drawn for _each_ person separately. Factor scores include latent variables, but also random effects (i.e., means, slopes, or residual variances). These are drawn from the sampled parameter values of that person. Through using this option, we can then plot the means or medians of these per person (e.g., in histograms univariately, or in scatter plots bivariately). Furthermore, it will also allow us to ask for a comparison of the factor scores (i.e., the individual's parameter estimates), as we will show below.
 
 $~$
 
@@ -160,10 +160,9 @@ The part of the output that is of interest to us, are the last two lines where t
 Here we see that the difference in the proportion between-person variance is quite large for these two variables: About 0.46 for negative affect, and only 0.09 for unpleasantness of events. The latter implies that the reported unpleasantness of events contains mostly within-person variation over time, whereas negative affect contains much more substantial differences between persons. 
 
 ## Bayesian estimation
+In generally, when using Bayesian estimation, we should be aware that a model may not have converged. While it is not possible to determine whether a model in fact did converged, there are several diagnostics that can be consulted to see whether there is evidence that the model did _not_ converge. 
 
-More generally, when using Bayesian estimation, we should be aware that a model may not have converged. While it is not possible to determine whehter a model in fact converged, there are several diagnostics that can be consulted to see whether there is evidence that the model did _not_ converge. 
-
-As already mentioned, the `BITER = (3000)` statement can be used to ensure that Mplus draws at elast 5000 samples in the MCMC algorithm; when the Potential Scale Reduction (PRS) statistic indicates that the algorithm did not converge yet, Mplus will continue beyond 5000 samples untill the criterion is satisfied. If the user does not want additional samples, they shoudl use `FBITER = 3000` instead. 
+As already mentioned, the `BITER = (3000)` statement can be used to ensure that Mplus draws at least 5000 samples in the MCMC algorithm; when the Potential Scale Reduction (PRS) statistic indicates that the algorithm did not converge yet, Mplus will continue beyond 5000 samples until the criterion is satisfied. If the user does not want additional samples, they should use `FBITER = 3000` instead. 
 
 The PRS statistic is shown on the screen while running the analysis; this information is saved in the output by asking for `TECH8` in the `OUTPUT` command. For the current analysis, this is 
 
@@ -208,9 +207,9 @@ The PRS statistic is shown on the screen while running the analysis; this inform
          2900             1.000               5
          3000             1.000               5
 
-The PSR is based on computing for each model parameter: a) the total variance across both chains over the last 100 (retained) iterations; b) the variance within the two chains; and c) dividing the former by the latter. Hence, when two chains have settled in the same area of the aprameter space, the total variance will be (almost) identical to the within chain variance, such that this statistic is very close to 1. The PSR that is reported here, is the largest one among all the model parameters; which parameter it is, is shown in the last column (which matches the parameter numbering in the `TECH1` output).
+The PSR is based on computing for each model parameter: a) the total variance across both chains over the last 100 (retained) iterations; b) the variance within the two chains; and c) dividing the former by the latter. Hence, when two chains have settled in the same area of the parameter space, the total variance will be (almost) identical to the within chain variance, such that this statistic is very close to 1. The PSR that is reported here, is the largest one among all the model parameters; which parameter it is, is shown in the last column (which matches the parameter numbering in the `TECH1` output).
 
-In addition to this statistic, the user should also check the traceplots of the model parameters. These can be viewed in Mplus, using the plotting option (from the plot menu, the option: Bayesian posterior parameter trace plot). An example of such a trace plot is given below.
+In addition to this statistic, the user should also check the trace plots of the model parameters. These can be viewed in Mplus, using the plotting option (from the plot menu, the option: Bayesian posterior parameter trace plot). An example of such a trace plot is given below.
 
 ![](images/Model0TracePlot.png){width=90%}
 
@@ -220,9 +219,9 @@ Other plots that contain relevant information on the performance of the MCMC alg
 
 ![](images/ParameterACF.png){width=90%}
 
-Preferrably, these autocorrelations (i.e., the autocorrelation across samples of the MCMC draws) go to zero very quickly, as is the case here. If they remain higher for longer lags, this is a reason to: a) using the `THINNING` option; and/or b) increase the number of iterations. 
+Preferably, these autocorrelations (i.e., the autocorrelation across samples of the MCMC draws) go to zero very quickly, as is the case here. If they remain higher for longer lags, this is a reason to: a) using the `THINNING` option; and/or b) increase the number of iterations. 
 
-As a final comment regarding Bayesian esitmation, we point out that the prior distributions that were used for the model parameters, are also reported in the output at the end. For the current model these are
+As a final comment regarding Bayesian estimation, we point out that the prior distributions that were used for the model parameters, are also reported in the output at the end. For the current model these are
 
 
          PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
