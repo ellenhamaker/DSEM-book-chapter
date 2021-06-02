@@ -1,6 +1,8 @@
 ---
 title: "Replicated N=1 analyses"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     highlight: default
     toc: yes
@@ -53,9 +55,9 @@ Throughout, we make use of Bayesian estimation, which is required for doing DSEM
 
 where: 
 
-`PROC = 2` indicates the number of processors to use for this analysis;
+`PROC = 2` indicates the number of processors to use for this analysis; depending on teh number of cores in one's computer this number can be increased to speed up the analysis;
 
-`BITER = (5000)` indicates that the number of iterations for the MCMC algorithm must be at least 5000 (Mplus will use more when the Potential Scale Reduction (PRS) statistic indicates that the MCMC algorithm has not converged yet); note that in fact two chains with different starting values are run, both for (at least) 5000 iterations, and the first half of them is discarded as burn-in; hence, the parameter estimates are based on the combination of the second half of both chains.
+`BITER = (5000)` indicates that the number of iterations for the MCMC algorithm must be at least 5000 (Mplus will use more when the Potential Scale Reduction (PRS) statistic indicates that the MCMC algorithm has not converged yet); note that in fact two chains with different starting values are run, both for (at least) 5000 iterations, and the first half of them is discarded as burn-in; hence, the parameter estimates are based on the combination of the second half of both chains (i.e., at least 5000 iterations together).
 
 `THIN = 10` implies that only 1 in 10 iterations of the MCMC sequence are saved; hence, rather than running two chains of at least 5000 iterations each, Mplus will run two chains of 10*5000 each; thinning is used to account for autocorrelation in the MCMC iterations. 
 
@@ -95,7 +97,7 @@ We ask for additional output using:
 
     OUTPUT: TECH1 TECH8;
 
-where `TECH1` provides information about the model parameters in terms of the LISREL notation; and `TECH8` provides additional information about convergence of the MCMC algorithm. 
+where `TECH1` provides information about the model parameters in terms of matrix notation (based on the LISREL model); and `TECH8` provides additional information about convergence of the MCMC algorithm. 
 
 ## Output for Model 1
 The complete output file for this analysis can be found [here](https://ellenhamaker.github.io/DSEM-book-chapter/nis1model1.htm). 

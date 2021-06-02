@@ -1,16 +1,19 @@
 ---
-title: "Supplementary materials for the book chapter: __Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling__"
-author: "Ellen Hamaker, Tihomir Asparouhov, and Bengt Muthén"
-date: "May 2021"
+title: 'Supplementary materials for the book chapter: __Dynamic structural equation
+  modeling as a combination of time series modeling, multilevel modeling, and structural
+  equation modeling__'
+author: "Ellen Hamaker, Tihomir Asparouhov, and Bengt MuthÃ©n"
+date: "June 2021"
 output:
   html_document:
     highlight: default
+  pdf_document: default
 ---
 This is a website with supporting material for the book chapter _Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling_. 
 
 Specifically, this website contains descriptions of the various models that are discussed in the book chapter, detailed discussions of the Mplus input that was used to run these models, and step-by-step discussions of the output of these models. 
 
-While other data and other research questions most likely require other model specifications, the descriptions and considerations provided here will hopefully prove helpful to you in making informed decisions about you DSEM analyses.
+While other data and other research questions most likely require other model specifications, the descriptions and considerations provided here will hopefully prove helpful to you in making informed decisions about your DSEM analyses.
 
 $~$
 
@@ -34,7 +37,7 @@ On this website we present the Mplus input and output of these models, and elabo
 
 $~$
 
-# General comments about the empricial data
+# General comments about the empirical data
 
 These data come from 129 participants who were measured using experience sampling during two episodes. Each episode consisted of 10 beeps per day for 6 days. The first episode took place before the intervention. After completing this episode, they were randomly assigned to either a mindfulness training or a control group, and a second episode of experience sampling took place after the intervention. In the $N=1$ analyses and the first six multilevel models, we focus on data from the first episode only. Subsequently, we consider the data from both episodes in a pretest-posttest analysis. 
 

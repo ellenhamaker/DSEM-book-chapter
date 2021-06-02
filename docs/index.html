@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Ellen Hamaker, Tihomir Asparouhov, and Bengt Muthén" />
+<meta name="author" content="Ellen Hamaker, Tihomir Asparouhov, and Bengt MuthÃ©n" />
 
 
 <title>Supplementary materials for the book chapter: Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling</title>
@@ -307,15 +307,15 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Supplementary materials for the book chapter: <strong>Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling</strong></h1>
-<h4 class="author">Ellen Hamaker, Tihomir Asparouhov, and Bengt Muthén</h4>
-<h4 class="date">May 2021</h4>
+<h4 class="author">Ellen Hamaker, Tihomir Asparouhov, and Bengt MuthÃ©n</h4>
+<h4 class="date">June 2021</h4>
 
 </div>
 
 
 <p>This is a website with supporting material for the book chapter <em>Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling</em>.</p>
 <p>Specifically, this website contains descriptions of the various models that are discussed in the book chapter, detailed discussions of the Mplus input that was used to run these models, and step-by-step discussions of the output of these models.</p>
-<p>While other data and other research questions most likely require other model specifications, the descriptions and considerations provided here will hopefully prove helpful to you in making informed decisions about you DSEM analyses.</p>
+<p>While other data and other research questions most likely require other model specifications, the descriptions and considerations provided here will hopefully prove helpful to you in making informed decisions about your DSEM analyses.</p>
 <p><span class="math inline">\(~\)</span></p>
 <div id="background" class="section level1">
 <h1>Background</h1>
@@ -334,8 +334,8 @@ $(document).ready(function () {
 <p>On this website we present the Mplus input and output of these models, and elaborate on their interpretation.</p>
 <p><span class="math inline">\(~\)</span></p>
 </div>
-<div id="general-comments-about-the-empricial-data" class="section level1">
-<h1>General comments about the empricial data</h1>
+<div id="general-comments-about-the-empirical-data" class="section level1">
+<h1>General comments about the empirical data</h1>
 <p>These data come from 129 participants who were measured using experience sampling during two episodes. Each episode consisted of 10 beeps per day for 6 days. The first episode took place before the intervention. After completing this episode, they were randomly assigned to either a mindfulness training or a control group, and a second episode of experience sampling took place after the intervention. In the <span class="math inline">\(N=1\)</span> analyses and the first six multilevel models, we focus on data from the first episode only. Subsequently, we consider the data from both episodes in a pretest-posttest analysis.</p>
 <p>The data are in long format, meaning that each beep for each individual is represented by a separate row. Throughout we focus on two time-varying variables: negative affect (<span class="math inline">\(y\)</span>) and unpleasantness of events (<span class="math inline">\(x\)</span>). The latter is actually based on a variable that was measured with 0 representing a neutral event, negative values representing the degree of unpleasantness of events, and positive values representing the degree of pleasantness of events. This was rescaled by multiplying it by -1, using the <code>DEFINE</code> command:</p>
 <pre><code>DEFINE:     ue_pre = -1*U2P_pre; </code></pre>

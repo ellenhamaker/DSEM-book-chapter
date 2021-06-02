@@ -1,6 +1,8 @@
 ---
 title: "Dynamic multilevel analyses"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     highlight: default
     toc: yes
@@ -76,7 +78,7 @@ If also include:
 
           FACTOR = ALL (500);
 
-in the`PLOT` command, Mplus will save 500 samples from the individually sampled parameters per person, and we can plot the means or medians of these per person. It will also allow us to ask for a comparison of the factor scores (i.e., the individual's parameter estimates), as we will show below.
+in the`PLOT` command, Mplus will save 500 factor score values drawn for _each_ person separately. Factor scores include latent variables, but also random effects (i.e., means, slopes, or residual variances). These are drawn from the sampled parameter values of that person. Through using this option, we can then plot the means or medians of these per person (e.g., in histograms univariately, or in scatterplots bivariately). Furthermore, it will also allow us to ask for a comparison of the factor scores (i.e., the individual's parameter estimates), as we will show below.
 
 $~$
 
@@ -153,9 +155,73 @@ This model provides the following parameter estimates:
         ICC_UE             0.092       0.014      0.000       0.070       0.121      *
 
 
-The part of the output that is of interest to us, are the last two lines where the intraclass correlations are computed for each variable. Note that by definition, the 95% CIs that are computed will not cover zero; hence, when zero is not included in the CI, this should not be interpreted as evidence that the intraclass correlation is different from zero. Instead, we may want to consider the lower bound and determine whether this is relatively close to zero or not, based also on the mean of the posterior distribution (i.e., the point estimate that is reported).
+The part of the output that is of interest to us, are the last two lines where the intraclass correlations are computed for each variable. Note that by definition, the 95% CIs that are computed for variance related parameters (e.g., variances, residual variances, proportions of explained variance) will not cover zero; hence, when zero is not included in the CI of an intraclass correlation, this should not be interpreted as evidence that the intraclass correlation is different from zero. Instead, we may want to consider the lower bound and determine whether this is relatively close to zero or not, based also on the mean of the posterior distribution (i.e., the point estimate that is reported).
 
 Here we see that the difference in the proportion between-person variance is quite large for these two variables: About 0.46 for negative affect, and only 0.09 for unpleasantness of events. The latter implies that the reported unpleasantness of events contains mostly within-person variation over time, whereas negative affect contains much more substantial differences between persons. 
+
+## Some additional comments on Bayesian estimation
+
+More generally, when using Bayesian estimation, we should be aware that a model may not have converged. While it is not possible to determine whehter a model in fact converged, there are several diagnostics that can be consulted to see whether there is evidence that the model did _not_ converge. 
+
+As already mentioned, the `BITER = (3000)` statement can be used to ensure that Mplus draws at elast 5000 samples in the MCMC algorithm; when the Potential Scale Reduction (PRS) statistic indicates that the algorithm did not converge yet, Mplus will continue beyond 5000 samples untill the criterion is satisfied. If the user does not want additional samples, they shoudl use `FBITER = 3000` instead. 
+
+The PRS statistic is shown on the screen while running the analysis; this information is saved in the output by asking for `TECH8` in the `OUTPUT` command. For the current analysis, this is 
+
+    TECHNICAL 8 OUTPUT
+
+       TECHNICAL 8 OUTPUT FOR BAYES ESTIMATION
+
+         CHAIN    BSEED
+         1        6974
+         2        534401
+
+                         POTENTIAL       PARAMETER WITH
+         ITERATION    SCALE REDUCTION      HIGHEST PSR
+         100              1.000               1
+         200              1.015               2
+         300              1.015               2
+         400              1.020               8
+         500              1.012               8
+         600              1.006               8
+         700              1.003               6
+         800              1.002               6
+         900              1.003               6
+         1000             1.004               6
+         1100             1.002               6
+         1200             1.001               6
+         1300             1.003               6
+         1400             1.002               6
+         1500             1.003               6   
+         1600             1.004               6
+         1700             1.002               6
+         1800             1.001               6
+         1900             1.002               6
+         2000             1.001               6
+         2100             1.001               6
+         2200             1.000               6
+         2300             1.001               5
+         2400             1.001               5
+         2500             1.001               5
+         2600             1.000               5
+         2700             1.000               5
+         2800             1.000               2
+         2900             1.000               5
+         3000             1.000               5
+
+The PSR is based on computing for each model parameter: a) the total variance across both chains over the last 100 (retained) iterations; b) the variance within the two chains; and c) dividing the former by the latter. Hence, when two chains have settled in the same area of the aprameter space, the total variance will be (almost) identical to the within chain variance, such that this statistic is very close to 1. The PSR that is reported here, is the largest one among all the model parameters; which parameter it is, is shown in the last column (which matches the parameter numbering in the `TECH1` output).
+
+In addition to this statistic, the user should also check the traceplots of the model parameters. These can be viewed in Mplus, using the plotting option (from the plot menu, the option: Bayesian posterior parameter trace plot). An example of such a trace plot is given below.
+
+![](images/Model0TracePlot.png){width=90%}
+
+It shows a red and a blue chain which are based on the two different seeds (see `TECH8` output). In this case, these overlap well, which means that the total variance will be (almost) identical to the within chain variance. Furthermore, the plot shows no evidence for a trend (a trajectory going up or down), which would be considered a sign that the MCMC algorithm did not converge if it was present. Also, there are no extreme values, which would be some reason for concern about convergence (see the discussion of the results for Model 5 below). 
+
+Other plots that contain relevant information on the performance of the MCMC algorithm are the autocorrelation plots that can be obtained for each model parameter based on each chain, as shown below. 
+
+![](images/ParameterACF.png){width=90%}
+
+Preferrably, these autocorrelations (i.e., the autocorrelation across samples of the MCMC draws) go to zero very quickly, as is the case here. If they remain higher for longer lags, this is a reason to: a) using the `THINNING` option; and/or b) increase the number of iterations. 
+
 
 $~$
 
@@ -551,7 +617,7 @@ In addition to the above parameter estimates, we also get the standardized estim
 
 As indicate here, the standardized results at the within level are based on standardizing the parameters per person first (using their model implied variances, rather than their observed variances!), and then taking the average across all 129 participants. Since this is done within each iteration of the MCMC algorithm, this results in a posterior distribution for each of these averaged standardized parameters. Hence, the Posterior S.D. indicates the amount of variability of this averaged standardized parameter, and the lower and upper bound define the 95% credibility interval of it. 
 
-It is important to realize that---in contrast to what we saw in the replicated $N=1$ analyses$---this has nothing to do with variability across individuals!
+It is important to realize that---in contrast to what we saw in the replicated $N=1$ analyses---this has nothing to do with variability across individuals!
 
 The standardized results at the between level contain the following:
 

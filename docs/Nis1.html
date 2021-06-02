@@ -424,8 +424,8 @@ div.tocify {
           THIN = 10;
           BSEED = 9371;</code></pre>
 <p>where:</p>
-<p><code>PROC = 2</code> indicates the number of processors to use for this analysis;</p>
-<p><code>BITER = (5000)</code> indicates that the number of iterations for the MCMC algorithm must be at least 5000 (Mplus will use more when the Potential Scale Reduction (PRS) statistic indicates that the MCMC algorithm has not converged yet); note that in fact two chains with different starting values are run, both for (at least) 5000 iterations, and the first half of them is discarded as burn-in; hence, the parameter estimates are based on the combination of the second half of both chains.</p>
+<p><code>PROC = 2</code> indicates the number of processors to use for this analysis; depending on teh number of cores in one's computer this number can be increased to speed up the analysis;</p>
+<p><code>BITER = (5000)</code> indicates that the number of iterations for the MCMC algorithm must be at least 5000 (Mplus will use more when the Potential Scale Reduction (PRS) statistic indicates that the MCMC algorithm has not converged yet); note that in fact two chains with different starting values are run, both for (at least) 5000 iterations, and the first half of them is discarded as burn-in; hence, the parameter estimates are based on the combination of the second half of both chains (i.e., at least 5000 iterations together).</p>
 <p><code>THIN = 10</code> implies that only 1 in 10 iterations of the MCMC sequence are saved; hence, rather than running two chains of at least 5000 iterations each, Mplus will run two chains of 10*5000 each; thinning is used to account for autocorrelation in the MCMC iterations.</p>
 <p><code>BSEED = 9371</code> sets the seed with which to start the first MCMC chain; by default, 2 chains are run. Note that by setting the seed, we can exactly replicate the results that are obtained with such an algorithm. We use a different seed in each analysis.</p>
 <p><span class="math inline">\(~\)</span></p>
@@ -452,7 +452,7 @@ ue_pre;</code></pre>
 <p>where the <code>ON</code> statement implies that negative affect (measured prior to intervention: na_pre) is regressed on unpleasantness of events (measured prior to intervention: ue_pre); and the second line is to ensure that Mplus will treat the predictor as an endogenous variable, rather than as an exogenous variable (the latter would imply Mplus uses case-wise deletion if there is a missing value on the predictor).</p>
 <p>We ask for additional output using:</p>
 <pre><code>OUTPUT: TECH1 TECH8;</code></pre>
-<p>where <code>TECH1</code> provides information about the model parameters in terms of the LISREL notation; and <code>TECH8</code> provides additional information about convergence of the MCMC algorithm.</p>
+<p>where <code>TECH1</code> provides information about the model parameters in terms of matrix notation (based on the LISREL model); and <code>TECH8</code> provides additional information about convergence of the MCMC algorithm.</p>
 </div>
 <div id="output-for-model-1" class="section level2">
 <h2>Output for Model 1</h2>
