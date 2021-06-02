@@ -17,7 +17,7 @@ In the book chapter we consider 6 dynamic multilevel models:
 
 * __Multilevel models 4-6__ are based on combining _times series modeling_ and _multilevel modeling_ with _structural equation modeling_ 
 
-As an initial step, we determine the intraclass correlation of each variable in __Multilevel Model 0__.
+As an initial step, we determine the intraclass correlation of each variable in __Multilevel Model 0__. When discussing this model, we will also provide some additional information regarding Bayesian estimation which apply more generally to the analyses performed for the book chapter. 
 
 Below, we start by discussing some general aspects of the multilevel analyses; then we present each model, discuss how it is specified, and discuss the output.  
 
@@ -159,7 +159,7 @@ The part of the output that is of interest to us, are the last two lines where t
 
 Here we see that the difference in the proportion between-person variance is quite large for these two variables: About 0.46 for negative affect, and only 0.09 for unpleasantness of events. The latter implies that the reported unpleasantness of events contains mostly within-person variation over time, whereas negative affect contains much more substantial differences between persons. 
 
-## Some additional comments on Bayesian estimation
+## Bayesian estimation
 
 More generally, when using Bayesian estimation, we should be aware that a model may not have converged. While it is not possible to determine whehter a model in fact converged, there are several diagnostics that can be consulted to see whether there is evidence that the model did _not_ converge. 
 
@@ -221,6 +221,65 @@ Other plots that contain relevant information on the performance of the MCMC alg
 ![](images/ParameterACF.png){width=90%}
 
 Preferrably, these autocorrelations (i.e., the autocorrelation across samples of the MCMC draws) go to zero very quickly, as is the case here. If they remain higher for longer lags, this is a reason to: a) using the `THINNING` option; and/or b) increase the number of iterations. 
+
+As a final comment regarding Bayesian esitmation, we point out that the prior distributions that were used for the model parameters, are also reported in the output at the end. For the current model these are
+
+
+         PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
+
+         Parameter 1~IW(0.000,-3)              infinity            infinity            infinity
+         Parameter 2~IW(0.000,-3)              infinity            infinity            infinity
+         Parameter 3~IW(0.000,-3)              infinity            infinity            infinity
+         Parameter 4~N(0.000,infinity)           0.0000            infinity            infinity
+         Parameter 5~N(0.000,infinity)           0.0000            infinity            infinity
+         Parameter 6~IW(0.000,-3)              infinity            infinity            infinity
+         Parameter 7~IW(0.000,-3)              infinity            infinity            infinity
+         Parameter 8~IW(0.000,-3)              infinity            infinity            infinity
+
+where the parameter numbers match the ones provided in the TECH1 output (based on the model matrices of the LISREL notation):
+
+    TECHNICAL 1 OUTPUT
+
+         PARAMETER SPECIFICATION FOR WITHIN
+
+
+               NU
+                  NA_PRE        UE_PRE
+                  ________      ________
+                        0             0
+
+
+               THETA
+                  NA_PRE        UE_PRE
+                  ________      ________
+     NA_PRE             1
+     UE_PRE             2             3
+
+
+         PARAMETER SPECIFICATION FOR BETWEEN
+
+
+               NU
+                  NA_PRE        UE_PRE
+                  ________      ________
+                        4             5
+
+
+               THETA
+                  NA_PRE        UE_PRE
+                  ________      ________
+     NA_PRE             6
+     UE_PRE             7             8
+
+
+         PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+               NEW/ADDITIONAL PARAMETERS
+                  ICC_NA        ICC_UE
+                  ________      ________
+                       9            10
+
 
 
 $~$

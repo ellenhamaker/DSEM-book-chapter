@@ -392,7 +392,7 @@ div.tocify {
 <li><p><strong>Multilevel models 1-3</strong> are based on combining <em>time series modeling</em> with <em>multilevel modeling</em></p></li>
 <li><p><strong>Multilevel models 4-6</strong> are based on combining <em>times series modeling</em> and <em>multilevel modeling</em> with <em>structural equation modeling</em></p></li>
 </ul>
-<p>As an initial step, we determine the intraclass correlation of each variable in <strong>Multilevel Model 0</strong>.</p>
+<p>As an initial step, we determine the intraclass correlation of each variable in <strong>Multilevel Model 0</strong>. When discussing this model, we will also provide some additional information regarding Bayesian estimation which apply more generally to the analyses performed for the book chapter.</p>
 <p>Below, we start by discussing some general aspects of the multilevel analyses; then we present each model, discuss how it is specified, and discuss the output.</p>
 <div id="general-comments" class="section level1">
 <h1>General comments</h1>
@@ -499,8 +499,8 @@ New/Additional Parameters
 <p>The part of the output that is of interest to us, are the last two lines where the intraclass correlations are computed for each variable. Note that by definition, the 95% CIs that are computed for variance related parameters (e.g., variances, residual variances, proportions of explained variance) will not cover zero; hence, when zero is not included in the CI of an intraclass correlation, this should not be interpreted as evidence that the intraclass correlation is different from zero. Instead, we may want to consider the lower bound and determine whether this is relatively close to zero or not, based also on the mean of the posterior distribution (i.e., the point estimate that is reported).</p>
 <p>Here we see that the difference in the proportion between-person variance is quite large for these two variables: About 0.46 for negative affect, and only 0.09 for unpleasantness of events. The latter implies that the reported unpleasantness of events contains mostly within-person variation over time, whereas negative affect contains much more substantial differences between persons.</p>
 </div>
-<div id="some-additional-comments-on-bayesian-estimation" class="section level2">
-<h2>Some additional comments on Bayesian estimation</h2>
+<div id="bayesian-estimation" class="section level2">
+<h2>Bayesian estimation</h2>
 <p>More generally, when using Bayesian estimation, we should be aware that a model may not have converged. While it is not possible to determine whehter a model in fact converged, there are several diagnostics that can be consulted to see whether there is evidence that the model did <em>not</em> converge.</p>
 <p>As already mentioned, the <code>BITER = (3000)</code> statement can be used to ensure that Mplus draws at elast 5000 samples in the MCMC algorithm; when the Potential Scale Reduction (PRS) statistic indicates that the algorithm did not converge yet, Mplus will continue beyond 5000 samples untill the criterion is satisfied. If the user does not want additional samples, they shoudl use <code>FBITER = 3000</code> instead.</p>
 <p>The PRS statistic is shown on the screen while running the analysis; this information is saved in the output by asking for <code>TECH8</code> in the <code>OUTPUT</code> command. For the current analysis, this is</p>
@@ -557,6 +557,59 @@ New/Additional Parameters
 
 </div>
 <p>Preferrably, these autocorrelations (i.e., the autocorrelation across samples of the MCMC draws) go to zero very quickly, as is the case here. If they remain higher for longer lags, this is a reason to: a) using the <code>THINNING</code> option; and/or b) increase the number of iterations.</p>
+<p>As a final comment regarding Bayesian esitmation, we point out that the prior distributions that were used for the model parameters, are also reported in the output at the end. For the current model these are</p>
+<pre><code>     PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
+
+     Parameter 1~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 2~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 3~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 4~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 5~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 6~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 7~IW(0.000,-3)              infinity            infinity            infinity
+     Parameter 8~IW(0.000,-3)              infinity            infinity            infinity</code></pre>
+<p>where the parameter numbers match the ones provided in the TECH1 output (based on the model matrices of the LISREL notation):</p>
+<pre><code>TECHNICAL 1 OUTPUT
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              NA_PRE        UE_PRE
+              ________      ________
+                    0             0
+
+
+           THETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE             1
+ UE_PRE             2             3
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              NA_PRE        UE_PRE
+              ________      ________
+                    4             5
+
+
+           THETA
+              NA_PRE        UE_PRE
+              ________      ________
+ NA_PRE             6
+ UE_PRE             7             8
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              ICC_NA        ICC_UE
+              ________      ________
+                   9            10</code></pre>
 <p><span class="math inline">\(~\)</span></p>
 </div>
 </div>
