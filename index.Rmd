@@ -1,17 +1,19 @@
 ---
-title: 'Supplementary materials for the book chapter: __Dynamic structural equation
-  modeling as a combination of time series modeling, multilevel modeling, and structural
-  equation modeling__'
-author: "Ellen Hamaker, Tihomir Asparouhov, and Bengt MuthÃ©n"
+title: 'Supplementary materials for the book chapter on DSEM'
+author: "Ellen Hamaker, Tihomir Asparouhov, and Bengt Muthén"
 date: "June 2021"
 output:
   html_document:
     highlight: default
   pdf_document: default
 ---
-This is a website with supporting material for the book chapter _Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling_. 
+This is a website with supporting material for the book chapter _Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling_, for the _Handbook of SEM_. Specifically, this website contains:
 
-Specifically, this website contains descriptions of the various models that are discussed in the book chapter, detailed discussions of the Mplus input that was used to run these models, and step-by-step discussions of the output of these models. 
+* descriptions of the various models that are discussed in the book chapter
+
+* detailed discussions of the Mplus input that was used to run these models
+
+* step-by-step discussions of the output of these models (as well as the actual output files) 
 
 While other data and other research questions most likely require other model specifications, the descriptions and considerations provided here will hopefully prove helpful to you in making informed decisions about your DSEM analyses.
 
