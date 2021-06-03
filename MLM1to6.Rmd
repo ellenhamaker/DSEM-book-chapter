@@ -74,11 +74,13 @@ To obtain the plots that are used to evaluate the Bayesian estimation, we includ
 
 This will allow us to look at trace plots for each parameter (i.e., the MCMC samples of the two chains that are run), posterior distributions of each parameter, the autocorrelation function for each parameter over the MCMC iterations.
 
-If also include:
+If we include
 
-          FACTOR = ALL (500);
+          FACTORS = ALL (500);
 
-in the`PLOT` command, Mplus will save 500 factor score values drawn for _each_ person separately. Factor scores include latent variables, but also random effects (i.e., means, slopes, or residual variances). These are drawn from the sampled parameter values of that person. Through using this option, we can then plot the means or medians of these per person (e.g., in histograms univariately, or in scatter plots bivariately). Furthermore, it will also allow us to ask for a comparison of the factor scores (i.e., the individual's parameter estimates), as we will show below.
+in the`PLOT` command, Mplus will run the MCMC algorithm for another 500*100 iterations, and save every 100th draw of each factor score for _each person separately_. Note that factor scores include latent variables, but also random effects (i.e., means, slopes, and (residual) variances). Hence, this gives us information about the posterior distribution of each person separately. 
+
+Through using this option, we can plot the means or medians of these per person (e.g., in histograms univariately, or in scatter plots bivariately). Furthermore, it will also allow us to ask for a comparison of the factor scores (i.e., the individual's parameter estimates), as we will show below.
 
 $~$
 
@@ -162,9 +164,9 @@ Here we see that the difference in the proportion between-person variance is qui
 ## Bayesian estimation
 In generally, when using Bayesian estimation, we should be aware that a model may not have converged. While it is not possible to determine whether a model in fact did converged, there are several diagnostics that can be consulted to see whether there is evidence that the model did _not_ converge. 
 
-As already mentioned, the `BITER = (3000)` statement can be used to ensure that Mplus draws at least 5000 samples in the MCMC algorithm; when the Potential Scale Reduction (PRS) statistic indicates that the algorithm did not converge yet, Mplus will continue beyond 5000 samples until the criterion is satisfied. If the user does not want additional samples, they should use `FBITER = 3000` instead. 
+As already mentioned, the `BITER = (3000)` statement can be used to ensure that Mplus draws at least 3000 samples in the MCMC algorithm; when the Potential Scale Reduction (PRS) statistic indicates that the algorithm did not converge yet, Mplus will continue beyond 3000 samples until the criterion is satisfied. If the user does not want additional samples, they should use `FBITER = 3000` instead. 
 
-The PRS statistic is shown on the screen while running the analysis; this information is saved in the output by asking for `TECH8` in the `OUTPUT` command. For the current analysis, this is 
+The PRS criterion is shown on the screen while running the analysis; this information is saved in the output by asking for `TECH8` in the `OUTPUT` command. For the current analysis, this is 
 
     TECHNICAL 8 OUTPUT
 
@@ -207,17 +209,23 @@ The PRS statistic is shown on the screen while running the analysis; this inform
          2900             1.000               5
          3000             1.000               5
 
-The PSR is based on computing for each model parameter: a) the total variance across both chains over the last 100 (retained) iterations; b) the variance within the two chains; and c) dividing the former by the latter. Hence, when two chains have settled in the same area of the parameter space, the total variance will be (almost) identical to the within chain variance, such that this statistic is very close to 1. The PSR that is reported here, is the largest one among all the model parameters; which parameter it is, is shown in the last column (which matches the parameter numbering in the `TECH1` output).
+The PSR is based on computing _for each model parameter_ at each iteration: a) the total variance across both chains over all the iterations so far (i.e., both within and between chains); b) the variance within the two chains and averaging these; and c) dividing the former by the latter and taking the square root of this. Hence, when two chains have settled in the same area of the parameter space, the total variance will be (almost) identical to the within chain variance (or: between chain variance will be virtually zero), such that this criterion is very close to 1. The PSR that is reported here, is the largest one among all the model parameters; which parameter it is, is shown in the last column (which matches the parameter numbering in the `TECH1` output).
 
-In addition to this statistic, the user should also check the trace plots of the model parameters. These can be viewed in Mplus, using the plotting option (from the plot menu, the option: Bayesian posterior parameter trace plot). An example of such a trace plot is given below.
+To compute the PSR, at least two chains are needed; this is the default number of chains used when doing Bayesian estimation in Mplus. The number can be changed in the `ANALYSIS` command, for instance by adding `CHAINS = 4;`. 
+
+In addition to the PSR criterion, the user should also check the trace plots of the model parameters. These can be viewed in Mplus, using the plotting option (from the plot menu, the option: Bayesian posterior parameter trace plot). An example of such a trace plot is given below.
+
 
 ![](images/Model0TracePlot.png){width=90%}
 
-It shows a red and a blue chain which are based on the two different seeds (see `TECH8` output). In this case, these overlap well, which means that the total variance will be (almost) identical to the within chain variance. Furthermore, the plot shows no evidence for a trend (a trajectory going up or down), which would be considered a sign that the MCMC algorithm did not converge if it was present. Also, there are no extreme values, which would be some reason for concern about convergence (see the discussion of the results for Model 5 below). 
+
+It shows a red and a blue chain which are based on the two different seeds (see `TECH8` output). In this case, these overlap well, which means that the total variance will be (almost) identical to the within chain variance. Furthermore, the plot shows no evidence for a trend (a trajectory going up or down); if such a trend would be present, this would be considered a sign that the MCMC algorithm did not converge. Also, there are no extreme values, which would be some reason for concern about convergence (see the discussion of the results for Model 5 below). 
 
 Other plots that contain relevant information on the performance of the MCMC algorithm are the autocorrelation plots that can be obtained for each model parameter based on each chain, as shown below. 
 
+
 ![](images/ParameterACF.png){width=90%}
+
 
 Preferably, these autocorrelations (i.e., the autocorrelation across samples of the MCMC draws) go to zero very quickly, as is the case here. If they remain higher for longer lags, this is a reason to: a) using the `THINNING` option; and/or b) increase the number of iterations. 
 

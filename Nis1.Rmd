@@ -45,7 +45,7 @@ Alternatively, we could also use the `STDYX` option in the `OUTPUT` command; thi
 
 ## Bayesian estimation
 
-Throughout, we make use of Bayesian estimation, which is required for doing DSEM analysis in Mplus. We do this by specifying:
+Throughout, we make use of Bayesian estimation, which is required for doing DSEM analysis in Mplus (for more details about this, see the additional information on the page: Multilevel Models -- Model 0). We do this by specifying:
 
     ANALYSIS: ESTIMATOR = BAYES; 
               PROC = 2;
@@ -55,7 +55,7 @@ Throughout, we make use of Bayesian estimation, which is required for doing DSEM
 
 where: 
 
-`PROC = 2` indicates the number of processors to use for this analysis; depending on teh number of cores in one's computer this number can be increased to speed up the analysis;
+`PROC = 2` indicates the number of processors to use for this analysis; depending on the number of cores in one's computer this number can be increased to speed up the analysis;
 
 `BITER = (5000)` indicates that the number of iterations for the MCMC algorithm must be at least 5000 (Mplus will use more when the Potential Scale Reduction (PRS) statistic indicates that the MCMC algorithm has not converged yet); note that in fact two chains with different starting values are run, both for (at least) 5000 iterations, and the first half of them is discarded as burn-in; hence, the parameter estimates are based on the combination of the second half of both chains (i.e., at least 5000 iterations together).
 
@@ -206,7 +206,7 @@ Again, we should only focus on the columns `Average`, `Std. Dev.`, and `% Sig. C
 $~$ 
 
 # $N=1$ Model 3
-In Model 3 we consider not only negative affect as an outcome, but also unpleasantness of event. Hence, we have a bivariate time series model, in which we regress negative affect $y_t$ on $x_t$ AFMAKEN
+In Model 3 we consider not only negative affect as an outcome, but also unpleasantness of event. Hence, we have a bivariate time series model, in which we regress negative affect $y_t$ on unpleasantness of events $x_t$ and on itself at the preceding occasion $y_{t-1}$, while also regressing unpleasantness of events $x_t$ on negative affect preceding it $y_{t-1}$, and on itself at the preceding occasion $x_{t-1}$. 
 
 
 

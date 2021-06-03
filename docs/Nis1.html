@@ -417,14 +417,14 @@ div.tocify {
 </div>
 <div id="bayesian-estimation" class="section level2">
 <h2>Bayesian estimation</h2>
-<p>Throughout, we make use of Bayesian estimation, which is required for doing DSEM analysis in Mplus. We do this by specifying:</p>
+<p>Throughout, we make use of Bayesian estimation, which is required for doing DSEM analysis in Mplus (for more details about this, see the additional information on the page: Multilevel Models -- Model 0). We do this by specifying:</p>
 <pre><code>ANALYSIS: ESTIMATOR = BAYES; 
           PROC = 2;
           BITER = (5000);
           THIN = 10;
           BSEED = 9371;</code></pre>
 <p>where:</p>
-<p><code>PROC = 2</code> indicates the number of processors to use for this analysis; depending on teh number of cores in one's computer this number can be increased to speed up the analysis;</p>
+<p><code>PROC = 2</code> indicates the number of processors to use for this analysis; depending on the number of cores in one's computer this number can be increased to speed up the analysis;</p>
 <p><code>BITER = (5000)</code> indicates that the number of iterations for the MCMC algorithm must be at least 5000 (Mplus will use more when the Potential Scale Reduction (PRS) statistic indicates that the MCMC algorithm has not converged yet); note that in fact two chains with different starting values are run, both for (at least) 5000 iterations, and the first half of them is discarded as burn-in; hence, the parameter estimates are based on the combination of the second half of both chains (i.e., at least 5000 iterations together).</p>
 <p><code>THIN = 10</code> implies that only 1 in 10 iterations of the MCMC sequence are saved; hence, rather than running two chains of at least 5000 iterations each, Mplus will run two chains of 10*5000 each; thinning is used to account for autocorrelation in the MCMC iterations.</p>
 <p><code>BSEED = 9371</code> sets the seed with which to start the first MCMC chain; by default, 2 chains are run. Note that by setting the seed, we can exactly replicate the results that are obtained with such an algorithm. We use a different seed in each analysis.</p>
@@ -541,7 +541,7 @@ Residual Variances
 </div>
 <div id="n1-model-3" class="section level1">
 <h1><span class="math inline">\(N=1\)</span> Model 3</h1>
-<p>In Model 3 we consider not only negative affect as an outcome, but also unpleasantness of event. Hence, we have a bivariate time series model, in which we regress negative affect <span class="math inline">\(y_t\)</span> on <span class="math inline">\(x_t\)</span> AFMAKEN</p>
+<p>In Model 3 we consider not only negative affect as an outcome, but also unpleasantness of event. Hence, we have a bivariate time series model, in which we regress negative affect <span class="math inline">\(y_t\)</span> on unpleasantness of events <span class="math inline">\(x_t\)</span> and on itself at the preceding occasion <span class="math inline">\(y_{t-1}\)</span>, while also regressing unpleasantness of events <span class="math inline">\(x_t\)</span> on negative affect preceding it <span class="math inline">\(y_{t-1}\)</span>, and on itself at the preceding occasion <span class="math inline">\(x_{t-1}\)</span>.</p>
 <div class="figure">
 <img src="images/FigNis1Model3a.jpg" style="width:40.0%" />
 
