@@ -7,7 +7,10 @@ output:
     highlight: default
   pdf_document: default
 ---
-This is a website with supporting material for the book chapter _Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling_, for the _Handbook of SEM_. Specifically, this website contains:
+This is a website with supporting material for the book chapter _Dynamic structural equation modeling as a combination of time series modeling, multilevel modeling, and structural equation modeling_, for the _Handbook of SEM_. A pdf can be find here 
+[here](https://ellenhamaker.github.io/DSEM-book-chapter/HamakerAsparouhovMuthen21.pdf).
+
+Specifically, this website contains:
 
 * descriptions of the various models that are discussed in the book chapter
 

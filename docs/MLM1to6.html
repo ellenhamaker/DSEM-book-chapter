@@ -402,7 +402,7 @@ div.tocify {
 <p>For both components a model is specified: At the within level a time series model is used to account for the dynamics in the repeated measures within a person, and at the between level the random effects can be related to each other, either through correlating them, or by including them in a regression model, a path model, and/or a factor model.</p>
 <p>In Mplus, this approach requires the repeated measures within a person to be represented in long format (as was the case for the <span class="math inline">\(N=1\)</span> approach as well), with the data of all the individuals stacked. There has to be a specific variable that indicates to which individual the data belong (i.e., the clustering of the data).</p>
 <p>The <code>DATA</code> command now becomes:</p>
-<pre><code>  DATA: file is ChapterData1.dat;</code></pre>
+<pre><code>  DATA: FILE = ChapterData1.dat;</code></pre>
 <p>The <code>VARIABLE</code> command is given as:</p>
 <pre><code>  NAMES       =   ID prepost TimeHours U2P PA NA PEx NEx
                   pa_pre na_pre U2P_pre PEx_pre NEx_pre

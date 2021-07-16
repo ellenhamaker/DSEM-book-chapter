@@ -34,7 +34,7 @@ In Mplus, this approach requires the repeated measures within a person to be rep
 
 The `DATA` command now becomes:
 
-      DATA: file is ChapterData1.dat;
+      DATA: FILE = ChapterData1.dat;
 
 
 The `VARIABLE` command is given as:
